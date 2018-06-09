@@ -1,0 +1,118 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    style="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
+    <LinearLayout
+        android:id="@+id/user_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:weightSum="1"
+        android:layout_alignParentTop="true">
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Incoming Trip..."
+            android:textSize="20sp"
+            android:padding="2sp"
+            android:textColor="#05affc"
+            android:gravity="center_horizontal"
+            android:background="@drawable/border" />
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:padding="2sp"
+            android:background="@color/theme_color_blue"
+            android:hint="Name"/>
+        <TextView
+            android:id="@+id/user_add"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="italic"
+            android:textSize="18sp"
+            android:padding="2sp"
+            android:gravity="center"
+            android:background="@color/theme_color_blue"
+            android:hint="Coming reqiest Address"/>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:id="@+id/linear_map">
+
+    <com.quickliftpilot.Util.RoundedLayout
+        android:id="@+id/maplayout"
+        android:layout_width="match_parent"
+        android:layout_height="314dp"
+        android:layout_gravity="center"
+        android:layout_margin="20dp"
+        android:layout_weight="3"
+        android:gravity="center">
+
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            tools:context="com.example.adarsh.quickliftpilot.com.activities.RequestActivity" />
+    </com.quickliftpilot.Util.RoundedLayout>
+</LinearLayout>
+</LinearLayout>
+
+    <Button
+        android:id="@+id/confirm_btn"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="Confirm"
+        android:background="@color/back_color"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="40dp"
+        android:textColor="#00ff00"
+        android:textSize="18dp"
+        android:layout_marginLeft="20dp"/>
+
+    <Button
+        android:id="@+id/cancel_btn"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:background="@color/back_color"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="40dp"
+        android:textSize="18dp"
+        android:textColor="#f56060"
+        android:layout_marginRight="20dp"/>
+
+    <LinearLayout
+        android:id="@+id/network_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#ff0000"
+        android:visibility="gone"
+        android:layout_alignParentBottom="true">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:textColor="#FFFFFF"
+            android:textSize="20dp"
+            android:text="No Internet Access !!!"
+            android:gravity="center"/>
+
+    </LinearLayout>
+</RelativeLayout>

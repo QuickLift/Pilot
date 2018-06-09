@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    app:layout_constraintCircleRadius="10dp"
+    android:background="@drawable/all_margin">
+
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="145dp"
+        android:layout_weight="0.7"
+        android:src="@drawable/ic_swap" />
+
+    <LinearLayout
+        android:id="@+id/information"
+        android:padding="2dp"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/image"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/name"
+            android:padding="3dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Customer Name"/>
+        <TextView
+            android:id="@+id/source"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:hint="Source"/>
+        <TextView
+            android:id="@+id/destination"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:hint="Destination"/>
+        <TextView
+            android:id="@+id/amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:hint="Fare"/>
+        <TextView
+            android:id="@+id/offer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Offer Price"
+            android:layout_marginTop="0dp"/>
+        <TextView
+            android:id="@+id/parking"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Parking Price"
+            android:layout_marginTop="0dp"/>
+        <TextView
+            android:id="@+id/ride"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Ride Type"
+            android:layout_marginTop="0dp"/>
+        <TextView
+            android:id="@+id/timestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Date and Time"
+            android:layout_marginTop="0dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="90dp"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@+id/information"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="108dp"
+            android:src="@drawable/profile" />
+        <TextView
+            android:id="@+id/sta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="status"
+            android:textSize="15dp"
+            android:textColor="#000000"/>
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.quickliftpilot.activities.FeedbackActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/feed_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Trip Completed"
+            android:textSize="30dp"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="40dp"/>
+        <TextView
+            android:id="@+id/fare_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fare - "
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:layout_below="@+id/feed_title"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="30dp"/>
+        <TextView
+            android:id="@+id/fare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:layout_toRightOf="@+id/fare_text"
+            android:layout_below="@+id/feed_title"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="5dp"/>
+
+        <TextView
+            android:id="@+id/offer_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="( Offer Amount - "
+            android:textSize="20dp"
+            android:layout_below="@+id/fare_text"
+            android:layout_marginLeft="30dp"/>
+        <TextView
+            android:id="@+id/offer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:layout_toRightOf="@+id/offer_text"
+            android:layout_below="@+id/fare_text"
+            android:layout_marginLeft="5dp"/>
+
+        <TextView
+            android:id="@+id/parking_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="( Parking - "
+            android:textSize="20dp"
+            android:layout_below="@+id/offer_text"
+            android:layout_marginLeft="30dp"/>
+        <TextView
+            android:id="@+id/parking"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:layout_toRightOf="@+id/parking_text"
+            android:layout_below="@+id/offer_text"
+            android:layout_marginLeft="5dp"/>
+
+        <TextView
+            android:id="@+id/cancel_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel Charge - "
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:layout_below="@+id/parking_text"
+            android:layout_marginLeft="30dp"/>
+        <TextView
+            android:id="@+id/cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:layout_toRightOf="@+id/cancel_text"
+            android:layout_below="@+id/parking"
+            android:layout_marginLeft="5dp"/>
+
+        <TextView
+            android:id="@+id/total_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total - "
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:layout_below="@+id/cancel_text"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="30dp"/>
+        <TextView
+            android:id="@+id/total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@+id/total_text"
+            android:layout_below="@+id/cancel_text"
+            android:layout_marginLeft="5dp"/>
+
+        <RatingBar
+            android:id="@+id/feed_rate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:backgroundTint="@color/front_color"
+            android:layout_below="@+id/total_text"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="75dp"/>
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/feed_image"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_below="@+id/feed_rate"
+            android:src="@drawable/profile"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="30dp"/>
+        <TextView
+            android:id="@+id/feed_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rate The Customer"
+            android:textSize="30dp"
+            android:layout_toRightOf="@+id/feed_image"
+            android:layout_below="@id/feed_rate"
+            android:layout_marginTop="40dp"
+            android:layout_marginLeft="10dp"/>
+        <Button
+            android:id="@+id/feed_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="20dp"
+            android:text="Submit"
+            android:layout_below="@+id/feed_text"
+            android:background="@color/back_color"/>
+    </RelativeLayout>
+</ScrollView>

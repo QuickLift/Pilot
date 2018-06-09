@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context="com.quickliftpilot.activities.Welcome">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/tabs_button">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/image"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/profile"
+                    android:layout_marginTop="20dp"
+                    android:layout_centerHorizontal="true"/>
+                <Switch
+                    android:id="@+id/login_switch"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/image"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginLeft="24dp"/>
+                <TextView
+                    android:id="@+id/login_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Logout"
+                    android:textSize="14sp"
+                    android:layout_toRightOf="@id/login_switch"
+                    android:layout_marginTop="33dp"/>
+                <TextView
+                    android:id="@+id/login_duration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Duration"
+                    android:textSize="14sp"
+                    android:layout_toRightOf="@id/image"
+                    android:layout_below="@id/login_switch"
+                    android:layout_marginLeft="45dp"/>
+
+            <TextView
+                android:id="@+id/driver_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:gravity="center_horizontal"
+                android:layout_margin="3dp"
+                android:textSize="18sp"
+                android:layout_below="@+id/image"/>
+            <TextView
+                android:id="@+id/driver_contact"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="18sp"
+                android:layout_below="@+id/driver_name"
+                android:gravity="center_horizontal"/>
+
+            <RatingBar
+                android:id="@+id/rateBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                style="@style/MyRatingBar"
+                android:layout_gravity="center"
+                android:backgroundTint="@color/front_color"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/driver_contact"/>
+
+            <View
+                android:id="@+id/hr_line"
+                android:layout_below="@+id/rateBar"
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="#000000"/>
+
+            <HorizontalScrollView
+                android:layout_below="@+id/hr_line"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none"
+                android:id="@+id/detail">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+                    <LinearLayout
+                        android:id="@+id/booking"
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:background="@drawable/round_button_blue"
+                        android:gravity="center"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_marginTop="4dp"
+                            android:layout_width="60dp"
+                            android:layout_height="wrap_content"
+                            android:text="BOOKING"/>
+                        <TextView
+                            android:id="@+id/book_no"
+                            android:layout_marginTop="10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textColor="@android:color/black"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/earn"
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:background="@drawable/round_button_blue"
+                        android:gravity="center"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="60dp"
+                            android:layout_height="wrap_content"
+                            android:text="EARNING"/>
+                        <TextView
+                            android:id="@+id/earn_no"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textColor="@android:color/black"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/cancel"
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:background="@drawable/round_button_blue"
+                        android:gravity="center"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="60dp"
+                            android:layout_height="wrap_content"
+                            android:text="CANCEL"/>
+                        <TextView
+                            android:id="@+id/cancel_no"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textColor="@android:color/black"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </HorizontalScrollView>
+        </RelativeLayout>
+    </ScrollView>
+    <android.support.v7.widget.CardView
+        android:id="@+id/tabs_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/back_color">
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/back_color"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:gravity="center"
+                android:layout_marginLeft="0dp"
+                android:background="@color/back_color"
+                android:layout_gravity="center_horizontal">
+
+                <LinearLayout
+                    android:id="@+id/profile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:background="@color/back_color"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/profile_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Profile"
+                        android:textColor="@android:color/black"
+                        android:textSize="18sp" />
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/profile_icon"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/round_button"
+                        android:src="@drawable/profile" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ride"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:background="@color/back_color"
+                    android:layout_marginLeft="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/ride_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Rides"
+                        android:textColor="@android:color/black"
+                        android:textSize="18sp" />
+
+                    <LinearLayout
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:gravity="center"
+                        android:background="@drawable/round_button">
+
+                        <ImageView
+                            android:id="@+id/ride_icon"
+                            android:layout_width="70dp"
+                            android:layout_height="80dp"
+                            android:src="@drawable/rides" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/account"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:background="@color/back_color"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/account_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Account Info"
+                        android:textColor="@android:color/black"
+                        android:textSize="18sp" />
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/account_icon"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/round_button"
+                        android:src="@drawable/accountinfo" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/help"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:background="@color/back_color"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/help_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Help"
+                        android:textColor="@android:color/black"
+                        android:textSize="18sp" />
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/help_icon"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/round_button"
+                        android:src="@drawable/helpicon" />
+                </LinearLayout>
+            </LinearLayout>
+        </HorizontalScrollView>
+    </android.support.v7.widget.CardView>
+</RelativeLayout>

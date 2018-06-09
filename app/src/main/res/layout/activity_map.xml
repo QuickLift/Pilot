@@ -1,0 +1,181 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.quickliftpilot.activities.MapActivity" />
+
+    <RelativeLayout
+        android:id="@+id/dest_type"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentStart="true"
+        android:background="@color/back_color">
+        <TextView
+            android:id="@+id/type"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:textSize="22sp"
+            android:layout_alignParentLeft="true"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="20dp"/>
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:textSize="22sp"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/type"/>
+        <ImageView
+            android:id="@+id/human"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_toLeftOf="@+id/arrow"
+            android:foregroundGravity="center_vertical"
+            android:src="@drawable/ic_action_human"/>
+        <ImageView
+            android:id="@+id/arrow"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/ic_action_arrow" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="100dp">
+        <Button
+            android:id="@+id/cancel_btn"
+            android:text="Rider List"
+            android:background="@color/front_color"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/customer_pickup"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/nav_bar">
+        <TextView
+            android:id="@+id/c_pick_name"
+            android:layout_alignParentStart="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
+            android:text="Name of the customer"
+            android:textColor="#000000"/>
+        <TextView
+            android:id="@+id/c_pick_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="19sp"
+            android:text="Address of the customer"
+            android:textColor="#000000"
+            android:layout_below="@+id/c_pick_name"/>
+        <ImageButton
+            android:id="@+id/pick_navigation"
+            android:layout_gravity="right"
+            android:layout_alignParentEnd="true"
+            android:layout_width="90dp"
+            android:background="@color/fui_transparent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_action_navigation"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/customer_locate"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentStart="true"
+        android:background="@color/back_color">
+        <!--<TextView-->
+            <!--android:id="@+id/c_locate_name"-->
+            <!--android:layout_alignParentStart="true"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:textSize="18dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:gravity="center_horizontal"-->
+            <!--android:layout_alignParentTop="true"-->
+            <!--android:hint="Name of customer :+91"/>-->
+        <!--<EditText-->
+            <!--android:id="@+id/c_number"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:hint="9678436389"-->
+            <!--android:layout_toRightOf="@+id/c_locate_name"/>-->
+        <Button
+            android:layout_margin="5dp"
+            android:id="@+id/locate_button"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/fui_transparent"
+            android:gravity="center"
+            android:text="Customer Located"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/start_trip"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/back_color"
+        android:layout_alignParentStart="true">
+        <Button
+            android:id="@+id/start_trip_btn"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Start Trip"
+            android:gravity="center"
+            android:layout_margin="5dp"
+            android:background="@color/fui_transparent"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/customer_drop"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/nav_bar">
+        <TextView
+            android:id="@+id/c_drop_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Address of the customer"
+            android:textSize="19sp"
+            android:textColor="#000000"/>
+        <ImageButton
+            android:id="@+id/drop_navigation"
+            android:layout_gravity="right"
+            android:layout_alignParentEnd="true"
+            android:layout_width="90dp"
+            android:background="@color/fui_transparent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_action_navigation"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/end_trip"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/back_color"
+        android:layout_alignParentStart="true">
+        <Button
+            android:id="@+id/end_trip_btn"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="END TRIP"
+            android:background="@color/reject"/>
+    </RelativeLayout>
+</RelativeLayout>
