@@ -111,78 +111,28 @@ public class UpdateLocation extends BroadcastReceiver {
     }
 
     private void getCurrentLocation() {
-//        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-//
-//            displayLocationSettingsRequest(con);
-//        }
         GPSTracker gps = new GPSTracker(con);
-//
-//        if (gps.canGetLocation()){
-//            Log.v("Tag",""+gps.getLatitude()+" "+gps.getLongitude());
-//        }
-        // check if GPS enabled
         if (gps.canGetLocation()) {
-//            Log.i("TAG","Getting location from GPS Tracker");
-
             double latitude = gps.getLatitude();
             double longitude = gps.getLongitude();
 
-//            if (log_id.getString("ride",null).equals("")) {
-//                Log.v("TAG","CURRENT LOCATION CALLED !");
                 String userId = log_id.getString("id",null);
                 DatabaseReference ref = FirebaseDatabase.getInstance().getReference("DriversAvailable/"+log_id.getString("type",null));
-//            ref.push().setValue("hello");
                 GeoFire geoFire = new GeoFire(ref);
                 geoFire.setLocation(userId,new GeoLocation(latitude,longitude));
-//            }
-//            else {
-//                String userId= log_id.getString("id",null);
-//                DatabaseReference ref=FirebaseDatabase.getInstance().getReference("DriversWorking/"+log_id.getString("type",null));
-////                GeoFire geoFire=new GeoFire(ref);
-////                geoFire.setLocation(userId,new GeoLocation(latitude,longitude));
-//            }
-        }else {
-            Log.i("Tag","False");
         }
     }
 
     private void getStatusCurrentLocation() {
-//        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-
-//            displayLocationSettingsRequest(con);
-//        }
         GPSTracker gps = new GPSTracker(con);
-//
-//        if (gps.canGetLocation()){
-//            Log.v("Tag",""+gps.getLatitude()+" "+gps.getLongitude());
-//        }
-        // check if GPS enabled
         if (gps.canGetLocation()) {
-//            Log.i("TAG","Getting location from GPS Tracker");
-
             double latitude = gps.getLatitude();
             double longitude = gps.getLongitude();
 
-//            if (log_id.getString("ride",null).equals("")) {
-//                Log.v("TAG","CURRENT LOCATION CALLED !");
-//                String userId = log_id.getString("id",null);
-//                DatabaseReference ref = FirebaseDatabase.getInstance().getReference("DriversAvailable/"+log_id.getString("type",null));
-////            ref.push().setValue("hello");
-//                GeoFire geoFire = new GeoFire(ref);
-//                geoFire.setLocation(userId,new GeoLocation(latitude,longitude));
-//            }
-//            else {
-//                String userId= log_id.getString("id",null);
-//                DatabaseReference ref=FirebaseDatabase.getInstance().getReference("Status/"+log_id.getString("type",null));
-//                GeoFire geoFire=new GeoFire(ref);
-//                geoFire.setLocation(userId,new GeoLocation(latitude,longitude));
-//            }
                 String userId= log_id.getString("id",null);
                 DatabaseReference ref=FirebaseDatabase.getInstance().getReference("Status");
                 GeoFire geoFire=new GeoFire(ref);
                 geoFire.setLocation(userId,new GeoLocation(latitude,longitude));
-        }else {
-            Log.i("TAG","False");
         }
     }
 

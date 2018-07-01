@@ -14,7 +14,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.quickliftpilot.Util.SQLQueries;
 import com.quickliftpilot.services.UpdateLocation;
+
+import java.util.ArrayList;
 
 public class LauncherActivity extends AppCompatActivity {
     UpdateLocation mReceiver=new UpdateLocation();
@@ -74,6 +77,71 @@ public class LauncherActivity extends AppCompatActivity {
                     if (dataSnapshot.exists()) {
                         editor.putString("cancelcharge", dataSnapshot.getValue(Integer.class).toString());
                         editor.commit();
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+            final SQLQueries sqlQueries=new SQLQueries(this);
+            sqlQueries.deletefare();
+            sqlQueries.deletelocation();
+            DatabaseReference dblist= FirebaseDatabase.getInstance().getReference("Fare/Patna");
+            dblist.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    editor.putString("excelcharge",String.valueOf(dataSnapshot.child("CustomerCancelCharge/excel").getValue(Integer.class)));
+                    editor.putString("sharecharge",String.valueOf(dataSnapshot.child("CustomerCancelCharge/share").getValue(Integer.class)));
+                    editor.putString("fullcharge",String.valueOf(dataSnapshot.child("CustomerCancelCharge/full").getValue(Integer.class)));
+                    editor.putString("ratemultiplier",String.valueOf(dataSnapshot.child("RateMultiplier").getValue(Float.class)));
+                    editor.putString("searchingtime",String.valueOf(dataSnapshot.child("SearchingTime").getValue(Integer.class)));
+                    editor.putString("outsidetripextraamount",String.valueOf(dataSnapshot.child("OutsideTripExtraAmount").getValue(Integer.class)));
+                    editor.putString("twoseatprice",String.valueOf(dataSnapshot.child("Twoseatprice").getValue(Integer.class)));
+                    editor.putString("excel",String.valueOf(dataSnapshot.child("ParkingCharge/excel").getValue(Integer.class)));
+                    editor.putString("fullcar",String.valueOf(dataSnapshot.child("ParkingCharge/fullcar").getValue(Integer.class)));
+                    editor.putString("fullrickshaw",String.valueOf(dataSnapshot.child("ParkingCharge/fullrickshaw").getValue(Integer.class)));
+                    editor.putString("sharecar",String.valueOf(dataSnapshot.child("ParkingCharge/sharecar").getValue(Integer.class)));
+                    editor.putString("sharerickshaw",String.valueOf(dataSnapshot.child("ParkingCharge/sharerickshaw").getValue(Integer.class)));
+                    editor.putString("normaltimeradius",dataSnapshot.child("NormalTimeSearchRadius").getValue(String.class));
+                    editor.putString("peaktimeradius",dataSnapshot.child("PeakTimeSearchRadius").getValue(String.class));
+                    editor.putString("waittime",String.valueOf(dataSnapshot.child("WaitingTime").getValue(Integer.class)));
+                    editor.putString("waitingcharge",String.valueOf(dataSnapshot.child("WaitingCharge").getValue(Integer.class)));
+                    editor.commit();
+                    for (DataSnapshot data:dataSnapshot.child("Package").getChildren()){
+                        ArrayList<String> price=new ArrayList<String>();
+                        price.add(data.child("Latitude").getValue(String.class));
+                        price.add(data.child("Longitude").getValue(String.class));
+                        price.add(data.child("Amount").getValue(String.class));
+                        price.add(data.child("Distance").getValue(String.class));
+
+                        sqlQueries.savelocation(price);
+                    }
+                    for (DataSnapshot data:dataSnapshot.child("Price").getChildren()){
+                        ArrayList<String> price=new ArrayList<String>();
+                        price.add(data.child("NormalTime/BaseFare/Amount").getValue(String.class));
+                        price.add(data.child("NormalTime/BaseFare/Distance").getValue(String.class));
+                        price.add(data.child("NormalTime/BeyondLimit/FirstLimit/Amount").getValue(String.class));
+                        price.add(data.child("NormalTime/BeyondLimit/FirstLimit/Distance").getValue(String.class));
+                        price.add(data.child("NormalTime/BeyondLimit/SecondLimit/Amount").getValue(String.class));
+                        price.add(data.child("NormalTime/Time").getValue(String.class));
+
+                        sqlQueries.savefare(price);
+//                    Log.v("TAG",price.get(0)+" "+price.get(1)+" "+price.get(2)+" "+price.get(3)+" "+price.get(4)+" "+price.get(5)+" ");
+
+                        price.clear();
+                        price.add(data.child("PeakTime/BaseFare/Amount").getValue(String.class));
+                        price.add(data.child("PeakTime/BaseFare/Distance").getValue(String.class));
+                        price.add(data.child("PeakTime/BeyondLimit/FirstLimit/Amount").getValue(String.class));
+                        price.add(data.child("PeakTime/BeyondLimit/FirstLimit/Distance").getValue(String.class));
+                        price.add(data.child("PeakTime/BeyondLimit/SecondLimit/Amount").getValue(String.class));
+                        price.add(data.child("PeakTime/Time").getValue(String.class));
+
+                        sqlQueries.savefare(price);
+//                    Toast.makeText(WelcomeScreen.this, ""+"hi", Toast.LENGTH_SHORT).show();
+//                    Log.v("TAG",price.get(0)+" "+price.get(1)+" "+price.get(2)+" "+price.get(3)+" "+price.get(4)+" "+price.get(5)+" ");
                     }
                 }
 

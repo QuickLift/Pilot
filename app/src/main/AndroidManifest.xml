@@ -124,10 +124,14 @@
             android:enabled="true"
             android:exported="true" />
 
-        <receiver android:name=".services.UpdateLocation"/>
+        <receiver android:name=".services.UpdateLocation" />
 
         <service
             android:name=".services.SetLocation"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".services.LocationService"
             android:enabled="true"
             android:exported="true"></service>
     </application>

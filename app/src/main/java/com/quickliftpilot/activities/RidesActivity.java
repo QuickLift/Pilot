@@ -181,7 +181,15 @@ public class RidesActivity extends AppCompatActivity {
             time.setText(ride_list.get(ride_list.size()-position-1).get("time").toString());
             source.setText(ride_list.get(ride_list.size()-position-1).get("source").toString());
             destination.setText(ride_list.get(ride_list.size()-position-1).get("destination").toString());
-            amount.setText("Rs. "+ride_list.get(ride_list.size()-position-1).get("amount").toString());
+            float charge=0;
+            if (ride_list.get(ride_list.size()-position-1).containsKey("cancel_charge")) {
+                charge = Float.valueOf(ride_list.get(ride_list.size() - position - 1).get("amount").toString()) +
+                        Float.valueOf(ride_list.get(ride_list.size() - position - 1).get("cancel_charge").toString());
+            }
+            else {
+                charge = Float.valueOf(ride_list.get(ride_list.size() - position - 1).get("amount").toString());
+            }
+            amount.setText("Rs. "+charge);
             if (ride_list.get(ride_list.size()-position-1).containsKey("discount"))
                 offer.setText("Rs. "+ride_list.get(ride_list.size()-position-1).get("discount").toString()+" (Offer)");
             else

@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +15,8 @@ import android.widget.TextView;
 
 import com.quickliftpilot.R;
 import com.quickliftpilot.Util.GPSTracker;
+import com.quickliftpilot.Util.GetPriceData;
+import com.quickliftpilot.Util.SQLQueries;
 import com.quickliftpilot.Util.SequenceStack;
 import com.quickliftpilot.model.SequenceModel;
 import com.firebase.geofire.GeoFire;
@@ -23,7 +26,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.quickliftpilot.services.ShareRideCheckingService;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -73,6 +79,7 @@ public class FeedbackActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
                     datamap=(Map<String, Object>) dataSnapshot.getValue();
+                    float final_price=0;
 
                     SharedPreferences.Editor editor = ride_info.edit();
                     editor.putString("state","start");
@@ -85,9 +92,11 @@ public class FeedbackActivity extends AppCompatActivity {
 //                        String destination = address.toString();
                     HashMap<String,Object> map= new HashMap<>();
 
-                    fare.setText("Rs. "+datamap.get("price").toString());
+//                    fare.setText("Rs. "+datamap.get("price").toString());
                     if (!datamap.get("cancel_charge").toString().equals("0")) {
                         cancel.setText("Rs. " + datamap.get("cancel_charge").toString());
+                        final_price+=Float.valueOf(datamap.get("cancel_charge").toString());
+                        Log.v("PRICE",""+final_price);
                         findViewById(R.id.cancel_text).setVisibility(View.VISIBLE);
                     }else {
                         cancel.setVisibility(View.GONE);
@@ -95,6 +104,8 @@ public class FeedbackActivity extends AppCompatActivity {
                     }
                     if (datamap.containsKey("offer") && !datamap.get("offer").toString().equals("0")) {
                         ((TextView)findViewById(R.id.offer)).setText("Rs. " + datamap.get("offer").toString()+" )");
+                        final_price-=Float.valueOf(datamap.get("offer").toString());
+                        Log.v("PRICE",""+final_price);
                         findViewById(R.id.offer_text).setVisibility(View.VISIBLE);
                     }else {
                         findViewById(R.id.offer).setVisibility(View.GONE);
@@ -102,6 +113,8 @@ public class FeedbackActivity extends AppCompatActivity {
                     }
                     if (datamap.containsKey("parking_price") && !datamap.get("parking_price").toString().equals("0")) {
                         ((TextView)findViewById(R.id.parking)).setText("Rs. " + datamap.get("parking_price").toString()+" )");
+                        final_price+=Float.valueOf(datamap.get("parking_price").toString());
+                        Log.v("PRICE",""+final_price);
                         findViewById(R.id.parking_text).setVisibility(View.VISIBLE);
                     }else {
                         findViewById(R.id.parking).setVisibility(View.GONE);
@@ -109,11 +122,9 @@ public class FeedbackActivity extends AppCompatActivity {
                     }
 
                     Float tot=Float.valueOf(datamap.get("price").toString())+Float.valueOf(datamap.get("cancel_charge").toString());
-                    total.setText("Rs. "+(int)((float)tot));
 
                     price=Integer.parseInt(datamap.get("price").toString());
 
-                    map.put("amount",datamap.get("price").toString());
                     map.put("customerid",datamap.get("customer_id").toString());
                     map.put("destination",datamap.get("destination").toString());
                     map.put("driver",log_id.getString("id",null));
@@ -129,8 +140,94 @@ public class FeedbackActivity extends AppCompatActivity {
                     map.put("time",new Date().toString());
                     map.put("status","Completed");
 
+//                    float total = 0;
+//                    map.put("waiting",datamap.get("seat").toString());
+//                    map.put("timing",new Date().toString());
                     String key = rides.push().getKey();
-                    rides.child(key).setValue(map);
+
+                    if (datamap.containsKey("version")) {
+                        if (dataSnapshot.hasChild("located") && dataSnapshot.hasChild("started") && dataSnapshot.hasChild("waitcharge")) {
+                            try {
+                                Date date1 = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss").parse(dataSnapshot.child("started").getValue().toString());
+                                Date date2 = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss").parse(dataSnapshot.child("located").getValue().toString());
+
+                                long diff = date1.getTime() - date2.getTime();
+//                            int days = (int) (diff / (1000*60*60*24));
+//                            int hours = (int) ((diff - (1000*60*60*24*days)) / (1000*60*60));
+                                int min = (int) (diff / (1000 * 60));
+                                if (dataSnapshot.hasChild("waittime") && (min > Integer.parseInt(dataSnapshot.child("waittime").getValue().toString()))) {
+//                                tot+=(Float.parseFloat(dataSnapshot.child("waitcharge").getValue().toString())*(float)(min-Integer.parseInt(dataSnapshot.child("waittime").getValue().toString())));
+                                    map.put("waiting", String.valueOf((int) (Float.parseFloat(dataSnapshot.child("waitcharge").getValue().toString()) * (float) (min - Integer.parseInt(dataSnapshot.child("waittime").getValue().toString())))));
+                                    final_price += (Float.parseFloat(dataSnapshot.child("waitcharge").getValue().toString()) * (float) (min - Integer.parseInt(dataSnapshot.child("waittime").getValue().toString())));
+                                    Log.v("PRICE", "" + final_price);
+                                } else {
+                                    map.put("waiting", "0");
+                                }
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            map.put("waiting", "0");
+                        }
+                        if (dataSnapshot.hasChild("ended") && dataSnapshot.hasChild("started") && dataSnapshot.hasChild("timecharge") && dataSnapshot.hasChild("triptime")) {
+                            try {
+                                Date date1 = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss").parse(dataSnapshot.child("started").getValue().toString());
+                                Date date2 = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss").parse(dataSnapshot.child("ended").getValue().toString());
+
+                                long diff = date2.getTime() - date1.getTime();
+//                            int days = (int) (diff / (1000*60*60*24));
+//                            int hours = (int) ((diff - (1000*60*60*24*days)) / (1000*60*60));
+                                int min = (int) (diff / (1000 * 60));
+                                final_price += ((float) min) * Float.parseFloat(dataSnapshot.child("timecharge").getValue().toString());
+                                Log.v("PRICE", "" + final_price);
+                                map.put("timing", (int) (Float.parseFloat(dataSnapshot.child("timecharge").getValue().toString()) * (float) (min)));
+//                            if ((min>Integer.parseInt(dataSnapshot.child("triptime").getValue().toString()))){
+//                                tot+=(Float.parseFloat(dataSnapshot.child("timecharge").getValue().toString())*(float)(min-Integer.parseInt(dataSnapshot.child("triptime").getValue().toString())));
+//                                map.put("timing", (int)(Float.parseFloat(dataSnapshot.child("timecharge").getValue().toString())*(float)(min)));
+//                            }else {
+//                                map.put("timing", (int)(Float.parseFloat(dataSnapshot.child("timecharge").getValue().toString())*(float)(min)));
+//                            }
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            map.put("timing", "0");
+                        }
+//                    price=(int) (((float)tot)-Float.valueOf(datamap.get("cancel_charge").toString()));
+//                    map.put("amount",String.valueOf(price));
+//                    total.setText("Rs. "+(int)((float)tot));
+
+                        SQLQueries sqlQueries = new SQLQueries(FeedbackActivity.this);
+
+                        Cursor cursor = sqlQueries.retrievefare();
+                        Object[] dataTransfer = new Object[18];
+                        String url = getDirectionsUrltwoplaces(datamap.get("st_lat").toString(), datamap.get("st_lng").toString(), datamap.get("en_lat").toString(), datamap.get("en_lng").toString());
+                        GetPriceData getDirectionsData = new GetPriceData();
+                        dataTransfer[0] = url;
+                        dataTransfer[1] = fare;
+                        dataTransfer[2] = final_price;
+                        dataTransfer[3] = map;
+                        dataTransfer[4] = key;
+                        dataTransfer[5] = rides;
+                        dataTransfer[6] = datamap.get("veh_type").toString();
+                        dataTransfer[7] = cursor;
+                        dataTransfer[8] = FeedbackActivity.this;
+                        dataTransfer[9] = total;
+                        dataTransfer[10] = datamap.get("cancel_charge").toString();
+                        dataTransfer[11] = price;
+                        getDirectionsData.execute(dataTransfer);
+                    }
+                    else {
+                        map.put("waiting","0");
+                        map.put("timing", "0");
+
+                        price=(int) (((float)tot)-Float.valueOf(datamap.get("cancel_charge").toString()));
+                        map.put("amount",String.valueOf(price));
+                        fare.setText("Rs. "+(int)((float)price));
+                        total.setText("Rs. "+(int)((float)tot));
+
+                        rides.child(key).setValue(map);
+                    }
 
                     HashMap<String,Object> last_ride = new HashMap<>();
                     last_ride.put("date",(new Date()).toString());
@@ -474,5 +571,16 @@ public class FeedbackActivity extends AppCompatActivity {
             }
         }
         super.onStop();
+    }
+
+    private String getDirectionsUrltwoplaces(String st_lt,String st_ln,String en_lt,String en_ln) {
+        GPSTracker gpsTracker=new GPSTracker(this);
+        StringBuilder googleDirectionsUrl=new StringBuilder("https://maps.googleapis.com/maps/api/directions/json?");
+        googleDirectionsUrl.append("origin="+st_lt+","+st_ln);
+        googleDirectionsUrl.append("&destination="+gpsTracker.getLatitude()+","+gpsTracker.getLongitude());
+        googleDirectionsUrl.append("&waypoints=optimize:false");
+        googleDirectionsUrl.append("|" + en_lt + "," + en_ln);
+        googleDirectionsUrl.append("&key="+"AIzaSyAexys7sg7A0OSyEk1uBmryDXFzCmY0068");
+        return googleDirectionsUrl.toString();
     }
 }

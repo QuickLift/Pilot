@@ -279,4 +279,13 @@ public class RequestService extends Service {
         });
         return START_STICKY;
     }
+
+//    @Override
+//    public void onDestroy() {
+//        super.onDestroy();
+//        SharedPreferences pref = getSharedPreferences("loginPref", MODE_PRIVATE);
+//        if (pref.contains("status") && pref.getBoolean("status",false)){
+//            startService(new Intent(this,RequestService.class));
+//        }
+//    }
 }

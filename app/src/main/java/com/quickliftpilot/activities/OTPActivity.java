@@ -10,13 +10,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.quickliftpilot.R;
 
-public class OTPActivity extends AppCompatActivity {
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+public class OTPActivity extends AppCompatActivity {
     private static EditText otp;
     private static Button otp_btn;
     private SharedPreferences ride_info;
+    SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +44,9 @@ public class OTPActivity extends AppCompatActivity {
                 }else {
                     int num = Integer.parseInt(otp.getText().toString());
                     if (num == Integer.parseInt(getIntent().getStringExtra("otp"))){
+                        SharedPreferences log_id=getApplicationContext().getSharedPreferences("Login",MODE_PRIVATE);
+                        DatabaseReference db= FirebaseDatabase.getInstance().getReference("CustomerRequests/"+log_id.getString("id",null));
+                        db.child(getIntent().getStringExtra("id")+"/started").setValue(sdf.format(new Date()));
                         Intent returnIntent = new Intent();
                         returnIntent.putExtra("result",true);
                         setResult(Activity.RESULT_OK,returnIntent);

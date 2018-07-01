@@ -72,7 +72,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Stack;
@@ -112,6 +114,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     ValueEventListener response_listener=null;
     public static Activity fa;
     Marker marker;
+    SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -689,13 +692,13 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
     @Override
     public void onLocationChanged(Location location) {
-        Log.v("Tag","Service up2");
+//        Log.v("Tag","Service up2");
 
         if (location != null) {
             this.location = location;
 //            getCurrentLocation();
 //            moveMap();
-            Log.v("Tag", "Map" + location.getLatitude() + " " + location.getLongitude());
+//            Log.v("Tag", "Map" + location.getLatitude() + " " + location.getLongitude());
             mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(),location.getLongitude())));
             mMap.animateCamera(CameraUpdateFactory.zoomTo(13));
             mMap.getUiSettings().setZoomControlsEnabled(true);
@@ -1031,6 +1034,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Response/"+model.getId()+"/resp");
         int id = v.getId();
         if (id == locate_btn.getId()){
+            db.child(model.getId()+"/located").setValue(sdf.format(new Date()));
             ref.setValue("Located");
             SharedPreferences.Editor editor = ride_info.edit();
             editor.putString("state","locate");
@@ -1053,11 +1057,13 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                 end_trip.setVisibility(View.VISIBLE);
             }
         }else if(id == start_trip_btn.getId()){
+//            db.child(model.getId()+"/started").setValue(sdf.format(new Date()));
 //            SharedPreferences.Editor editor = ride_info.edit();
 //            editor.putString("state","start_trip");
 //            editor.commit();
             Intent i=new Intent(this,OTPActivity.class);
             i.putExtra("otp",model.getOtp());
+            i.putExtra("id",model.getId());
             startActivityForResult(i,2);
         }else if(id == pick_nav.getId()){
 //            SharedPreferences.Editor editor = ride_info.edit();
@@ -1095,6 +1101,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                 startService(new Intent(this, FloatingViewService.class));
             }
         }else if (id == end_trip_btn.getId()){
+            db.child(model.getId()+"/ended").setValue(sdf.format(new Date()));
 //            resp.removeEventListener(response_listener);
             dest_type.setVisibility(View.GONE);
             cancel.setVisibility(View.VISIBLE);

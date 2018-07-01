@@ -409,6 +409,8 @@ public class Login extends AppCompatActivity {
                             type = "Auto";
                         } else if (getType.equalsIgnoreCase("rickshaw")) {
                             type = "Rickshaw";
+                        } else if (getType.equalsIgnoreCase("excel")) {
+                            type = "Excel";
                         }
 
                         editor.putString("type", type);

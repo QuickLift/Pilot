@@ -15,8 +15,8 @@ android {
         applicationId "com.quickliftpilot"
         minSdkVersion 18
         targetSdkVersion 27
-        versionCode 4
-        versionName "1.0.3"
+        versionCode 5
+        versionName "1.0.4"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

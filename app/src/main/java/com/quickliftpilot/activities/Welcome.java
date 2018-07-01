@@ -48,6 +48,7 @@ import com.quickliftpilot.R;
 import com.quickliftpilot.Util.GPSTracker;
 import com.quickliftpilot.Util.SequenceStack;
 import com.quickliftpilot.model.SequenceModel;
+import com.quickliftpilot.services.LocationService;
 import com.quickliftpilot.services.RequestService;
 import com.quickliftpilot.services.ShareRideCheckingService;
 import com.firebase.geofire.GeoFire;
@@ -356,6 +357,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
 //                    stopService(rideCheckingService);
                         startService(requestService);
                         startService(rideCheckingService);
+                        startService(new Intent(Welcome.this, LocationService.class));
                         login_status.setText("Login");
                         login_duration.setText("Running...");
                         wel_edit = welcome.edit();
@@ -660,7 +662,9 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
                                                     Map<String, Object> map = (Map<String, Object>) data.getValue();
                                                     book.setText(map.get("book").toString());
                                                     earn.setText("Rs. " + map.get("earn").toString());
-                                                    cancel.setText(map.get("cancel").toString());
+                                                    int count=Integer.parseInt(map.get("cancel").toString())+
+                                                            Integer.parseInt(map.get("reject").toString());
+                                                    cancel.setText(String.valueOf(count));
                                                 }
                                             }
 

@@ -24,6 +24,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Map;
 import java.util.Stack;
@@ -172,6 +174,9 @@ public class TripHandlerActivity extends AppCompatActivity {
         startService(new Intent(this, RouteArrangeService.class));
 
         db.child("accept").setValue(1);
+
+        SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+        db.child("accepted").setValue(sdf.format(new Date()));
         DatabaseReference response = FirebaseDatabase.getInstance().getReference("Response/"+ride_info.getString("customer_id",null));
         response.child("resp").setValue("Accept");
         response.child("driver").setValue(log_id.getString("id",null));
