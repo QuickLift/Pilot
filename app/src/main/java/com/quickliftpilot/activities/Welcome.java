@@ -113,7 +113,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
     public static Activity WelcomeActivity=null;
     private PowerManager.WakeLock mWakeLock;
     UpdateLocation mReceiver=new UpdateLocation();
-    private GoogleApiClient googleApiClient;
+//    private GoogleApiClient googleApiClient;
 
     @Override
     public void onBackPressed() {
@@ -157,12 +157,12 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
         WelcomeActivity=this;
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-        googleApiClient.connect();
+//        googleApiClient = new GoogleApiClient.Builder(this)
+//                .addConnectionCallbacks(this)
+//                .addOnConnectionFailedListener(this)
+//                .addApi(LocationServices.API)
+//                .build();
+//        googleApiClient.connect();
 
         manager =  (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -358,13 +358,19 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
                         startService(requestService);
                         startService(rideCheckingService);
 //                        startService(new Intent(Welcome.this, LocationService.class));
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            startForegroundService(new Intent(Welcome.this,LocationService.class));
+                        }
+                        else {
+                            startService(new Intent(Welcome.this,LocationService.class));
+                        }
                         login_status.setText("Login");
                         login_duration.setText("Running...");
                         wel_edit = welcome.edit();
                         wel_edit.putString("date",formateDate);
                         wel_edit.putString("login_time",login_time.toString());
                         wel_edit.commit();
-                        getCurrentLocation();
+//                        getCurrentLocation();
                     }
 
                 }else {
@@ -923,30 +929,30 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
     LocationRequest lct;
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        lct = LocationRequest.create();
-        lct.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        if (log_id.contains("ride") && !log_id.getString("ride",null).equals("")) {
-            lct.setInterval(15000);
-        }
-        else {
-            lct.setInterval(30000);
-        }
-
-        Log.v("Tag","Service up");
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return;
-            }
-        }
-        LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, lct, this);
+//        lct = LocationRequest.create();
+//        lct.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+//        if (log_id.contains("ride") && !log_id.getString("ride",null).equals("")) {
+//            lct.setInterval(15000);
+//        }
+//        else {
+//            lct.setInterval(30000);
+//        }
+//
+//        Log.v("Tag","Service up");
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            if (checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//                // TODO: Consider calling
+//                //    ActivityCompat#requestPermissions
+//                // here to request the missing permissions, and then overriding
+//                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//                //                                          int[] grantResults)
+//                // to handle the case where the user grants the permission. See the documentation
+//                // for ActivityCompat#requestPermissions for more details.
+//                return;
+//            }
+//        }
+//        LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, lct, this);
     }
 
     @Override

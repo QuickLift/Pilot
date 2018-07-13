@@ -73,10 +73,11 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
             // Do something here
             wakeLock.acquire();
             while (true) {
-                Log.v("Target", "Printing");
+//                Log.v("Target", "Printing");
                 if (!pref.getBoolean("status",false)) {
                     stopForeground(true);
-                    wakeLock.release();
+                    if (wakeLock.isHeld())
+                        wakeLock.release();
                     stopSelf();
                 }
                 else {
@@ -87,10 +88,19 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
                             .build();
                     googleApiClient.connect();
 //                ref.child(logid.getString("key", null)).setValue(sdf.format(new Date()));
-                    try {
-                        Thread.sleep(20000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                    if (logid.contains("ride") && !logid.getString("ride", null).equals("")) {
+                        try {
+                            Thread.sleep(15000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    else if (pref.contains("status") && pref.getBoolean("status",false)){
+                        try {
+                            Thread.sleep(30000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }
