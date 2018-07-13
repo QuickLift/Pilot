@@ -3,6 +3,7 @@ package com.quickliftpilot.activities;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -32,6 +33,13 @@ public class LauncherActivity extends AppCompatActivity {
         final SharedPreferences.Editor editor=log_id.edit();
         if (log_id.contains("id")) {
             DatabaseReference db = FirebaseDatabase.getInstance().getReference("Drivers");
+            String version=null;
+            try {
+                version=getApplication().getPackageManager().getPackageInfo(getApplication().getPackageName(), 0).versionName;
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+            db.child(log_id.getString("id", null)+"/version").setValue(version);
             db.child(log_id.getString("id", null)).child("subPlan").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {

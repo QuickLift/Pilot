@@ -111,7 +111,7 @@
                             android:layout_marginTop="4dp"
                             android:layout_width="60dp"
                             android:layout_height="wrap_content"
-                            android:text="BOOKING"/>
+                            android:text="@string/Booking_Circle"/>
                         <TextView
                             android:id="@+id/book_no"
                             android:layout_marginTop="10dp"
@@ -132,7 +132,7 @@
                         <TextView
                             android:layout_width="60dp"
                             android:layout_height="wrap_content"
-                            android:text="EARNING"/>
+                            android:text="@string/Earning_Circle"/>
                         <TextView
                             android:id="@+id/earn_no"
                             android:layout_width="wrap_content"
@@ -152,7 +152,7 @@
                         <TextView
                             android:layout_width="60dp"
                             android:layout_height="wrap_content"
-                            android:text="CANCEL"/>
+                            android:text="@string/Cancel_Circle"/>
                         <TextView
                             android:id="@+id/cancel_no"
                             android:layout_width="wrap_content"
@@ -200,7 +200,7 @@
                         android:id="@+id/profile_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Profile"
+                        android:text="@string/Welcome_Profile"
                         android:textColor="@android:color/black"
                         android:textSize="18sp" />
 
@@ -226,7 +226,7 @@
                         android:id="@+id/ride_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Rides"
+                        android:text="@string/Welcome_Ride"
                         android:textColor="@android:color/black"
                         android:textSize="18sp" />
 
@@ -250,13 +250,15 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:background="@color/back_color"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/account_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Account Info"
+                        android:text="@string/Welcome_AccountInfo"
                         android:textColor="@android:color/black"
                         android:textSize="18sp" />
 
@@ -281,7 +283,7 @@
                         android:id="@+id/help_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Help"
+                        android:text="@string/Welcome_Help"
                         android:textColor="@android:color/black"
                         android:textSize="18sp" />
 

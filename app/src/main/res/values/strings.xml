@@ -87,4 +87,28 @@
         <item>Cancel History</item>
     </string-array>
     <string name="select_prompt">Select an option</string>
+
+    // Welcome Activity
+    <string name="Booking_Circle">Booking</string>
+    <string name="Earning_Circle">Earning</string>
+    <string name="Cancel_Circle">Cancel</string>
+    <string name="Welcome_Profile">Profile</string>
+    <string name="Welcome_Ride">Rides</string>
+    <string name="Welcome_AccountInfo">Account</string>
+    <string name="Welcome_Help">Help</string>
+
+
+    //Profile Activity
+
+    <string name="Profile_Cancel">Cancel</string>
+    <string name="Profile_Save">Save</string>
+
+    //Map Activity
+
+    <string name="Map_PickUp">Pick Up</string>
+    <string name="Map_Located">Customer Located</string>
+    <string name="Map_StartTrip">Start Trip</string>
+    <string name="Map_Drop">Drop</string>
+    <string name="Map_EndTrip">End Trip</string>
+    <string name="Map_RideList">Rider List</string>
 </resources>

@@ -27,6 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
@@ -101,6 +102,16 @@ public class TripHandlerActivity extends AppCompatActivity {
 //            delref.removeValue();
             db.removeValue();
         }
+
+        DatabaseReference rej_ride=FirebaseDatabase.getInstance().getReference("RejectRides");
+        HashMap<String,Object> map=new HashMap<>();
+        map.put("customer_id",ride_info.getString("customer_id",null));
+        map.put("customer_name",ride_info.getString("name",null));
+        map.put("driver",log_id.getString("id",null));
+        map.put("source",ride_info.getString("source",null));
+        map.put("destination",ride_info.getString("destination",null));
+        map.put("time",(new Date()).toString());
+        rej_ride.push().setValue(map);
 
         GregorianCalendar gregorianCalendar=new GregorianCalendar();
         String date = String.format("%02d",gregorianCalendar.get(GregorianCalendar.DAY_OF_MONTH));

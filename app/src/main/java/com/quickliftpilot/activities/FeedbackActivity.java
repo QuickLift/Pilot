@@ -169,6 +169,7 @@ public class FeedbackActivity extends AppCompatActivity {
                         } else {
                             map.put("waiting", "0");
                         }
+                        int time=0;
                         if (dataSnapshot.hasChild("ended") && dataSnapshot.hasChild("started") && dataSnapshot.hasChild("timecharge") && dataSnapshot.hasChild("triptime")) {
                             try {
                                 Date date1 = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss").parse(dataSnapshot.child("started").getValue().toString());
@@ -178,9 +179,11 @@ public class FeedbackActivity extends AppCompatActivity {
 //                            int days = (int) (diff / (1000*60*60*24));
 //                            int hours = (int) ((diff - (1000*60*60*24*days)) / (1000*60*60));
                                 int min = (int) (diff / (1000 * 60));
+                                time=min;
                                 final_price += ((float) min) * Float.parseFloat(dataSnapshot.child("timecharge").getValue().toString());
                                 Log.v("PRICE", "" + final_price);
-                                map.put("timing", (int) (Float.parseFloat(dataSnapshot.child("timecharge").getValue().toString()) * (float) (min)));
+                                map.put("triptime",String.valueOf(min));
+                                map.put("timing", String.valueOf((int) (Float.parseFloat(dataSnapshot.child("timecharge").getValue().toString()) * (float) (min))));
 //                            if ((min>Integer.parseInt(dataSnapshot.child("triptime").getValue().toString()))){
 //                                tot+=(Float.parseFloat(dataSnapshot.child("timecharge").getValue().toString())*(float)(min-Integer.parseInt(dataSnapshot.child("triptime").getValue().toString())));
 //                                map.put("timing", (int)(Float.parseFloat(dataSnapshot.child("timecharge").getValue().toString())*(float)(min)));
@@ -201,7 +204,13 @@ public class FeedbackActivity extends AppCompatActivity {
 
                         Cursor cursor = sqlQueries.retrievefare();
                         Object[] dataTransfer = new Object[18];
-                        String url = getDirectionsUrltwoplaces(datamap.get("st_lat").toString(), datamap.get("st_lng").toString(), datamap.get("en_lat").toString(), datamap.get("en_lng").toString());
+                        String url=null;
+                        if (time>(int)(float)(Float.valueOf(dataSnapshot.child("triptime").getValue().toString())*1.2)) {
+                            url = getDirectionsUrlthreeplaces(datamap.get("st_lat").toString(), datamap.get("st_lng").toString(), datamap.get("en_lat").toString(), datamap.get("en_lng").toString());
+                        }
+                        else {
+                            url = getDirectionsUrltwoplaces(datamap.get("st_lat").toString(), datamap.get("st_lng").toString(), datamap.get("en_lat").toString(), datamap.get("en_lng").toString());
+                        }
                         GetPriceData getDirectionsData = new GetPriceData();
                         dataTransfer[0] = url;
                         dataTransfer[1] = fare;
@@ -215,6 +224,8 @@ public class FeedbackActivity extends AppCompatActivity {
                         dataTransfer[9] = total;
                         dataTransfer[10] = datamap.get("cancel_charge").toString();
                         dataTransfer[11] = price;
+                        dataTransfer[12] = ref;
+                        dataTransfer[13] = ongoing_rides;
                         getDirectionsData.execute(dataTransfer);
                     }
                     else {
@@ -227,6 +238,7 @@ public class FeedbackActivity extends AppCompatActivity {
                         total.setText("Rs. "+(int)((float)tot));
 
                         rides.child(key).setValue(map);
+                        ref.child("resp").setValue("Trip Ended");
                     }
 
                     HashMap<String,Object> last_ride = new HashMap<>();
@@ -239,8 +251,6 @@ public class FeedbackActivity extends AppCompatActivity {
                     last_ride.put("status","");
 
                     LastRide.child(datamap.get("customer_id").toString()).setValue(last_ride);
-
-                    ref.child("resp").setValue("Trip Ended");
                 }
             }
 
@@ -575,11 +585,24 @@ public class FeedbackActivity extends AppCompatActivity {
 
     private String getDirectionsUrltwoplaces(String st_lt,String st_ln,String en_lt,String en_ln) {
         GPSTracker gpsTracker=new GPSTracker(this);
+
+//        Log.v("DISTANCE",""+gpsTracker.getLatitude()+" , "+gpsTracker.getLongitude());
         StringBuilder googleDirectionsUrl=new StringBuilder("https://maps.googleapis.com/maps/api/directions/json?");
         googleDirectionsUrl.append("origin="+st_lt+","+st_ln);
-        googleDirectionsUrl.append("&destination="+gpsTracker.getLatitude()+","+gpsTracker.getLongitude());
-        googleDirectionsUrl.append("&waypoints=optimize:false");
-        googleDirectionsUrl.append("|" + en_lt + "," + en_ln);
+        googleDirectionsUrl.append("&destination="+log_id.getString("cur_lat",null)+","+log_id.getString("cur_lng",null));
+        googleDirectionsUrl.append("&key="+"AIzaSyAexys7sg7A0OSyEk1uBmryDXFzCmY0068");
+        return googleDirectionsUrl.toString();
+    }
+
+    private String getDirectionsUrlthreeplaces(String st_lt,String st_ln,String en_lt,String en_ln) {
+        GPSTracker gpsTracker=new GPSTracker(this);
+
+//        Log.v("DISTANCE",""+gpsTracker.getLatitude()+" , "+gpsTracker.getLongitude());
+        StringBuilder googleDirectionsUrl=new StringBuilder("https://maps.googleapis.com/maps/api/directions/json?");
+        googleDirectionsUrl.append("origin="+st_lt+","+st_ln);
+        googleDirectionsUrl.append("&destination="+log_id.getString("cur_lat",null)+","+log_id.getString("cur_lng",null));
+        googleDirectionsUrl.append("&waypoints=via:");
+        googleDirectionsUrl.append(en_lt + "," + en_ln);
         googleDirectionsUrl.append("&key="+"AIzaSyAexys7sg7A0OSyEk1uBmryDXFzCmY0068");
         return googleDirectionsUrl.toString();
     }

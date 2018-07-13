@@ -357,7 +357,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
 //                    stopService(rideCheckingService);
                         startService(requestService);
                         startService(rideCheckingService);
-                        startService(new Intent(Welcome.this, LocationService.class));
+//                        startService(new Intent(Welcome.this, LocationService.class));
                         login_status.setText("Login");
                         login_duration.setText("Running...");
                         wel_edit = welcome.edit();
@@ -729,8 +729,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
         return haveConnectedWifi || haveConnectedMobile;
     }
 
-    public boolean hasActiveInternetConnection()
-    {
+    public boolean hasActiveInternetConnection(){
         // TCP/HTTP/DNS (depending on the port, 53=DNS, 80=HTTP, etc.)
         Runtime runtime = Runtime.getRuntime();
         try {
@@ -803,8 +802,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
                 SixthPermissionResult == PackageManager.PERMISSION_GRANTED;
     }
 
-    static public void appendLog(String text)
-    {
+    static public void appendLog(String text) {
         File logFile = new File("sdcard/log.txt");
         if (!logFile.exists())
         {
@@ -901,6 +899,10 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
 //            this.location = location;
 //            getCurrentLocation();
 //            moveMap();
+            SharedPreferences.Editor editor=log_id.edit();
+            editor.putString("cur_lat",String.valueOf(location.getLatitude()));
+            editor.putString("cur_lng",String.valueOf(location.getLongitude()));
+            editor.commit();
             Log.v("Tag", "Welcome" + location.getLatitude() + " " + location.getLongitude());
 
             String userId= log_id.getString("id",null);

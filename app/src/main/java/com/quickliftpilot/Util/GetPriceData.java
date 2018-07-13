@@ -36,7 +36,7 @@ public class GetPriceData extends AsyncTask<Object,String,String> {
     private TextView fare_text;
     private float final_price=0;
     private HashMap<String, Object> map;
-    private DatabaseReference rides;
+    private DatabaseReference rides,ref,ongoing_rides;
     private String key,veh_type;
     private TextView total_text;
     private String cancel_charge;
@@ -56,6 +56,8 @@ public class GetPriceData extends AsyncTask<Object,String,String> {
         total_text=(TextView)objects[9];
         cancel_charge=(String)objects[10];
         price=(int)objects[11];
+        ref=(DatabaseReference)objects[12];
+        ongoing_rides=(DatabaseReference)objects[13];
 //        data=(Data) objects[17];
         //duration=(String) objects[2];
 
@@ -128,16 +130,23 @@ public class GetPriceData extends AsyncTask<Object,String,String> {
             float tax=final_price * Float.valueOf(pref.getString("tax", null))/100;
             map.put("tax",String.valueOf(tax));
             final_price += tax;
+
+            Log.v("TAG","step 5: "+final_price);
         }
         else {
             map.put("tax","0");
         }
 
         map.put("amount",String.valueOf((int)(final_price-Float.valueOf(cancel_charge))));
+
+        Log.v("TAG","step 6: "+final_price);
         price=(int)(final_price-Float.valueOf(cancel_charge));
 //        Log.v("PRICE",""+final_price);
         fare_text.setText("Rs. "+price);
         total_text.setText("Rs. "+(int)final_price);
+
+        ongoing_rides.child("price").setValue(String.valueOf((int)(final_price-Float.valueOf(cancel_charge))));
+        ref.child("resp").setValue("Trip Ended");
         rides.child(key).setValue(map);
     }
 
@@ -235,25 +244,26 @@ public class GetPriceData extends AsyncTask<Object,String,String> {
 //            Log.v("TAG",cursor.getString(0)+" "+cursor.getString(1)+" "+cursor.getString(2)
 //                    +" "+cursor.getString(3)+" "+cursor.getString(4)+" "+cursor.getString(5)+" ");
         float fare=final_price;
+        Log.v("TAG","fare : "+fare);
         if (index==2)
             cursor.moveToNext();
 
         if (pckg==-1) {
             if (distanceValue <= Integer.parseInt(cursor.getString(cursor.getColumnIndex("dist_base")))) {
                 fare += Float.valueOf(cursor.getString(cursor.getColumnIndex("amount_base")));
-                Log.v("TAG",""+fare);
+                Log.v("TAG","p step 1: "+fare);
             } else if (distanceValue <= Integer.parseInt(cursor.getString(cursor.getColumnIndex("dist_first")))) {
                 fare += Float.valueOf(cursor.getString(cursor.getColumnIndex("amount_base")));
-                Log.v("TAG","1 "+fare);
+//                Log.v("TAG","1 "+fare);
                 fare = fare + (Float.valueOf(cursor.getString(cursor.getColumnIndex("amount_first"))) * (distanceValue - Integer.parseInt(cursor.getString(cursor.getColumnIndex("dist_base")))));
-                Log.v("TAG","2 "+fare);
+                Log.v("TAG","p step 2: "+fare);
             } else {
                 fare += Float.valueOf(cursor.getString(cursor.getColumnIndex("amount_base")));
-                Log.v("TAG",""+fare);
+//                Log.v("TAG",""+fare);
                 fare = fare + (Float.valueOf(cursor.getString(cursor.getColumnIndex("amount_first"))) * (Integer.parseInt(cursor.getString(cursor.getColumnIndex("dist_first"))) - Integer.parseInt(cursor.getString(cursor.getColumnIndex("dist_base")))));
-                Log.v("TAG",""+fare);
+//                Log.v("TAG",""+fare);
                 fare = fare + (Float.valueOf(cursor.getString(cursor.getColumnIndex("amount_second"))) * (distanceValue - Integer.parseInt(cursor.getString(cursor.getColumnIndex("dist_first")))));
-                Log.v("TAG",""+fare);
+                Log.v("TAG","p step 3: "+fare);
             }
 //            fare = fare + (time * Float.valueOf(cursor.getString(cursor.getColumnIndex("time"))));
 //            data.setTimecharge(cursor.getString(cursor.getColumnIndex("time")));
@@ -261,12 +271,12 @@ public class GetPriceData extends AsyncTask<Object,String,String> {
         else {
             if (distanceValue <= Integer.parseInt(sloc.getString(sloc.getColumnIndex("distance")))) {
                 fare = Float.valueOf(sloc.getString(sloc.getColumnIndex("amount")));
-//                Log.v("TAG",""+fare);
+                Log.v("TAG","step 1: "+fare);
             } else if (distanceValue <= Integer.parseInt(cursor.getString(cursor.getColumnIndex("dist_first")))) {
                 fare = Float.valueOf(sloc.getString(sloc.getColumnIndex("amount")));
 //                Log.v("TAG",""+fare);
                 fare = fare + (Float.valueOf(cursor.getString(cursor.getColumnIndex("amount_first"))) * (distanceValue - Integer.parseInt(sloc.getString(sloc.getColumnIndex("distance")))));
-//                Log.v("TAG",""+fare);
+                Log.v("TAG","step 2: "+fare);
 //                fare = fare + (time * Float.valueOf(cursor.getString(cursor.getColumnIndex("time"))));
             } else {
                 fare = Float.valueOf(sloc.getString(sloc.getColumnIndex("amount")));
@@ -274,7 +284,7 @@ public class GetPriceData extends AsyncTask<Object,String,String> {
                 fare = fare + (Float.valueOf(cursor.getString(cursor.getColumnIndex("amount_first"))) * (Integer.parseInt(cursor.getString(cursor.getColumnIndex("dist_first"))) - Integer.parseInt(sloc.getString(sloc.getColumnIndex("distance")))));
 //                Log.v("TAG",""+fare);
                 fare = fare + (Float.valueOf(cursor.getString(cursor.getColumnIndex("amount_second"))) * (distanceValue - Integer.parseInt(cursor.getString(cursor.getColumnIndex("dist_first")))));
-//                Log.v("TAG",""+fare);
+                Log.v("TAG","step 3: "+fare);
             }
 //            fare = fare + (time * Float.valueOf(cursor.getString(cursor.getColumnIndex("time"))));
 //            data.setTimecharge(cursor.getString(cursor.getColumnIndex("time")));
@@ -290,6 +300,7 @@ public class GetPriceData extends AsyncTask<Object,String,String> {
             val=(int)(((float)val)* Float.parseFloat(pref.getString("ratemultiplier",null)));
             final_price=val;
             fare_text.setText("Rs. " + val);
+            Log.v("TAG","step 4: "+val);
 //            price_car.setText("Rs. " + val);
         }
         else if (vehicle_case==2) {
@@ -298,7 +309,7 @@ public class GetPriceData extends AsyncTask<Object,String,String> {
             val=(int)(((float)val)* Float.parseFloat(pref.getString("ratemultiplier",null)))+((int)((float)add* Float.parseFloat(pref.getString("ratemultiplier",null)))*Integer.parseInt(pref.getString("outsidetripextraamount",null)));
 //            price_car.setText("Rs. " + val);
 
-            Log.v("TAG",""+distanceValue+" "+fare+" "+val);
+            Log.v("TAG","step 4: "+distanceValue+" "+fare+" "+val);
         }
         //time_car.setText(String.valueOf(time/60)+" min");
     }
