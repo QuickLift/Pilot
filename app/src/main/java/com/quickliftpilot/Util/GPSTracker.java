@@ -111,7 +111,7 @@ public class GPSTracker extends Service implements LocationListener,
                                 latitude = location.getLatitude();
                                 longitude = location.getLongitude();
 
-                                Log.v("Location",""+latitude+" "+longitude);
+//                                Log.v("Location",""+latitude+" "+longitude);
                             }
                         }
                     } catch (SecurityException e) {
@@ -134,7 +134,7 @@ public class GPSTracker extends Service implements LocationListener,
                                     latitude = location.getLatitude();
                                     longitude = location.getLongitude();
                                 }
-                                Log.v("Location",""+latitude+" "+longitude);
+//                                Log.v("Location",""+latitude+" "+longitude);
                             }
                         } catch (SecurityException e) {
                             Log.e("SecurityException", " 2 " + e.toString());
@@ -160,7 +160,7 @@ public class GPSTracker extends Service implements LocationListener,
             e.printStackTrace();
         }
 
-        Log.v("Location","here : ");
+//        Log.v("Location","here : ");
         return location;
     }
 
@@ -204,8 +204,7 @@ public class GPSTracker extends Service implements LocationListener,
 
     @Override
     public void onLocationChanged(Location location) {
-
-        Log.v("Location","h");
+        //        Log.v("Location","h");
     }
 
     @Override
@@ -228,7 +227,7 @@ public class GPSTracker extends Service implements LocationListener,
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        Log.v("Location","hry");
+//        Log.v("Location","hry");
         getLocation();
     }
 

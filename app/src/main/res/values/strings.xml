@@ -96,6 +96,8 @@
     <string name="Welcome_Ride">Rides</string>
     <string name="Welcome_AccountInfo">Account</string>
     <string name="Welcome_Help">Help</string>
+    <string name="Welcome_Login">Login</string>
+    <string name="Welcome_Logout">Logout</string>
 
 
     //Profile Activity
@@ -111,4 +113,25 @@
     <string name="Map_Drop">Drop</string>
     <string name="Map_EndTrip">End Trip</string>
     <string name="Map_RideList">Rider List</string>
+
+
+
+    //Feedback Activity
+    <string name="Feedback_TripEnded">Trip Ended</string>
+    <string name="Feedback_Fare">Fare</string>
+    <string name="Feedback_Offer">Offer</string>
+    <string name="Feedback_Parking">Parking  </string>
+
+    <string name="Feedback_Cancel">Cancellation Charge</string>
+    <string name="Feedback_Total">Total</string>
+    <string name="Feedback_Rating">Customer Rating</string>
+    <string name="Feedback_Save">Submit</string>
+
+    //Incoming request
+    <string name="Incoming_Request">Incoming Request</string>
+
+    //Otp Activity
+    <string name="Otp_Enter">Enter OTP</string>
+    <string name="Otp_Submit">Submit</string>
+
 </resources>

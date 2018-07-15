@@ -58,6 +58,7 @@ public class GetPriceData extends AsyncTask<Object,String,String> {
         price=(int)objects[11];
         ref=(DatabaseReference)objects[12];
         ongoing_rides=(DatabaseReference)objects[13];
+        pref=(SharedPreferences)objects[14];
 //        data=(Data) objects[17];
         //duration=(String) objects[2];
 
@@ -80,7 +81,7 @@ public class GetPriceData extends AsyncTask<Object,String,String> {
         duration=directionsList.get("duration");
         distance=directionsList.get("distance");
 
-        pref = context.getSharedPreferences("Login",MODE_PRIVATE);
+//        pref = context.getSharedPreferences("Login",MODE_PRIVATE);
         editor=pref.edit();
 
         //editText.setText(distance + " : "+duration);
@@ -126,6 +127,7 @@ public class GetPriceData extends AsyncTask<Object,String,String> {
 //        editText5.setText(duration);
 //        editText6.setText(duration);
 
+        map.put("trip_distance",String.valueOf(Integer.valueOf(distance)/1000));
         if (pref.contains("tax")) {
             float tax=final_price * Float.valueOf(pref.getString("tax", null))/100;
             map.put("tax",String.valueOf(tax));
@@ -141,6 +143,9 @@ public class GetPriceData extends AsyncTask<Object,String,String> {
 
         Log.v("TAG","step 6: "+final_price);
         price=(int)(final_price-Float.valueOf(cancel_charge));
+        editor.putString("saveprice",String.valueOf(price));
+        editor.commit();
+        Log.v("Price",""+price);
 //        Log.v("PRICE",""+final_price);
         fare_text.setText("Rs. "+price);
         total_text.setText("Rs. "+(int)final_price);

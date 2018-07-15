@@ -35,7 +35,7 @@
                     android:id="@+id/login_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Logout"
+                    android:text="@string/Welcome_Logout"
                     android:textSize="14sp"
                     android:layout_toRightOf="@id/login_switch"
                     android:layout_marginTop="33dp"/>

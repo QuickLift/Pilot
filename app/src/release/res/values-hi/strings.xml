@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name"> क्विक लिफ्ट</string>
+    <string name="app_name">QuickLift Pilot</string>
     <string name="label_google_sign_in">Firebase + Google Sign In</string>
     <string name="desc_google_sign_in">Use a Google Sign In credential to authenticate with Firebase.</string>
 
@@ -89,25 +89,48 @@
     <string name="select_prompt">Select an option</string>
 
     // Welcome Activity
-    <string name="Booking_Circle">बुकिंग</string>
-    <string name="Earning_Circle">आमदनी</string>
-    <string name="Cancel_Circle">कैंसिल</string>
-    <string name="Welcome_Profile">प्रोफाइल </string>
-    <string name="Welcome_Ride">राइड </string>
-    <string name="Welcome_AccountInfo">अकाउंट </string>
-    <string name="Welcome_Help">हेल्प</string>
+    <string name="Booking_Circle">Booking</string>
+    <string name="Earning_Circle">Earning</string>
+    <string name="Cancel_Circle">Cancel</string>
+    <string name="Welcome_Profile">Profile</string>
+    <string name="Welcome_Ride">Rides</string>
+    <string name="Welcome_AccountInfo">Account</string>
+    <string name="Welcome_Help">Help</string>
+    <string name="Welcome_Login">Login</string>
+    <string name="Welcome_Logout">Logout</string>
+
 
     //Profile Activity
 
-    <string name="Profile_Cancel">रद्द करें</string>
-    <string name="Profile_Save">सेव करें </string>
+    <string name="Profile_Cancel">Cancel</string>
+    <string name="Profile_Save">Save</string>
 
     //Map Activity
 
-    <string name="Map_PickUp">पिक उप</string>
-    <string name="Map_Located">कस्टमर लोकेटेड</string>
-    <string name="Map_StartTrip">यात्रा शुरू करें</string>
-    <string name="Map_Drop">ड्राप</string>
-    <string name="Map_EndTrip">यात्रा समाप्त करें</string>
-    <string name="Map_RideList">सवारी विवरण</string>
+    <string name="Map_PickUp">Pick Up</string>
+    <string name="Map_Located">Customer Located</string>
+    <string name="Map_StartTrip">Start Trip</string>
+    <string name="Map_Drop">Drop</string>
+    <string name="Map_EndTrip">End Trip</string>
+    <string name="Map_RideList">Rider List</string>
+
+
+    //Feedback Activity
+    <string name="Feedback_TripEnded">Trip Ended</string>
+    <string name="Feedback_Fare">Fare</string>
+    <string name="Feedback_Offer">Offer</string>
+    <string name="Feedback_Parking">Parking  </string>
+
+    <string name="Feedback_Cancel">Cancellation Charge</string>
+    <string name="Feedback_Total">Total</string>
+    <string name="Feedback_Rating">Customer Rating</string>
+    <string name="Feedback_Save">Submit</string>
+
+    //Incoming request
+    <string name="Incoming_Request">Incoming Request</string>
+
+    //Otp Activity
+    <string name="Otp_Enter">Enter OTP</string>
+    <string name="Otp_Submit">Submit</string>
+
 </resources>

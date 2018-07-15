@@ -15,6 +15,7 @@ import android.util.Base64;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -42,6 +43,7 @@ public class RidesActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     ImageView no_ride;
     public static Activity RideActivity=null;
+    private ArrayList<String> ridekey=new ArrayList<>();
 
     @Override
     public void onBackPressed() {
@@ -126,9 +128,11 @@ public class RidesActivity extends AppCompatActivity {
                     no_ride.setVisibility(View.VISIBLE);
                 }
                 ride_list.clear();
+                ridekey.clear();
 
                 for (DataSnapshot data:dataSnapshot.getChildren()){
                     ride_list.add((Map<String, Object>) data.getValue());
+                    ridekey.add(data.getKey());
                     //Toast.makeText(CustomerRides.this, String.valueOf(ride_list.size()), Toast.LENGTH_SHORT).show();
                     //Toast.makeText(CustomerRides.this, ride_list.get(ride_list.size()-1).get("time").toString(), Toast.LENGTH_SHORT).show();
                 }
@@ -144,9 +148,18 @@ public class RidesActivity extends AppCompatActivity {
 
             }
         });
+
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent=new Intent(RidesActivity.this,BillDetails.class);
+                intent.putExtra("rideid",ridekey.get(ridekey.size()-1-position));
+                startActivity(intent);
+            }
+        });
     }
 
-    class CustomAdapter extends BaseAdapter {
+    public class CustomAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {

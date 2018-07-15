@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.util.Log;
 
 import com.quickliftpilot.Util.CheckRoute;
@@ -37,6 +38,7 @@ public class ShareRideCheckingService extends Service {
     private Stack<SequenceModel> stack;
     GPSTracker gpsTracker;
     int value=0;
+    PowerManager.WakeLock wakeLock;
 
     public ShareRideCheckingService() {
 
@@ -45,17 +47,20 @@ public class ShareRideCheckingService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+                "MyWakelockTag");
         stack = new SequenceStack().getStack();
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        wakeLock.acquire();
         Log.i("TAG","ShareRideCheckingService");
 
         sharereq = FirebaseDatabase.getInstance().getReference("Share");
@@ -157,5 +162,17 @@ public class ShareRideCheckingService extends Service {
         });
 
         return START_STICKY;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (wakeLock.isHeld())
+            wakeLock.release();
+
+//        SharedPreferences pref = getSharedPreferences("loginPref", MODE_PRIVATE);
+//        if (pref.contains("status") && pref.getBoolean("status",false)){
+//            startService(new Intent(this,ShareRideCheckingService.class));
+//        }
     }
 }

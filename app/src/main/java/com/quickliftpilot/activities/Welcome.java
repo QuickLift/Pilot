@@ -102,7 +102,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
     private static RatingBar rate;
     private static SharedPreferences log_id,welcome;
     private static DatabaseHelper databaseHelper;
-    private static Intent requestService,rideCheckingService;
+    private static Intent requestService,rideCheckingService,locationService;
     private static Date login_time,logout_time;
     protected static final int REQUEST_CHECK_SETTINGS = 0x1;
     boolean doubleBackToExitPressedOnce = false;
@@ -179,6 +179,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
         driver_acc = FirebaseDatabase.getInstance().getReference("Driver_Account_Info");
         databaseHelper = new DatabaseHelper(getApplicationContext());
         requestService = new Intent(Welcome.this,RequestService.class);
+        locationService = new Intent(Welcome.this,LocationService.class);
         rideCheckingService=new Intent(this, ShareRideCheckingService.class);
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -359,10 +360,10 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
                         startService(rideCheckingService);
 //                        startService(new Intent(Welcome.this, LocationService.class));
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            startForegroundService(new Intent(Welcome.this,LocationService.class));
+                            startForegroundService(locationService);
                         }
                         else {
-                            startService(new Intent(Welcome.this,LocationService.class));
+                            startService(locationService);
                         }
                         login_status.setText("Login");
                         login_duration.setText("Running...");
@@ -370,6 +371,11 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
                         wel_edit.putString("date",formateDate);
                         wel_edit.putString("login_time",login_time.toString());
                         wel_edit.commit();
+                        driver_info = FirebaseDatabase.getInstance().getReference("Driver_Login_Info/"+log_id.getString("id",null)+"/"+welcome.getString("date",null));
+                        String key=driver_info.push().getKey();
+                        pref_editor.putString("loginkey",key);
+                        pref_editor.commit();
+                        driver_info.child(key+"/Login_Time").setValue(login_time.toString());
 //                        getCurrentLocation();
                     }
 
@@ -427,6 +433,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
             databaseHelper.insertLoginData(welcome.getString("date",null),"logout","100.0ms");
             stopService(requestService);
             stopService(rideCheckingService);
+//            stopService(locationService);
             login_status.setText("Logout");
             logout_time = new Date();
             login_time = new Date(welcome.getString("login_time",null));
@@ -459,7 +466,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
             map.put("Login_Time",login_time.toString());
             map.put("Logout_Time",logout_time.toString());
             map.put("Duration",dura);
-            driver_info.push().setValue(map);
+            driver_info.child(log_id.getString("loginkey",null)).setValue(map);
         }
     }
 
@@ -488,8 +495,16 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
 //            Log.v("TAG","STATUS TRUE !");
 //            stopService(requestService);
 //            stopService(rideCheckingService);
+//            startService(requestService);
+//            startService(rideCheckingService);
             startService(requestService);
             startService(rideCheckingService);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(locationService);
+            }
+            else {
+                startService(locationService);
+            }
 //            getCurrentLocation();
         }else {
             login_btn.setChecked(false);
@@ -497,6 +512,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
             login_duration.setText("Not Working");
             stopService(requestService);
             stopService(rideCheckingService);
+//            stopService()
 //            Log.v("TAG","STATUS False !");
         }
 
@@ -597,14 +613,14 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
             if (!mWakeLock.isHeld()) {
                 mWakeLock.release();
             }
-            if (log_id.getString("ride",null).equals("")) {
-                editor = pref.edit();
-                editor.putBoolean("status", false);
-                editor.commit();
-                logOut();
-            }
-            stopService(requestService);
-            stopService(rideCheckingService);
+//            if (log_id.getString("ride",null).equals("")) {
+//                editor = pref.edit();
+//                editor.putBoolean("status", false);
+//                editor.commit();
+//                logOut();
+//            }
+//            stopService(requestService);
+//            stopService(rideCheckingService);
         }
 
         @Override
@@ -901,29 +917,29 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
 //            this.location = location;
 //            moveMap();
 //        }
-        if (location != null) {
-//            this.location = location;
-//            getCurrentLocation();
-//            moveMap();
-            SharedPreferences.Editor editor=log_id.edit();
-            editor.putString("cur_lat",String.valueOf(location.getLatitude()));
-            editor.putString("cur_lng",String.valueOf(location.getLongitude()));
-            editor.commit();
-            Log.v("Tag", "Welcome" + location.getLatitude() + " " + location.getLongitude());
-
-            String userId= log_id.getString("id",null);
-
-            if (log_id.contains("ride") && !log_id.getString("ride",null).equals("")) {
-                DatabaseReference statref = FirebaseDatabase.getInstance().getReference("Status");
-                GeoFire statGeoFire = new GeoFire(statref);
-                statGeoFire.setLocation(userId, new GeoLocation(location.getLatitude(), location.getLongitude()));
-            }
-            else if (pref.contains("status") && pref.getBoolean("status",false)) {
-                DatabaseReference cus=FirebaseDatabase.getInstance().getReference("DriversAvailable/"+log_id.getString("type",null));
-                GeoFire statGeoFire = new GeoFire(cus);
-                statGeoFire.setLocation(userId, new GeoLocation(location.getLatitude(), location.getLongitude()));
-            }
-        }
+//        if (location != null) {
+////            this.location = location;
+////            getCurrentLocation();
+////            moveMap();
+//            SharedPreferences.Editor editor=log_id.edit();
+//            editor.putString("cur_lat",String.valueOf(location.getLatitude()));
+//            editor.putString("cur_lng",String.valueOf(location.getLongitude()));
+//            editor.commit();
+//            Log.v("Tag", "Welcome" + location.getLatitude() + " " + location.getLongitude());
+//
+//            String userId= log_id.getString("id",null);
+//
+//            if (log_id.contains("ride") && !log_id.getString("ride",null).equals("")) {
+//                DatabaseReference statref = FirebaseDatabase.getInstance().getReference("Status");
+//                GeoFire statGeoFire = new GeoFire(statref);
+//                statGeoFire.setLocation(userId, new GeoLocation(location.getLatitude(), location.getLongitude()));
+//            }
+//            else if (pref.contains("status") && pref.getBoolean("status",false)) {
+//                DatabaseReference cus=FirebaseDatabase.getInstance().getReference("DriversAvailable/"+log_id.getString("type",null));
+//                GeoFire statGeoFire = new GeoFire(cus);
+//                statGeoFire.setLocation(userId, new GeoLocation(location.getLatitude(), location.getLongitude()));
+//            }
+//        }
     }
 
     LocationRequest lct;

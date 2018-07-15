@@ -74,7 +74,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
             wakeLock.acquire();
             while (true) {
 //                Log.v("Target", "Printing");
-                if (!pref.getBoolean("status",false)) {
+                if (!pref.getBoolean("status",false) && (!logid.contains("ride") || logid.getString("ride",null).equals(""))){
                     stopForeground(true);
                     if (wakeLock.isHeld())
                         wakeLock.release();
@@ -172,6 +172,10 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     public void onLocationChanged(Location location) {
         Log.v("Location","Location Changed !");
         if (location!=null){
+            SharedPreferences.Editor editor=logid.edit();
+            editor.putString("cur_lat",String.valueOf(location.getLatitude()));
+            editor.putString("cur_lng",String.valueOf(location.getLongitude()));
+            editor.commit();
             if (logid.contains("ride") && !logid.getString("ride", null).equals("")) {
                 getStatusCurrentLocation(location);
             }

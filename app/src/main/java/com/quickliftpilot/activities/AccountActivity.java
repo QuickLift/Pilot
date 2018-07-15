@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.quickliftpilot.R;
+import com.quickliftpilot.model.Earning;
 import com.quickliftpilot.model.Feed;
 import com.quickliftpilot.model.RideHistory;
 import com.google.firebase.database.DataSnapshot;
@@ -52,6 +53,7 @@ public class AccountActivity extends AppCompatActivity {
     SharedPreferences preferences;
     List<RideHistory> rideHistoryList;
     ArrayList<Feed> earnings=new ArrayList<>();
+    ArrayList<Earning> income=new ArrayList<>();
 //    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
     float total=0;
@@ -79,7 +81,7 @@ public class AccountActivity extends AppCompatActivity {
         setContentView(R.layout.activity_account);
         // stop auto showing keyboard
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        getSupportActionBar().setTitle("Account Info");
+        getSupportActionBar().setTitle("Account");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // attetch components with id's
         myCalendar = Calendar.getInstance();
@@ -148,10 +150,13 @@ public class AccountActivity extends AppCompatActivity {
                             if (d.hasChild("offer"))
                                 offer=Float.parseFloat(d.child("offer").getValue(String.class));
 
-                            tot=earn+offer;
+                            tot=earn+offer+cancel;
                             if (tot!=0) {
                                 if (preferences.contains("tax")) {
-                                    tax = tot * Float.valueOf(preferences.getString("tax", null)) / 100;
+                                    float tax_amt=Float.valueOf(preferences.getString("tax", null));
+//                                    float amt=0;
+//                                    tax = tot * Float.valueOf(preferences.getString("tax", null)) / 100;
+                                    tax=(tot*tax_amt)/(100+tax_amt);
                                 }
                                 if (preferences.contains("basevalue")) {
                                     if (tot < Float.parseFloat(preferences.getString("basevalue", null)))
@@ -242,7 +247,10 @@ public class AccountActivity extends AppCompatActivity {
                             tot=earn+offer;
                             if (tot!=0) {
                                 if (preferences.contains("tax")) {
-                                    tax = tot * Float.valueOf(preferences.getString("tax", null)) / 100;
+                                    float tax_amt=Float.valueOf(preferences.getString("tax", null));
+//                                    float amt=0;
+//                                    tax = tot * Float.valueOf(preferences.getString("tax", null)) / 100;
+                                    tax=(tot*tax_amt)/(100+tax_amt);
                                 }
                                 if (preferences.contains("basevalue")) {
                                     if (tot < Float.parseFloat(preferences.getString("basevalue", null)))
@@ -629,19 +637,21 @@ public class AccountActivity extends AppCompatActivity {
                     cess=cess+Float.valueOf(Float.valueOf(preferences.getString("maxcommission", null)) * (total-Float.parseFloat(preferences.getString("basevalue", null))) / 100);
                 }
             }
-            company_cess.setText("Company Cess : " + cess);
+            company_cess.setText("Company Cess : " + String.format("%.2f",cess));
             if (preferences.contains("cancelcharge")) {
 //                Log.v("OK","true");
                 cancel = Integer.parseInt(earnings.get(position).getCanceledRidesCount()) * Integer.parseInt(preferences.getString("cancelcharge", null));
             }
-            cancellation.setText("Cancel : " + cancel);
+            cancellation.setText("Cancel : " + String.format("%.2f",cancel));
             if (preferences.contains("tax")) {
-                tottax = Float.valueOf(Float.valueOf(preferences.getString("tax", null)) * total / 100);
+//                tottax = Float.valueOf(Float.valueOf(preferences.getString("tax", null)) * total / 100);
+                float tax_amt=Float.valueOf(preferences.getString("tax", null));
+                tottax=(total*tax_amt)/(100+tax_amt);
             }
-            tax.setText("Tax : " + tottax);
+            tax.setText("Tax : " + String.format("%.2f",tottax));
 
             ded=cess+tottax+cancel;
-            deduction.setText("Deduction : Rs. "+ded);
+            deduction.setText("Deduction : Rs. "+String.format("%.2f",ded));
             float outst=0,receive=0,retrn=0;
 
             receive=Float.parseFloat(earnings.get(position).getOffer())+Float.parseFloat(earnings.get(position).getTotalEarning())-
@@ -652,7 +662,7 @@ public class AccountActivity extends AppCompatActivity {
 //                    Float.parseFloat(earnings.get(position).getTotalEarning())- Float.parseFloat(earnings.get(position).getCash());
 //            outst=Float.parseFloat(earnings.get(position).getTotalEarning())-Float.parseFloat(earnings.get(position).getCash());
 //            outst=
-            outstanding.setText("Outstanding Amount : Rs. "+String.valueOf((receive-retrn)));
+            outstanding.setText("Outstanding Amount : Rs. "+String.format("%.2f",(receive-retrn)));
 //            Log.v("OK",""+earnings.get(position).getDate()+" "+earnings.get(position).getCanceledRidesCount());
             return view;
         }

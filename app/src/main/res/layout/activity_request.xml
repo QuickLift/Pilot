@@ -16,7 +16,7 @@
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Incoming Trip..."
+            android:text="@string/Incoming_Request"
             android:textSize="20sp"
             android:padding="2sp"
             android:textColor="#05affc"

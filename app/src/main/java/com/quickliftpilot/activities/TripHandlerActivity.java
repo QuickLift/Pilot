@@ -48,9 +48,7 @@ public class TripHandlerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_trip_handler);
 
         TripHandler=this;
-
         Log.v("TAG","TripHandlerActivity");
-
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         log_id = getSharedPreferences("Login", MODE_PRIVATE);
@@ -77,9 +75,9 @@ public class TripHandlerActivity extends AppCompatActivity {
     }
 
     public void cancelTrip() {
-        if (gps.canGetLocation()){
-            latitude = gps.getLatitude();
-            longitude = gps.getLongitude();
+//        if (gps.canGetLocation()){
+//            latitude = gps.getLatitude();
+//            longitude = gps.getLongitude();
 //            Toast.makeText(this, "Trip Canceled", Toast.LENGTH_SHORT).show();
             DatabaseReference dref=FirebaseDatabase.getInstance().getReference("Response/" + ride_info.getString("customer_id",null));
             dref.child("resp").setValue("Reject");
@@ -90,7 +88,7 @@ public class TripHandlerActivity extends AppCompatActivity {
                 DatabaseReference ref = FirebaseDatabase.getInstance().getReference("DriversAvailable/" + log_id.getString("type", null));
 //                ref.removeValue();
                 GeoFire geoFire = new GeoFire(ref);
-                geoFire.setLocation(userId, new GeoLocation(latitude, longitude));
+                geoFire.setLocation(userId, new GeoLocation(Double.valueOf(log_id.getString("cur_lat",null)), Double.valueOf(log_id.getString("cur_lng",null))));
 
                 SharedPreferences pref = getApplicationContext().getSharedPreferences("loginPref",MODE_PRIVATE);
                 SharedPreferences.Editor editor1=pref.edit();
@@ -101,7 +99,7 @@ public class TripHandlerActivity extends AppCompatActivity {
 //            DatabaseReference delref=FirebaseDatabase.getInstance().getReference("DriversWorking/"+log_id.getString("type",null)+"/"+userId);
 //            delref.removeValue();
             db.removeValue();
-        }
+//        }
 
         DatabaseReference rej_ride=FirebaseDatabase.getInstance().getReference("RejectRides");
         HashMap<String,Object> map=new HashMap<>();
@@ -185,6 +183,8 @@ public class TripHandlerActivity extends AppCompatActivity {
         startService(new Intent(this, RouteArrangeService.class));
 
         db.child("accept").setValue(1);
+        db.child("d_lat").setValue(log_id.getString("cur_lat",null));
+        db.child("d_lng").setValue(log_id.getString("cur_lng",null));
 
         SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
         db.child("accepted").setValue(sdf.format(new Date()));

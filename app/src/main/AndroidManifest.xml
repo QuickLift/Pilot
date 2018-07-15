@@ -95,6 +95,7 @@
 
         <activity android:name=".activities.FeedbackActivity" />
         <activity android:name=".activities.OTPActivity" />
+        <activity android:name=".activities.BillDetails" />
 
         <service
             android:name=".services.FloatingViewService"

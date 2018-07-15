@@ -209,7 +209,7 @@ public class FeedbackActivity extends AppCompatActivity {
                             url = getDirectionsUrlthreeplaces(datamap.get("st_lat").toString(), datamap.get("st_lng").toString(), datamap.get("en_lat").toString(), datamap.get("en_lng").toString());
                         }
                         else {
-                            url = getDirectionsUrltwoplaces(datamap.get("st_lat").toString(), datamap.get("st_lng").toString(), datamap.get("en_lat").toString(), datamap.get("en_lng").toString());
+                            url = getDirectionsUrltwoplaces(datamap.get("st_lat").toString(), datamap.get("st_lng").toString());
                         }
                         GetPriceData getDirectionsData = new GetPriceData();
                         dataTransfer[0] = url;
@@ -226,6 +226,7 @@ public class FeedbackActivity extends AppCompatActivity {
                         dataTransfer[11] = price;
                         dataTransfer[12] = ref;
                         dataTransfer[13] = ongoing_rides;
+                        dataTransfer[14] = log_id;
                         getDirectionsData.execute(dataTransfer);
                     }
                     else {
@@ -328,6 +329,8 @@ public class FeedbackActivity extends AppCompatActivity {
                                 cancel_charge = Float.parseFloat(map.get("cancel_charge").toString());
 
                             confirm = confirm+1;
+                            price=Integer.valueOf(log_id.getString("saveprice",null));
+                            Log.v("Price",""+price);
                             if (earn!=null)
                                 earn = earn + Float.parseFloat(String.valueOf(price));
                             else
@@ -406,10 +409,10 @@ public class FeedbackActivity extends AppCompatActivity {
                     DatabaseReference seat_data = FirebaseDatabase.getInstance().getReference("DriversWorking/"+log_id.getString("type",null)+"/"+log_id.getString("id",null));
                     seat_data.removeValue();
 
-                    GPSTracker gps = new GPSTracker(FeedbackActivity.this);
+//                    GPSTracker gps = new GPSTracker(FeedbackActivity.this);
                     DatabaseReference ref = FirebaseDatabase.getInstance().getReference("DriversAvailable/"+log_id.getString("type",null));
                     GeoFire geoFire = new GeoFire(ref);
-                    geoFire.setLocation(log_id.getString("id",null),new GeoLocation(gps.getLatitude(),gps.getLongitude()));
+                    geoFire.setLocation(log_id.getString("id",null),new GeoLocation(Double.valueOf(log_id.getString("cur_lat",null)),Double.valueOf(log_id.getString("cur_lng",null))));
 
                     SharedPreferences.Editor editor1=pref.edit();
                     editor1.putBoolean("status", true);
@@ -563,10 +566,10 @@ public class FeedbackActivity extends AppCompatActivity {
                 DatabaseReference seat_data = FirebaseDatabase.getInstance().getReference("DriversWorking/"+log_id.getString("type",null)+"/"+log_id.getString("id",null));
                 seat_data.removeValue();
 
-                GPSTracker gps = new GPSTracker(FeedbackActivity.this);
+//                GPSTracker gps = new GPSTracker(FeedbackActivity.this);
                 DatabaseReference ref = FirebaseDatabase.getInstance().getReference("DriversAvailable/"+log_id.getString("type",null));
                 GeoFire geoFire = new GeoFire(ref);
-                geoFire.setLocation(log_id.getString("id",null),new GeoLocation(gps.getLatitude(),gps.getLongitude()));
+                geoFire.setLocation(log_id.getString("id",null),new GeoLocation(Double.valueOf(log_id.getString("cur_lat",null)),Double.valueOf(log_id.getString("cur_lng",null))));
 
                 SharedPreferences.Editor editor1=pref.edit();
                 editor1.putBoolean("status", true);
@@ -583,8 +586,8 @@ public class FeedbackActivity extends AppCompatActivity {
         super.onStop();
     }
 
-    private String getDirectionsUrltwoplaces(String st_lt,String st_ln,String en_lt,String en_ln) {
-        GPSTracker gpsTracker=new GPSTracker(this);
+    private String getDirectionsUrltwoplaces(String st_lt,String st_ln) {
+//        GPSTracker gpsTracker=new GPSTracker(this);
 
 //        Log.v("DISTANCE",""+gpsTracker.getLatitude()+" , "+gpsTracker.getLongitude());
         StringBuilder googleDirectionsUrl=new StringBuilder("https://maps.googleapis.com/maps/api/directions/json?");
@@ -595,7 +598,7 @@ public class FeedbackActivity extends AppCompatActivity {
     }
 
     private String getDirectionsUrlthreeplaces(String st_lt,String st_ln,String en_lt,String en_ln) {
-        GPSTracker gpsTracker=new GPSTracker(this);
+//        GPSTracker gpsTracker=new GPSTracker(this);
 
 //        Log.v("DISTANCE",""+gpsTracker.getLatitude()+" , "+gpsTracker.getLongitude());
         StringBuilder googleDirectionsUrl=new StringBuilder("https://maps.googleapis.com/maps/api/directions/json?");

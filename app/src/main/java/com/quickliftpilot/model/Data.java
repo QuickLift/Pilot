@@ -7,10 +7,131 @@ package com.quickliftpilot.model;
 
 public class Data {
     double st_lat,st_lng,en_lat,en_lng,d_lat,d_lng;
-    String customer_id;
+    String customer_id,source,destination,price,otp,seat,offer="0",paymode="Cash",cancel_charge="0",veh_type,parking_price="0";
+    String waitcharge="0",triptime="0",timecharge="0",waittime="0",version="5";
     Integer accept=0;
 
     public Data() {
+    }
+
+    public String getOtp() {
+        return otp;
+    }
+
+    public String getOffer() {
+        return offer;
+    }
+
+    public String getWaitcharge() {
+        return waitcharge;
+    }
+
+    public String getTriptime() {
+        return triptime;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public String getWaittime() {
+        return waittime;
+    }
+
+    public void setWaittime(String waittime) {
+        this.waittime = waittime;
+    }
+
+    public String getTimecharge() {
+        return timecharge;
+    }
+
+    public void setTimecharge(String timecharge) {
+        this.timecharge = timecharge;
+    }
+
+    public void setTriptime(String triptime) {
+        this.triptime = triptime;
+    }
+
+    public void setWaitcharge(String waitcharge) {
+        this.waitcharge = waitcharge;
+    }
+
+    public String getParking_price() {
+        return parking_price;
+    }
+
+    public void setParking_price(String parking_price) {
+        this.parking_price = parking_price;
+    }
+
+    public void setOffer(String offer) {
+        this.offer = offer;
+    }
+
+    public String getPaymode() {
+        return paymode;
+    }
+
+    public void setPaymode(String paymode) {
+        this.paymode = paymode;
+    }
+
+    public String getCancel_charge() {
+        return cancel_charge;
+    }
+
+    public void setCancel_charge(String cancel_charge) {
+        this.cancel_charge = cancel_charge;
+    }
+
+    public void setOtp(String otp) {
+        this.otp = otp;
+    }
+
+    public String getSeat() {
+        return seat;
+    }
+
+    public void setSeat(String seat) {
+        this.seat = seat;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public String getVeh_type() {
+        return veh_type;
+    }
+
+    public void setVeh_type(String veh_type) {
+        this.veh_type = veh_type;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
     }
 
     public Integer getAccept() {

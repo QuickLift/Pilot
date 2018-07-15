@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.util.Log;
 
 import com.quickliftpilot.Util.GPSTracker;
@@ -29,7 +30,6 @@ import java.util.Map;
 import java.util.Stack;
 
 public class RequestService extends Service {
-
     DatabaseReference customerReq;
     UserRequestInfo userRequestInfo;
     Location location;
@@ -40,6 +40,7 @@ public class RequestService extends Service {
     Intent notificationServ;
     int check=0;
     private Stack<SequenceModel> stack;
+    PowerManager.WakeLock wakeLock;
 
     public RequestService() {
 
@@ -48,6 +49,9 @@ public class RequestService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+                "MyWakelockTag");
         stack = new SequenceStack().getStack();
     }
 
@@ -59,6 +63,7 @@ public class RequestService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        wakeLock.acquire();
         Log.v("OK","RequestService");
         log_id = getSharedPreferences("Login",MODE_PRIVATE);
         customerReq= FirebaseDatabase.getInstance().getReference("CustomerRequests/"+log_id.getString("id",null));
@@ -280,12 +285,14 @@ public class RequestService extends Service {
         return START_STICKY;
     }
 
-//    @Override
-//    public void onDestroy() {
-//        super.onDestroy();
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (wakeLock.isHeld())
+            wakeLock.release();
 //        SharedPreferences pref = getSharedPreferences("loginPref", MODE_PRIVATE);
 //        if (pref.contains("status") && pref.getBoolean("status",false)){
 //            startService(new Intent(this,RequestService.class));
 //        }
-//    }
+    }
 }

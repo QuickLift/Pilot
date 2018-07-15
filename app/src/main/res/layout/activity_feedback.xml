@@ -14,17 +14,22 @@
             android:id="@+id/feed_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Trip Completed"
+            android:text="@string/Feedback_TripEnded"
             android:textSize="30dp"
             android:gravity="center_horizontal"
             android:layout_marginTop="40dp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/feed_title"
+            android:background="@color/back_color"/>
         <TextView
             android:id="@+id/fare_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Fare - "
+            android:text="@string/Feedback_Fare"
             android:textSize="20dp"
-            android:textStyle="bold"
+            android:textStyle="normal"
             android:layout_below="@+id/feed_title"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="30dp"/>
@@ -33,16 +38,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20dp"
+            android:text="@string/Feedback_TripEnded"
+            android:layout_alignParentEnd="true"
+            android:gravity="right"
+            android:layout_marginRight="15dp"
             android:layout_toRightOf="@+id/fare_text"
             android:layout_below="@+id/feed_title"
-            android:layout_marginTop="30dp"
-            android:layout_marginLeft="5dp"/>
+            android:layout_marginTop="30dp" />
 
         <TextView
             android:id="@+id/offer_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="( Offer Amount - "
+            android:text="@string/Feedback_Offer"
             android:textSize="20dp"
             android:layout_below="@+id/fare_text"
             android:layout_marginLeft="30dp"/>
@@ -51,15 +59,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20dp"
+            android:text="@string/Feedback_TripEnded"
+            android:layout_alignParentEnd="true"
+            android:gravity="right"
+            android:layout_marginRight="15dp"
             android:layout_toRightOf="@+id/offer_text"
-            android:layout_below="@+id/fare_text"
-            android:layout_marginLeft="5dp"/>
+            android:layout_below="@+id/fare_text"/>
 
         <TextView
             android:id="@+id/parking_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="( Parking - "
+            android:text="@string/Feedback_Parking"
             android:textSize="20dp"
             android:layout_below="@+id/offer_text"
             android:layout_marginLeft="30dp"/>
@@ -68,6 +79,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20dp"
+            android:text="@string/Feedback_TripEnded"
+            android:layout_alignParentEnd="true"
+            android:gravity="right"
+            android:layout_marginRight="15dp"
             android:layout_toRightOf="@+id/parking_text"
             android:layout_below="@+id/offer_text"
             android:layout_marginLeft="5dp"/>
@@ -76,39 +91,52 @@
             android:id="@+id/cancel_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cancel Charge - "
+            android:text="@string/Feedback_Cancel"
             android:textSize="20dp"
-            android:textStyle="bold"
+            android:textStyle="normal"
             android:layout_below="@+id/parking_text"
             android:layout_marginLeft="30dp"/>
+        <View
+            android:id="@+id/below_line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/cancel_text"
+            android:layout_marginTop="20dp"
+            android:background="@color/back_color"/>
         <TextView
             android:id="@+id/cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20dp"
+            android:text="@string/Feedback_TripEnded"
+            android:layout_alignParentEnd="true"
+            android:gravity="right"
+            android:layout_marginRight="15dp"
             android:layout_toRightOf="@+id/cancel_text"
-            android:layout_below="@+id/parking"
-            android:layout_marginLeft="5dp"/>
+            android:layout_below="@+id/parking"/>
 
         <TextView
             android:id="@+id/total_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Total - "
-            android:textSize="20dp"
+            android:text="@string/Feedback_Total"
+            android:textSize="25dp"
             android:textStyle="bold"
-            android:layout_below="@+id/cancel_text"
+            android:layout_below="@+id/below_line"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="30dp"/>
         <TextView
             android:id="@+id/total"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
+            android:textSize="25dp"
+            android:text="@string/Feedback_TripEnded"
+            android:layout_alignParentEnd="true"
+            android:gravity="right"
+            android:layout_marginRight="15dp"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@+id/total_text"
-            android:layout_below="@+id/cancel_text"
-            android:layout_marginLeft="5dp"/>
+            android:layout_below="@+id/below_line"/>
 
         <RatingBar
             android:id="@+id/feed_rate"
@@ -131,7 +159,7 @@
             android:id="@+id/feed_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Rate The Customer"
+            android:text="@string/Feedback_Rating"
             android:textSize="30dp"
             android:layout_toRightOf="@+id/feed_image"
             android:layout_below="@id/feed_rate"
@@ -142,9 +170,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_margin="20dp"
-            android:text="Submit"
-            android:layout_below="@+id/feed_text"
-            android:background="@color/back_color"/>
+            android:text="@string/Feedback_Save"
+            android:background="@color/back_color"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_alignParentTop="true" />
     </RelativeLayout>
 </ScrollView>
