@@ -52,6 +52,6 @@ public class GetDistance extends AsyncTask<Object,String,String> {
         duration=directionsList.get("duration");
         distance=directionsList.get("distance");
 
-        ref.child("pickup_distance").setValue(String.valueOf(Integer.valueOf(distance)/1000));
+        ref.child("pickup_distance").setValue(String.valueOf(Float.valueOf(distance)/1000));
     }
 }

@@ -45,24 +45,24 @@
             android:layout_height="wrap_content"
             android:padding="3dp"
             android:hint="Fare"/>
-        <TextView
-            android:id="@+id/offer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="Offer Price"
-            android:layout_marginTop="0dp"/>
-        <TextView
-            android:id="@+id/parking"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="Parking Price"
-            android:layout_marginTop="0dp"/>
-        <TextView
-            android:id="@+id/ride"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="Ride Type"
-            android:layout_marginTop="0dp"/>
+        <!--<TextView-->
+            <!--android:id="@+id/offer"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:hint="Offer Price"-->
+            <!--android:layout_marginTop="0dp"/>-->
+        <!--<TextView-->
+            <!--android:id="@+id/parking"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:hint="Parking Price"-->
+            <!--android:layout_marginTop="0dp"/>-->
+        <!--<TextView-->
+            <!--android:id="@+id/ride"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:hint="Ride Type"-->
+            <!--android:layout_marginTop="0dp"/>-->
         <TextView
             android:id="@+id/timestamp"
             android:layout_width="wrap_content"

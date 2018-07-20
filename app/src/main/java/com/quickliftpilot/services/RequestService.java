@@ -49,9 +49,6 @@ public class RequestService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-                "MyWakelockTag");
         stack = new SequenceStack().getStack();
     }
 
@@ -63,6 +60,9 @@ public class RequestService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+                "MyWakelockTag");
         wakeLock.acquire();
         Log.v("OK","RequestService");
         log_id = getSharedPreferences("Login",MODE_PRIVATE);

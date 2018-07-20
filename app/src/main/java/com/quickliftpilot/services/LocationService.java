@@ -66,12 +66,12 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
                 "MyWakelockTag");
+        wakeLock.acquire();
     }
 
-    private Runnable myTask = new Runnable() {
+    public Runnable myTask = new Runnable() {
         public void run() {
             // Do something here
-            wakeLock.acquire();
             while (true) {
 //                Log.v("Target", "Printing");
                 if (!pref.getBoolean("status",false) && (!logid.contains("ride") || logid.getString("ride",null).equals(""))){
@@ -185,18 +185,17 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         }
     }
 
-    private void getStatusCurrentLocation(Location location) {
+    public void getStatusCurrentLocation(Location location) {
         String userId= logid.getString("id",null);
         DatabaseReference ref=FirebaseDatabase.getInstance().getReference("Status");
         GeoFire geoFire=new GeoFire(ref);
         geoFire.setLocation(userId,new GeoLocation(location.getLatitude(),location.getLongitude()));
     }
 
-    private void getCurrentLocation(Location location) {
+    public void getCurrentLocation(Location location) {
         String userId = logid.getString("id",null);
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("DriversAvailable/"+logid.getString("type",null));
         GeoFire geoFire = new GeoFire(ref);
         geoFire.setLocation(userId,new GeoLocation(location.getLatitude(),location.getLongitude()));
     }
 }
-

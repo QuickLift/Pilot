@@ -1101,23 +1101,55 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                 startService(new Intent(this, FloatingViewService.class));
             }
         }else if (id == end_trip_btn.getId()){
-            db.child(model.getId()+"/ended").setValue(sdf.format(new Date()));
-//            resp.removeEventListener(response_listener);
-            dest_type.setVisibility(View.GONE);
-            cancel.setVisibility(View.VISIBLE);
-            pickup.setVisibility(View.GONE);
-            drop.setVisibility(View.GONE);
+            View view=getLayoutInflater().inflate(R.layout.notification_layout,null);
+            TextView title=(TextView)view.findViewById(R.id.title);
+            TextView message=(TextView)view.findViewById(R.id.message);
+            Button left=(Button) view.findViewById(R.id.left_btn);
+            Button right=(Button) view.findViewById(R.id.right_btn);
 
-            DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference("CustomerRequests/"+log_id.getString("id",null)+"/"+model.getId());
-            databaseReference.child("accept").setValue(3);
-            Log.v("TAG","onclick pop");
-            stack.pop();
-            Log.v("TAG","ended trip");
-            Intent intent=new Intent(MapActivity.this,FeedbackActivity.class);
-            intent.putExtra("customer_id",model.getId());
+            left.setVisibility(View.VISIBLE);
+            left.setText("No");
+            right.setText("Yes");
+            title.setText("End Trip !");
+            message.setText("Are you sure you want to end trip ?");
+            AlertDialog.Builder builder = new AlertDialog.Builder(MapActivity.this);
+            builder .setView(view)
+                    .setCancelable(false);
+
+            final AlertDialog alert = builder.create();
+            alert.show();
+
+            left.setOnClickListener(null);
+            left.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    alert.dismiss();
+                }
+            });
+            right.setOnClickListener(null);
+            right.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    db.child(model.getId()+"/ended").setValue(sdf.format(new Date()));
+//            resp.removeEventListener(response_listener);
+                    dest_type.setVisibility(View.GONE);
+                    cancel.setVisibility(View.VISIBLE);
+                    pickup.setVisibility(View.GONE);
+                    drop.setVisibility(View.GONE);
+
+                    DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference("CustomerRequests/"+log_id.getString("id",null)+"/"+model.getId());
+                    databaseReference.child("accept").setValue(3);
+                    Log.v("TAG","onclick pop");
+                    stack.pop();
+                    Log.v("TAG","ended trip");
+                    Intent intent=new Intent(MapActivity.this,FeedbackActivity.class);
+                    intent.putExtra("customer_id",model.getId());
 //            intent.putExtra("price",datamap.get("price").toString());
-            startActivity(intent);
-            MapActivity.fa.finish();
+                    startActivity(intent);
+                    MapActivity.fa.finish();
+                    alert.dismiss();
+                }
+            });
         }else if (id == cancel_btn.getId()){
 //            SharedPreferences.Editor editor = ride_info.edit();
 //            editor.putString("state","start");

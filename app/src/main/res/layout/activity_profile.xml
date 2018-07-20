@@ -19,7 +19,7 @@
         android:id="@+id/driver_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Driver Name"
+        android:text=""
         android:gravity="center_horizontal"
         android:layout_margin="3dp"
         android:layout_below="@+id/image"/>
@@ -27,7 +27,7 @@
         android:id="@+id/driver_contact"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="9678436389"
+        android:text=""
         android:layout_below="@+id/driver_name"
         android:gravity="center_horizontal"/>
     <RatingBar

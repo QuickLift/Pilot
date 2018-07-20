@@ -103,7 +103,7 @@ public class FeedbackActivity extends AppCompatActivity {
                         findViewById(R.id.cancel_text).setVisibility(View.GONE);
                     }
                     if (datamap.containsKey("offer") && !datamap.get("offer").toString().equals("0")) {
-                        ((TextView)findViewById(R.id.offer)).setText("Rs. " + datamap.get("offer").toString()+" )");
+                        ((TextView)findViewById(R.id.offer)).setText("Rs. " + datamap.get("offer").toString());
                         final_price-=Float.valueOf(datamap.get("offer").toString());
                         Log.v("PRICE",""+final_price);
                         findViewById(R.id.offer_text).setVisibility(View.VISIBLE);
@@ -112,7 +112,7 @@ public class FeedbackActivity extends AppCompatActivity {
                         findViewById(R.id.offer_text).setVisibility(View.GONE);
                     }
                     if (datamap.containsKey("parking_price") && !datamap.get("parking_price").toString().equals("0")) {
-                        ((TextView)findViewById(R.id.parking)).setText("Rs. " + datamap.get("parking_price").toString()+" )");
+                        ((TextView)findViewById(R.id.parking)).setText("Rs. " + datamap.get("parking_price").toString());
                         final_price+=Float.valueOf(datamap.get("parking_price").toString());
                         Log.v("PRICE",""+final_price);
                         findViewById(R.id.parking_text).setVisibility(View.VISIBLE);
@@ -138,6 +138,10 @@ public class FeedbackActivity extends AppCompatActivity {
                         map.put("parking","0");
                     map.put("seat",datamap.get("seat").toString());
                     map.put("time",new Date().toString());
+                    if (datamap.containsKey("pickup_distance"))
+                        map.put("pickup_distance",datamap.get("pickup_distance").toString());
+                    else
+                        map.put("pickup_distance","0");
                     map.put("status","Completed");
 
 //                    float total = 0;
@@ -234,6 +238,10 @@ public class FeedbackActivity extends AppCompatActivity {
                         map.put("timing", "0");
 
                         price=(int) (((float)tot)-Float.valueOf(datamap.get("cancel_charge").toString()));
+                        SharedPreferences.Editor editor1=log_id.edit();
+                        editor1.putString("saveprice",String.valueOf(price));
+                        editor1.commit();
+
                         map.put("amount",String.valueOf(price));
                         fare.setText("Rs. "+(int)((float)price));
                         total.setText("Rs. "+(int)((float)tot));

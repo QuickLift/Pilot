@@ -263,6 +263,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
                 right.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
                         alert.dismiss();
                     }
                 });
@@ -342,41 +343,70 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
                     if (!pref.getBoolean("status",false)){
-                        GregorianCalendar gregorianCalendar=new GregorianCalendar();
-                        String date = String.format("%02d",gregorianCalendar.get(GregorianCalendar.DAY_OF_MONTH));
-                        String month = String.format("%02d",(gregorianCalendar.get(GregorianCalendar.MONTH)+1));
-                        String year = String.format("%02d",gregorianCalendar.get(GregorianCalendar.YEAR));
+                        if (!pref.contains("block") || (pref.contains("block") && pref.getString("block",null).equals("0"))) {
+                            GregorianCalendar gregorianCalendar = new GregorianCalendar();
+                            String date = String.format("%02d", gregorianCalendar.get(GregorianCalendar.DAY_OF_MONTH));
+                            String month = String.format("%02d", (gregorianCalendar.get(GregorianCalendar.MONTH) + 1));
+                            String year = String.format("%02d", gregorianCalendar.get(GregorianCalendar.YEAR));
 //                    StringBuilder builder=new StringBuilder().append(String.format("%02d", (date))).append("-")
 //                            .append(String.format("%02d", (month+1))).append("-").append(year);
-                        final String formateDate = date+"-"+month+"-"+year;
-                        login_time = new Date();
-                        editor = pref.edit();
-                        editor.putBoolean("status",true);
-                        editor.commit();
-                        databaseHelper.insertLoginData(formateDate,"login","0.0ms");
+                            final String formateDate = date + "-" + month + "-" + year;
+                            login_time = new Date();
+                            editor = pref.edit();
+                            editor.putBoolean("status", true);
+                            editor.commit();
+                            databaseHelper.insertLoginData(formateDate, "login", "0.0ms");
 //                    stopService(requestService);
 //                    stopService(rideCheckingService);
-                        startService(requestService);
-                        startService(rideCheckingService);
+                            startService(requestService);
+                            startService(rideCheckingService);
 //                        startService(new Intent(Welcome.this, LocationService.class));
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            startForegroundService(locationService);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                startForegroundService(locationService);
+//                            startService(locationService);
+                            } else {
+                                startService(locationService);
+                            }
+                            login_status.setText("Login");
+                            login_duration.setText("Running...");
+                            wel_edit = welcome.edit();
+                            wel_edit.putString("date", formateDate);
+                            wel_edit.putString("login_time", login_time.toString());
+                            wel_edit.commit();
+                            driver_info = FirebaseDatabase.getInstance().getReference("Driver_Login_Info/" + log_id.getString("id", null) + "/" + welcome.getString("date", null));
+                            String key = driver_info.push().getKey();
+                            pref_editor.putString("loginkey", key);
+                            pref_editor.commit();
+                            driver_info.child(key + "/Login_Time").setValue(login_time.toString());
+//                        getCurrentLocation();
                         }
                         else {
-                            startService(locationService);
+                            View view=getLayoutInflater().inflate(R.layout.notification_layout,null);
+                            TextView title=(TextView)view.findViewById(R.id.title);
+                            TextView message=(TextView)view.findViewById(R.id.message);
+                            Button left=(Button) view.findViewById(R.id.left_btn);
+                            Button right=(Button) view.findViewById(R.id.right_btn);
+
+                            left.setVisibility(View.GONE);
+                            right.setText("Ok");
+                            title.setText("Account Blocked !");
+                            message.setText("Your account is blocked ! Please contact the admin !");
+                            AlertDialog.Builder builder = new AlertDialog.Builder(Welcome.this);
+                            builder .setView(view)
+                                    .setCancelable(false);
+
+                            final AlertDialog alert = builder.create();
+                            alert.show();
+
+                            right.setOnClickListener(null);
+                            right.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    login_btn.setChecked(false);
+                                    alert.dismiss();
+                                }
+                            });
                         }
-                        login_status.setText("Login");
-                        login_duration.setText("Running...");
-                        wel_edit = welcome.edit();
-                        wel_edit.putString("date",formateDate);
-                        wel_edit.putString("login_time",login_time.toString());
-                        wel_edit.commit();
-                        driver_info = FirebaseDatabase.getInstance().getReference("Driver_Login_Info/"+log_id.getString("id",null)+"/"+welcome.getString("date",null));
-                        String key=driver_info.push().getKey();
-                        pref_editor.putString("loginkey",key);
-                        pref_editor.commit();
-                        driver_info.child(key+"/Login_Time").setValue(login_time.toString());
-//                        getCurrentLocation();
                     }
 
                 }else {
@@ -489,21 +519,75 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
         }
 
         if(pref.getBoolean("status",false) || getIntent().hasExtra("status")){
-            login_btn.setChecked(true);
-            login_status.setText("Login");
-            login_duration.setText("Running");
+            if (pref.contains("block")) {
+                if (pref.getString("block",null).equals("1")){
+                    login_btn.setChecked(false);
+                    login_status.setText("Logout");
+                    login_duration.setText("Not Working");
+                    stopService(requestService);
+                    stopService(rideCheckingService);
+
+                    View view=getLayoutInflater().inflate(R.layout.notification_layout,null);
+                    TextView title=(TextView)view.findViewById(R.id.title);
+                    TextView message=(TextView)view.findViewById(R.id.message);
+                    Button left=(Button) view.findViewById(R.id.left_btn);
+                    Button right=(Button) view.findViewById(R.id.right_btn);
+
+                    left.setVisibility(View.GONE);
+                    right.setText("Ok");
+                    title.setText("Account Blocked !");
+                    message.setText("Your account is blocked ! Please contact the admin !");
+                    AlertDialog.Builder builder = new AlertDialog.Builder(Welcome.this);
+                    builder .setView(view)
+                            .setCancelable(false);
+
+                    final AlertDialog alert = builder.create();
+                    alert.show();
+
+                    right.setOnClickListener(null);
+                    right.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alert.dismiss();
+                        }
+                    });
+                }
+                else {
+                    login_btn.setChecked(true);
+                    login_status.setText("Login");
+                    login_duration.setText("Running");
 //            Log.v("TAG","STATUS TRUE !");
 //            stopService(requestService);
 //            stopService(rideCheckingService);
 //            startService(requestService);
 //            startService(rideCheckingService);
-            startService(requestService);
-            startService(rideCheckingService);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                startForegroundService(locationService);
+                    startService(requestService);
+                    startService(rideCheckingService);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        startForegroundService(locationService);
+//                startService(locationService);
+                    } else {
+                        startService(locationService);
+                    }
+                }
             }
             else {
-                startService(locationService);
+                login_btn.setChecked(true);
+                login_status.setText("Login");
+                login_duration.setText("Running");
+//            Log.v("TAG","STATUS TRUE !");
+//            stopService(requestService);
+//            stopService(rideCheckingService);
+//            startService(requestService);
+//            startService(rideCheckingService);
+                startService(requestService);
+                startService(rideCheckingService);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    startForegroundService(locationService);
+//                startService(locationService);
+                } else {
+                    startService(locationService);
+                }
             }
 //            getCurrentLocation();
         }else {

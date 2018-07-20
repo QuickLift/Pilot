@@ -185,9 +185,9 @@ public class RidesActivity extends AppCompatActivity {
             TextView source=(TextView)view.findViewById(R.id.source);
             TextView destination=(TextView)view.findViewById(R.id.destination);
             TextView amount=(TextView)view.findViewById(R.id.amount);
-            TextView offer=(TextView)view.findViewById(R.id.offer);
-            TextView parking=(TextView)view.findViewById(R.id.parking);
-            TextView ride=(TextView)view.findViewById(R.id.ride);
+//            TextView offer=(TextView)view.findViewById(R.id.offer);
+//            TextView parking=(TextView)view.findViewById(R.id.parking);
+//            TextView ride=(TextView)view.findViewById(R.id.ride);
             final TextView name=(TextView)view.findViewById(R.id.name);
             TextView status = (TextView)view.findViewById(R.id.sta);
 
@@ -203,20 +203,20 @@ public class RidesActivity extends AppCompatActivity {
                 charge = Float.valueOf(ride_list.get(ride_list.size() - position - 1).get("amount").toString());
             }
             amount.setText("Rs. "+charge);
-            if (ride_list.get(ride_list.size()-position-1).containsKey("discount"))
-                offer.setText("Rs. "+ride_list.get(ride_list.size()-position-1).get("discount").toString()+" (Offer)");
-            else
-                offer.setText("Rs. 0"+" (Offer)");
-            if (ride_list.get(ride_list.size()-position-1).containsKey("parking"))
-                parking.setText("Rs. "+ride_list.get(ride_list.size()-position-1).get("parking").toString()+" (Parking)");
-            else
-                parking.setText("Rs. 0 (Parking)");
-            if (ride_list.get(ride_list.size()-position-1).containsKey("seat")) {
-                if (ride_list.get(ride_list.size() - position - 1).get("seat").toString().equals("full"))
-                    ride.setText("Full Ride");
-                else
-                    ride.setText(ride_list.get(ride_list.size() - position - 1).get("seat").toString()+" seats");
-            }
+//            if (ride_list.get(ride_list.size()-position-1).containsKey("discount"))
+//                offer.setText("Rs. "+ride_list.get(ride_list.size()-position-1).get("discount").toString()+" (Offer)");
+//            else
+//                offer.setText("Rs. 0"+" (Offer)");
+//            if (ride_list.get(ride_list.size()-position-1).containsKey("parking"))
+//                parking.setText("Rs. "+ride_list.get(ride_list.size()-position-1).get("parking").toString()+" (Parking)");
+//            else
+//                parking.setText("Rs. 0 (Parking)");
+//            if (ride_list.get(ride_list.size()-position-1).containsKey("seat")) {
+//                if (ride_list.get(ride_list.size() - position - 1).get("seat").toString().equals("full"))
+//                    ride.setText("Full Ride");
+//                else
+//                    ride.setText(ride_list.get(ride_list.size() - position - 1).get("seat").toString()+" seats");
+//            }
             try{
                 status.setText(ride_list.get(ride_list.size()-position-1).get("status").toString());
             }catch (Exception e){

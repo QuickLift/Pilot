@@ -4,10 +4,15 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.quickliftpilot.R;
 import com.google.firebase.database.DataSnapshot;
@@ -22,6 +27,7 @@ import java.util.ArrayList;
 
 public class LauncherActivity extends AppCompatActivity {
     UpdateLocation mReceiver=new UpdateLocation();
+    boolean valid=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +35,78 @@ public class LauncherActivity extends AppCompatActivity {
         setContentView(R.layout.activity_launcher);
 //        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         Log.v("Tag","Launcher Activity");
+
+        DatabaseReference cust_cancel_reason=FirebaseDatabase.getInstance().getReference("CustomerCancelReason");
+        DatabaseReference driver_cancel_reason=FirebaseDatabase.getInstance().getReference("DriverCancelReason");
+
+        cust_cancel_reason.child("reason1").setValue("Option 1");
+        driver_cancel_reason.child("reason1").setValue("Option 1");
         SharedPreferences log_id=getApplicationContext().getSharedPreferences("Login",MODE_PRIVATE);
+
+        if (log_id.contains("id")) {
+            DatabaseReference vers = FirebaseDatabase.getInstance().getReference("Version_driver");
+            vers.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        try {
+                            if (Integer.parseInt(dataSnapshot.getValue().toString()) >
+                                    getApplicationContext().getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0).versionCode) {
+                                View view = getLayoutInflater().inflate(R.layout.notification_layout, null);
+                                TextView title = (TextView) view.findViewById(R.id.title);
+                                TextView message = (TextView) view.findViewById(R.id.message);
+                                Button left = (Button) view.findViewById(R.id.left_btn);
+                                Button right = (Button) view.findViewById(R.id.right_btn);
+
+                                left.setVisibility(View.INVISIBLE);
+                                right.setText("Ok");
+                                title.setText("Update !");
+                                message.setText("A new version of app is availabe !\n We request you to update the app to enjoy the uninterrupted services !!");
+                                AlertDialog.Builder builder = new AlertDialog.Builder(LauncherActivity.this);
+                                builder.setView(view)
+                                        .setCancelable(false);
+
+                                final AlertDialog alert = builder.create();
+                                alert.show();
+
+                                left.setOnClickListener(null);
+                                right.setOnClickListener(null);
+                                right.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                                        intent.setData(Uri.parse("market://details?id=com.quickliftpilot"));
+                                        try {
+                                            startActivity(intent);
+                                        } catch (Exception e) {
+                                            intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.quickliftpilot"));
+                                        }
+                                        alert.dismiss();
+                                    }
+                                });
+                            } else if (valid) {
+                                startActivity(new Intent(LauncherActivity.this, Login.class));
+                                finish();
+                            } else {
+                                valid = true;
+                            }
+                        } catch (PackageManager.NameNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        valid = true;
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+        else {
+            valid=true;
+        }
         final SharedPreferences.Editor editor=log_id.edit();
         if (log_id.contains("id")) {
             DatabaseReference db = FirebaseDatabase.getInstance().getReference("Drivers");
@@ -40,6 +117,20 @@ public class LauncherActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             db.child(log_id.getString("id", null)+"/version").setValue(version);
+            db.child(log_id.getString("id", null)).child("block").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()){
+                        editor.putString("block",dataSnapshot.getValue().toString());
+                        editor.commit();
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
             db.child(log_id.getString("id", null)).child("subPlan").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -186,8 +277,13 @@ public class LauncherActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(LauncherActivity.this,Login.class));
-                finish();
+                if (valid) {
+                    startActivity(new Intent(LauncherActivity.this, Login.class));
+                    finish();
+                }
+                else {
+                    valid=true;
+                }
             }
         },2000);
     }
