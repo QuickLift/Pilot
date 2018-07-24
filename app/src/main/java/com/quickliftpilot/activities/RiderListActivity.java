@@ -141,7 +141,7 @@ public class RiderListActivity extends AppCompatActivity {
         });
     }
 
-    public void cancel_trip(String customer){
+    public void cancel_trip(String customer, final String reason){
         GregorianCalendar gregorianCalendar=new GregorianCalendar();
         String date = String.format("%02d",gregorianCalendar.get(GregorianCalendar.DAY_OF_MONTH));
         String month = String.format("%02d",(gregorianCalendar.get(GregorianCalendar.MONTH)+1));
@@ -194,6 +194,7 @@ public class RiderListActivity extends AppCompatActivity {
                     map.put("discount", dataSnapshot.child("offer").getValue().toString());
                     map.put("cancel_charge", dataSnapshot.child("cancel_charge").getValue().toString());
                     map.put("paymode", dataSnapshot.child("paymode").getValue().toString());
+                    map.put("reason", reason);
                     if (dataSnapshot.hasChild("parking_price"))
                         map.put("parking",dataSnapshot.child("parking_price").getValue().toString());
                     else
@@ -285,39 +286,9 @@ public class RiderListActivity extends AppCompatActivity {
             cancel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    View view=getLayoutInflater().inflate(R.layout.notification_layout,null);
-                    TextView title=(TextView)view.findViewById(R.id.title);
-                    TextView message=(TextView)view.findViewById(R.id.message);
-                    Button left=(Button) view.findViewById(R.id.left_btn);
-                    Button right=(Button) view.findViewById(R.id.right_btn);
-
-                    left.setVisibility(View.VISIBLE);
-                    left.setText("No");
-                    right.setText("Yes");
-                    title.setText("Cancel Trip !");
-                    message.setText("Are you sure you want to cancel trip of "+riders.get(position).getC_name()+" ?");
-                    AlertDialog.Builder builder = new AlertDialog.Builder(RiderListActivity.this);
-                    builder .setView(view)
-                            .setCancelable(false);
-
-                    final AlertDialog alert = builder.create();
-                    alert.show();
-
-                    left.setOnClickListener(null);
-                    left.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            alert.dismiss();
-                        }
-                    });
-                    right.setOnClickListener(null);
-                    right.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            cancel_trip(riders.get(position).getC_id());
-                            alert.dismiss();
-                        }
-                    });
+                    Intent intent=new Intent(RiderListActivity.this,CancelReason.class);
+                    intent.putExtra("id",riders.get(position).getC_id());
+                    startActivityForResult(intent,1);
 //                    Log.i("OK","Id while cancel drive : "+riders.get(position).getC_id());
                 }
             });
@@ -342,6 +313,14 @@ public class RiderListActivity extends AppCompatActivity {
             });
 
             return view;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==1 && resultCode==RESULT_OK){
+            cancel_trip(data.getStringExtra("id"),data.getStringExtra("reason"));
         }
     }
 

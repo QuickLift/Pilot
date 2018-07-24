@@ -202,7 +202,8 @@ public class RidesActivity extends AppCompatActivity {
             else {
                 charge = Float.valueOf(ride_list.get(ride_list.size() - position - 1).get("amount").toString());
             }
-            amount.setText("Rs. "+charge);
+            float val=Float.valueOf(ride_list.get(ride_list.size() - position - 1).get("amount").toString())+Float.valueOf(ride_list.get(ride_list.size() - position - 1).get("discount").toString());
+            amount.setText("Rs. "+val);
 //            if (ride_list.get(ride_list.size()-position-1).containsKey("discount"))
 //                offer.setText("Rs. "+ride_list.get(ride_list.size()-position-1).get("discount").toString()+" (Offer)");
 //            else

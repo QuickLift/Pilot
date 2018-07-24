@@ -16,6 +16,7 @@ public class SequenceModel {
     private String id;
     private String address;
     private String otp;
+    private String phone;
     private int seat=0;
 
     public String getOtp() {
@@ -24,6 +25,14 @@ public class SequenceModel {
 
     public int getSeat() {
         return seat;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public void setSeat(int seat) {

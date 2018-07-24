@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">QuickLift Pilot</string>
+    <string name="app_name">Pilot</string>
     <string name="label_google_sign_in">Firebase + Google Sign In</string>
     <string name="desc_google_sign_in">Use a Google Sign In credential to authenticate with Firebase.</string>
 
@@ -92,6 +92,7 @@
     <string name="Booking_Circle">Booking</string>
     <string name="Earning_Circle">Earning</string>
     <string name="Cancel_Circle">Cancel</string>
+    <string name="Pickup_Circle">Pickup</string>
     <string name="Welcome_Profile">Profile</string>
     <string name="Welcome_Ride">Rides</string>
     <string name="Welcome_AccountInfo">Account</string>
@@ -129,9 +130,13 @@
 
     //Incoming request
     <string name="Incoming_Request">Incoming Request</string>
+    <string name="Incoming_Share_Request">Incoming Share Request</string>
 
     //Otp Activity
     <string name="Otp_Enter">Enter OTP</string>
     <string name="Otp_Submit">Submit</string>
+
+    //Cancel Reason
+    <string name="Cancel_Reason">Reason for Cancellation</string>
 
 </resources>

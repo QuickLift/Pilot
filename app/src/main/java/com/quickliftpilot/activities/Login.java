@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.quickliftpilot.R;
+import com.quickliftpilot.Util.SQLQueries;
 import com.quickliftpilot.Util.SendSms;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -44,6 +45,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
@@ -175,9 +178,24 @@ public class Login extends AppCompatActivity {
         send_otp = (Button)findViewById(R.id.send_otp);
         submit = (Button)findViewById(R.id.submit);
 
+        reference.setVisibility(View.VISIBLE);
+        send_otp.setVisibility(View.VISIBLE);
+        otp.setVisibility(View.GONE);
+        submit.setVisibility(View.GONE);
         driver = FirebaseDatabase.getInstance().getReference("Drivers");
         otp_ref=FirebaseDatabase.getInstance().getReference("OTP");
 
+        if (!checkPermission()){
+//            Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
+            requestPermission();
+        }
+
+        log_id=getApplicationContext().getSharedPreferences("Login",MODE_PRIVATE);
+        if (log_id.contains("id")){
+            if (log_id.getString("id",null) != null){
+                updateUI(log_id.getString("id",null));
+            }
+        }
         // [START initialize_auth]
 //        mAuth = FirebaseAuth.getInstance();
 //
@@ -195,28 +213,16 @@ public class Login extends AppCompatActivity {
 //        });
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        reference.setVisibility(View.VISIBLE);
-        send_otp.setVisibility(View.VISIBLE);
-        otp.setVisibility(View.GONE);
-        submit.setVisibility(View.GONE);
-
-        otp_number = null;
-
-        if (!checkPermission()){
-//            Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
-            requestPermission();
-        }
-
-        log_id=getApplicationContext().getSharedPreferences("Login",MODE_PRIVATE);
-        if (log_id.contains("id")){
-            if (log_id.getString("id",null) != null){
-                updateUI(log_id.getString("id",null));
-            }
-        }
-    }
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        reference.setVisibility(View.VISIBLE);
+//        send_otp.setVisibility(View.VISIBLE);
+//        otp.setVisibility(View.GONE);
+//        submit.setVisibility(View.GONE);
+//
+//        otp_number = null;
+//    }
 
     private void hideProgressDialog() {
         pdialog.dismiss();
@@ -285,6 +291,16 @@ public class Login extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
     public void send_otp(View view) {
         err.setText("");
         //Toast.makeText(this, "Send otp clicked", Toast.LENGTH_SHORT).show();
@@ -307,18 +323,18 @@ public class Login extends AppCompatActivity {
                             }else {
                                 showProgressDialog();
                                 otp_number = String.valueOf((int)(Math.random()*9999)+1000);
-                                String otp_msg = "Enter "+otp_number+" as an otp to verify yourself. This otp is valid for only 2 mins from the time when otp was sent.";
-//                                Toast.makeText(Login.this, ""+otp_msg, Toast.LENGTH_SHORT).show();
+//                                String otp_msg = "Enter "+otp_number+" as an otp to verify yourself. This otp is valid for only 2 mins from the time when otp was sent.";
+                                Toast.makeText(Login.this, ""+otp_number, Toast.LENGTH_LONG).show();
 
-                                otp_msg="\"Enter "+otp_number+" as an otp to verify yourself. This otp is valid for only 2 mins from the time when otp was sent.";
+                                String otp_msg="\"Enter "+otp_number+" as an otp to verify yourself. This otp is valid for only 2 mins from the time when otp was sent.";
                                 Log.v("TAG",otp_msg);
 //
                                 otp_ref.child(ref_id).setValue(String.valueOf(otp_number));
                                 message = message + otp_msg;
                                 numbers = numbers + phone;
 
-                                new SendSms(otp_msg,phone).start();
-//
+//                                new SendSms(otp_msg,phone).start();
+
                                 hideProgressDialog();
 
                                 reference.setEnabled(false);
@@ -393,6 +409,73 @@ public class Login extends AppCompatActivity {
             }
             editor.putString("ride","");
             editor.commit();
+
+            final SQLQueries sqlQueries=new SQLQueries(this);
+            sqlQueries.deletefare();
+            sqlQueries.deletelocation();
+            DatabaseReference dblist= FirebaseDatabase.getInstance().getReference("Fare/Patna");
+            dblist.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    editor.putString("excelcharge",String.valueOf(dataSnapshot.child("CustomerCancelCharge/excel").getValue(Integer.class)));
+                    editor.putString("sharecharge",String.valueOf(dataSnapshot.child("CustomerCancelCharge/share").getValue(Integer.class)));
+                    editor.putString("fullcharge",String.valueOf(dataSnapshot.child("CustomerCancelCharge/full").getValue(Integer.class)));
+                    editor.putString("ratemultiplier",String.valueOf(dataSnapshot.child("RateMultiplier").getValue(Float.class)));
+                    editor.putString("searchingtime",String.valueOf(dataSnapshot.child("SearchingTime").getValue(Integer.class)));
+                    editor.putString("outsidetripextraamount",String.valueOf(dataSnapshot.child("OutsideTripExtraAmount").getValue(Integer.class)));
+                    editor.putString("twoseatprice",String.valueOf(dataSnapshot.child("Twoseatprice").getValue(Integer.class)));
+                    editor.putString("excel",String.valueOf(dataSnapshot.child("ParkingCharge/excel").getValue(Integer.class)));
+                    editor.putString("fullcar",String.valueOf(dataSnapshot.child("ParkingCharge/fullcar").getValue(Integer.class)));
+                    editor.putString("fullrickshaw",String.valueOf(dataSnapshot.child("ParkingCharge/fullrickshaw").getValue(Integer.class)));
+                    editor.putString("sharecar",String.valueOf(dataSnapshot.child("ParkingCharge/sharecar").getValue(Integer.class)));
+                    editor.putString("sharerickshaw",String.valueOf(dataSnapshot.child("ParkingCharge/sharerickshaw").getValue(Integer.class)));
+                    editor.putString("normaltimeradius",dataSnapshot.child("NormalTimeSearchRadius").getValue(String.class));
+                    editor.putString("peaktimeradius",dataSnapshot.child("PeakTimeSearchRadius").getValue(String.class));
+                    editor.putString("waittime",String.valueOf(dataSnapshot.child("WaitingTime").getValue(Integer.class)));
+                    editor.putString("waitingcharge",String.valueOf(dataSnapshot.child("WaitingCharge").getValue(Integer.class)));
+                    editor.putString("pickupdistance",String.valueOf(dataSnapshot.child("PickupDistance").getValue(String.class)));
+                    editor.putString("pickupprice",String.valueOf(dataSnapshot.child("PickupPrice").getValue(String.class)));
+                    editor.commit();
+                    for (DataSnapshot data:dataSnapshot.child("Package").getChildren()){
+                        ArrayList<String> price=new ArrayList<String>();
+                        price.add(data.child("Latitude").getValue(String.class));
+                        price.add(data.child("Longitude").getValue(String.class));
+                        price.add(data.child("Amount").getValue(String.class));
+                        price.add(data.child("Distance").getValue(String.class));
+
+                        sqlQueries.savelocation(price);
+                    }
+                    for (DataSnapshot data:dataSnapshot.child("Price").getChildren()){
+                        ArrayList<String> price=new ArrayList<String>();
+                        price.add(data.child("NormalTime/BaseFare/Amount").getValue(String.class));
+                        price.add(data.child("NormalTime/BaseFare/Distance").getValue(String.class));
+                        price.add(data.child("NormalTime/BeyondLimit/FirstLimit/Amount").getValue(String.class));
+                        price.add(data.child("NormalTime/BeyondLimit/FirstLimit/Distance").getValue(String.class));
+                        price.add(data.child("NormalTime/BeyondLimit/SecondLimit/Amount").getValue(String.class));
+                        price.add(data.child("NormalTime/Time").getValue(String.class));
+
+                        sqlQueries.savefare(price);
+//                    Log.v("TAG",price.get(0)+" "+price.get(1)+" "+price.get(2)+" "+price.get(3)+" "+price.get(4)+" "+price.get(5)+" ");
+
+                        price.clear();
+                        price.add(data.child("PeakTime/BaseFare/Amount").getValue(String.class));
+                        price.add(data.child("PeakTime/BaseFare/Distance").getValue(String.class));
+                        price.add(data.child("PeakTime/BeyondLimit/FirstLimit/Amount").getValue(String.class));
+                        price.add(data.child("PeakTime/BeyondLimit/FirstLimit/Distance").getValue(String.class));
+                        price.add(data.child("PeakTime/BeyondLimit/SecondLimit/Amount").getValue(String.class));
+                        price.add(data.child("PeakTime/Time").getValue(String.class));
+
+                        sqlQueries.savefare(price);
+//                    Toast.makeText(WelcomeScreen.this, ""+"hi", Toast.LENGTH_SHORT).show();
+//                    Log.v("TAG",price.get(0)+" "+price.get(1)+" "+price.get(2)+" "+price.get(3)+" "+price.get(4)+" "+price.get(5)+" ");
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
 
             DatabaseReference db = FirebaseDatabase.getInstance().getReference("Drivers");
             db.child(log_id.getString("id",null)).child("veh_type").addListenerForSingleValueEvent(new ValueEventListener() {

@@ -90,7 +90,7 @@
             <HorizontalScrollView
                 android:layout_below="@+id/hr_line"
                 android:layout_marginTop="10dp"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:scrollbars="none"
                 android:id="@+id/detail">
@@ -99,6 +99,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
+                    android:gravity="center"
                     android:padding="10dp">
                     <LinearLayout
                         android:id="@+id/booking"
@@ -111,6 +112,7 @@
                             android:layout_marginTop="4dp"
                             android:layout_width="60dp"
                             android:layout_height="wrap_content"
+                            android:gravity="center"
                             android:text="@string/Booking_Circle"/>
                         <TextView
                             android:id="@+id/book_no"
@@ -132,6 +134,7 @@
                         <TextView
                             android:layout_width="60dp"
                             android:layout_height="wrap_content"
+                            android:gravity="center"
                             android:text="@string/Earning_Circle"/>
                         <TextView
                             android:id="@+id/earn_no"
@@ -152,9 +155,31 @@
                         <TextView
                             android:layout_width="60dp"
                             android:layout_height="wrap_content"
+                            android:gravity="center"
                             android:text="@string/Cancel_Circle"/>
                         <TextView
                             android:id="@+id/cancel_no"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textColor="@android:color/black"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/pickup"
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:background="@drawable/round_button_blue"
+                        android:gravity="center"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="60dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/Pickup_Circle"/>
+                        <TextView
+                            android:id="@+id/pickup_dist"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text=""

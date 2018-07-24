@@ -78,6 +78,10 @@
         <activity
             android:name=".activities.TripHandlerActivity"
             android:launchMode="singleInstance" />
+
+        <activity
+            android:name=".activities.CancelReason" />
+
         <activity
             android:name=".activities.MapActivity"
             android:finishOnTaskLaunch="true"
@@ -94,7 +98,8 @@
             android:exported="true" />
 
         <activity android:name=".activities.FeedbackActivity" />
-        <activity android:name=".activities.OTPActivity" />
+        <activity android:name=".activities.OTPActivity"
+            android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".activities.BillDetails" />
 
         <service

@@ -92,6 +92,7 @@
     <string name="Booking_Circle">बुकिंग</string>
     <string name="Earning_Circle">आमदनी</string>
     <string name="Cancel_Circle">कैंसिल</string>
+    <string name="Pickup_Circle">Pickup</string>
     <string name="Welcome_Profile">प्रोफाइल </string>
     <string name="Welcome_Ride">राइड </string>
     <string name="Welcome_AccountInfo">अकाउंट </string>
@@ -124,10 +125,12 @@
     <string name="Feedback_Save">सेव करें </string>
 //Incoming trip
     <string name="Incoming_Request">रिक्वेस्ट आ रही हैं</string>
+    <string name="Incoming_Share_Request">रिक्वेस्ट आ रही हैं</string>
     //Otp Activity
     <string name="Otp_Enter">OTP डालें</string>
     <string name="Otp_Submit">चालू करें </string>
 
-
+    //Cancel Reason
+    <string name="Cancel_Reason">Reason for Cancellation</string>
 
 </resources>

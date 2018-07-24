@@ -159,7 +159,7 @@
             android:id="@+id/feed_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/Feedback_Rating"
+            android:text=""
             android:textSize="30dp"
             android:layout_toRightOf="@+id/feed_image"
             android:layout_below="@id/feed_rate"

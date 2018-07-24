@@ -84,11 +84,12 @@ public class OTPActivity extends AppCompatActivity {
                     if (num == Integer.parseInt(getIntent().getStringExtra("otp"))){
                         db.child("started").setValue(sdf.format(new Date()));
 
-                        Object[] dataTransfer = new Object[4];
+                        Object[] dataTransfer = new Object[5];
                         String url = getDirectionsUrltwoplaces(latitude, longitude);
                         GetDistance getDirectionsData = new GetDistance();
                         dataTransfer[0] = url;
                         dataTransfer[1] = db;
+                        dataTransfer[2] = log_id;
                         getDirectionsData.execute(dataTransfer);
 
                         Intent returnIntent = new Intent();

@@ -96,13 +96,13 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
     private static LinearLayout ride,profile,account,help;
     private static Switch login_btn;
     private static DatabaseReference db,driver_acc,driver_info;
-    private static TextView login_status,login_duration,book,earn,cancel,name,contact;
+    private static TextView login_status,login_duration,book,earn,cancel,name,contact,pickup;
     private static SharedPreferences pref;
     private static  SharedPreferences.Editor editor,wel_edit;
     private static RatingBar rate;
     private static SharedPreferences log_id,welcome;
     private static DatabaseHelper databaseHelper;
-    private static Intent requestService,rideCheckingService,locationService;
+    private static Intent rideCheckingService,locationService;
     private static Date login_time,logout_time;
     protected static final int REQUEST_CHECK_SETTINGS = 0x1;
     boolean doubleBackToExitPressedOnce = false;
@@ -178,7 +178,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
         type = log_id.getString("type",null);
         driver_acc = FirebaseDatabase.getInstance().getReference("Driver_Account_Info");
         databaseHelper = new DatabaseHelper(getApplicationContext());
-        requestService = new Intent(Welcome.this,RequestService.class);
+//        requestService = new Intent(Welcome.this,RequestService.class);
         locationService = new Intent(Welcome.this,LocationService.class);
         rideCheckingService=new Intent(this, ShareRideCheckingService.class);
 
@@ -203,6 +203,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
         book = (TextView)findViewById(R.id.book_no);
         earn = (TextView)findViewById(R.id.earn_no);
         cancel = (TextView)findViewById(R.id.cancel_no);
+        pickup = (TextView)findViewById(R.id.pickup_dist);
         image = (CircleImageView)findViewById(R.id.image);
         profile_icon = (CircleImageView)findViewById(R.id.profile_icon);
 
@@ -358,7 +359,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
                             databaseHelper.insertLoginData(formateDate, "login", "0.0ms");
 //                    stopService(requestService);
 //                    stopService(rideCheckingService);
-                            startService(requestService);
+//                            startService(requestService);
                             startService(rideCheckingService);
 //                        startService(new Intent(Welcome.this, LocationService.class));
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -461,7 +462,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
             editor.putBoolean("status",false);
             editor.commit();
             databaseHelper.insertLoginData(welcome.getString("date",null),"logout","100.0ms");
-            stopService(requestService);
+//            stopService(requestService);
             stopService(rideCheckingService);
 //            stopService(locationService);
             login_status.setText("Logout");
@@ -524,7 +525,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
                     login_btn.setChecked(false);
                     login_status.setText("Logout");
                     login_duration.setText("Not Working");
-                    stopService(requestService);
+//                    stopService(requestService);
                     stopService(rideCheckingService);
 
                     View view=getLayoutInflater().inflate(R.layout.notification_layout,null);
@@ -561,7 +562,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
 //            stopService(rideCheckingService);
 //            startService(requestService);
 //            startService(rideCheckingService);
-                    startService(requestService);
+//                    startService(requestService);
                     startService(rideCheckingService);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         startForegroundService(locationService);
@@ -580,7 +581,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
 //            stopService(rideCheckingService);
 //            startService(requestService);
 //            startService(rideCheckingService);
-                startService(requestService);
+//                startService(requestService);
                 startService(rideCheckingService);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     startForegroundService(locationService);
@@ -594,7 +595,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
             login_btn.setChecked(false);
             login_status.setText("Logout");
             login_duration.setText("Not Working");
-            stopService(requestService);
+//            stopService(requestService);
             stopService(rideCheckingService);
 //            stopService()
 //            Log.v("TAG","STATUS False !");
@@ -767,10 +768,19 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
                                                 for (DataSnapshot data : dataSnapshot.getChildren()) {
                                                     Map<String, Object> map = (Map<String, Object>) data.getValue();
                                                     book.setText(map.get("book").toString());
-                                                    earn.setText("Rs. " + map.get("earn").toString());
+                                                    float val=0;
+                                                    if (map.containsKey("offer"))
+                                                        val=Float.parseFloat(map.get("earn").toString())+Float.parseFloat(map.get("offer").toString());
+                                                    else
+                                                        val=Float.parseFloat(map.get("earn").toString());
+                                                    earn.setText("Rs. " + val);
                                                     int count=Integer.parseInt(map.get("cancel").toString())+
                                                             Integer.parseInt(map.get("reject").toString());
                                                     cancel.setText(String.valueOf(count));
+                                                    if (map.containsKey("pickup"))
+                                                        pickup.setText("Rs. "+Float.parseFloat(map.get("pickup").toString()));
+                                                    else
+                                                        pickup.setText("Rs. 0");
                                                 }
                                             }
 

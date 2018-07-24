@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.CancelReason">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:text="Select Reason :"
+        android:textSize="18sp"
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp"
+        android:textStyle="bold"/>
+
+    <ListView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="70dp"
+        android:layout_marginTop="40dp"/>
+
+    <Button
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:text="Ok"
+        android:textColor="#ffffff"
+        android:layout_margin="10dp"
+        android:textSize="20dp"
+        android:onClick="select"
+        android:background="@drawable/blue_background"/>
+
+    <Button
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="Cancel"
+        android:textColor="#ffffff"
+        android:layout_margin="10dp"
+        android:textSize="20dp"
+        android:onClick="cancel"
+        android:background="@drawable/blue_background"/>
+</RelativeLayout>

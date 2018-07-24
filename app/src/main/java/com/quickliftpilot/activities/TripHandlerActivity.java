@@ -155,6 +155,7 @@ public class TripHandlerActivity extends AppCompatActivity {
         model.setId(ride_info.getString("customer_id",null));
         model.setName(ride_info.getString("name",null));
         model.setType("pick");
+        model.setPhone(ride_info.getString("phone",null));
         model.setOtp(ride_info.getString("otp",null));
         if (!ride_info.getString("seat",null).equals("full"))
             model.setSeat(Integer.parseInt(ride_info.getString("seat",null)));
@@ -167,6 +168,7 @@ public class TripHandlerActivity extends AppCompatActivity {
         dropModel.setId(ride_info.getString("customer_id",null));
         dropModel.setName(ride_info.getString("name",null));
         dropModel.setType("drop");
+        dropModel.setPhone(ride_info.getString("phone",null));
         dropModel.setOtp(ride_info.getString("otp",null));
         if (!ride_info.getString("seat",null).equals("full"))
             dropModel.setSeat(Integer.parseInt(ride_info.getString("seat",null)));

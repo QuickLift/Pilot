@@ -7,6 +7,8 @@ import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
@@ -1140,11 +1142,13 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                     DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference("CustomerRequests/"+log_id.getString("id",null)+"/"+model.getId());
                     databaseReference.child("accept").setValue(3);
                     Log.v("TAG","onclick pop");
-                    stack.pop();
                     Log.v("TAG","ended trip");
                     Intent intent=new Intent(MapActivity.this,FeedbackActivity.class);
                     intent.putExtra("customer_id",model.getId());
+                    intent.putExtra("phone",model.getPhone());
+                    intent.putExtra("name",model.getName());
 //            intent.putExtra("price",datamap.get("price").toString());
+                    stack.pop();
                     startActivity(intent);
                     MapActivity.fa.finish();
                     alert.dismiss();
@@ -1226,13 +1230,13 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                 .title("Current Location")
                 .position(currLoc)
                 .draggable(true)
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                .icon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.pin_location),80,80,false))));
 
         mMap.addMarker(new MarkerOptions()
                 .position(latLng)
                 .draggable(true)
                 .title("Destination")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                .icon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.pin_location),80,80,false))));
     }
 
     @Override

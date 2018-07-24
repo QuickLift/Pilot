@@ -93,13 +93,13 @@ public class BillDetails extends AppCompatActivity {
                     }
                     if (dataSnapshot.hasChild("pickup_distance") && !dataSnapshot.child("pickup_distance").getValue().toString().equals("0")) {
                         findViewById(R.id.pickupLayout).setVisibility(View.VISIBLE);
-                        ((TextView) findViewById(R.id.pickup_dist)).setText(dataSnapshot.child("pickup_distance").getValue().toString()+" km");
+                        ((TextView) findViewById(R.id.pickup_dist)).setText(String.format("%.2f",Float.valueOf(dataSnapshot.child("pickup_distance").getValue().toString()))+" km");
 //                        cancel=(float) Float.parseFloat(dataSnapshot.child("cancel_charge").getValue().toString());
 //                        total=total+(float) Float.parseFloat(dataSnapshot.child("cancel_charge").getValue().toString());
                     }
                     if (dataSnapshot.hasChild("trip_distance") && !dataSnapshot.child("trip_distance").getValue().toString().equals("0")) {
                         findViewById(R.id.tripLayout).setVisibility(View.VISIBLE);
-                        ((TextView) findViewById(R.id.trip_dist)).setText(dataSnapshot.child("trip_distance").getValue().toString()+" km");
+                        ((TextView) findViewById(R.id.trip_dist)).setText(String.format("%.2f",Float.valueOf(dataSnapshot.child("trip_distance").getValue().toString()))+" km");
 //                        cancel=(float) Float.parseFloat(dataSnapshot.child("trip_distance").getValue().toString());
 //                        total=total+(float) Float.parseFloat(dataSnapshot.child("cancel_charge").getValue().toString());
                     }

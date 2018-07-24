@@ -36,11 +36,12 @@ public class LauncherActivity extends AppCompatActivity {
 //        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         Log.v("Tag","Launcher Activity");
 
-        DatabaseReference cust_cancel_reason=FirebaseDatabase.getInstance().getReference("CustomerCancelReason");
-        DatabaseReference driver_cancel_reason=FirebaseDatabase.getInstance().getReference("DriverCancelReason");
+//        DatabaseReference cust_cancel_reason=FirebaseDatabase.getInstance().getReference("CustomerCancelReason");
+//        DatabaseReference driver_cancel_reason=FirebaseDatabase.getInstance().getReference("DriverCancelReason");
+//
+//        cust_cancel_reason.child("reason1").setValue("Option 1");
+//        driver_cancel_reason.child("reason1").setValue("Option 1");
 
-        cust_cancel_reason.child("reason1").setValue("Option 1");
-        driver_cancel_reason.child("reason1").setValue("Option 1");
         SharedPreferences log_id=getApplicationContext().getSharedPreferences("Login",MODE_PRIVATE);
 
         if (log_id.contains("id")) {
@@ -208,6 +209,8 @@ public class LauncherActivity extends AppCompatActivity {
                     editor.putString("peaktimeradius",dataSnapshot.child("PeakTimeSearchRadius").getValue(String.class));
                     editor.putString("waittime",String.valueOf(dataSnapshot.child("WaitingTime").getValue(Integer.class)));
                     editor.putString("waitingcharge",String.valueOf(dataSnapshot.child("WaitingCharge").getValue(Integer.class)));
+                    editor.putString("pickupdistance",String.valueOf(dataSnapshot.child("PickupDistance").getValue(String.class)));
+                    editor.putString("pickupprice",String.valueOf(dataSnapshot.child("PickupPrice").getValue(String.class)));
                     editor.commit();
                     for (DataSnapshot data:dataSnapshot.child("Package").getChildren()){
                         ArrayList<String> price=new ArrayList<String>();

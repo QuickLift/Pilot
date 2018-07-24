@@ -17,6 +17,7 @@ import com.quickliftpilot.R;
 import com.quickliftpilot.Util.GPSTracker;
 import com.quickliftpilot.Util.GetPriceData;
 import com.quickliftpilot.Util.SQLQueries;
+import com.quickliftpilot.Util.SendSms;
 import com.quickliftpilot.Util.SequenceStack;
 import com.quickliftpilot.model.SequenceModel;
 import com.firebase.geofire.GeoFire;
@@ -43,7 +44,7 @@ public class FeedbackActivity extends AppCompatActivity {
     private RatingBar rate_bar;
     private DatabaseReference feed_rate;
     boolean submit = false;
-    String id;
+    String id,phone,name;
     int price=0;
     private SharedPreferences pref;
     Map<String,Object> datamap;
@@ -61,6 +62,10 @@ public class FeedbackActivity extends AppCompatActivity {
         ride_info = getApplicationContext().getSharedPreferences("ride_info",MODE_PRIVATE);
         pref = getApplicationContext().getSharedPreferences("loginPref",MODE_PRIVATE);
         id = getIntent().getStringExtra("customer_id").toString();
+//        phone = getIntent().getStringExtra("phone").toString();
+        name = getIntent().getStringExtra("name").toString();
+
+        ((TextView)findViewById(R.id.feed_text)).setText("Rate "+name);
 
         rate_bar = (RatingBar)findViewById(R.id.feed_rate);
         feed_rate = FirebaseDatabase.getInstance().getReference("DriverFeedback/"+id);
@@ -390,6 +395,9 @@ public class FeedbackActivity extends AppCompatActivity {
                 cus.removeValue();
 
                 Stack<SequenceModel> stack = new SequenceStack().getStack();
+
+//            String otp_msg="Thank you for using QuickLift. We hope to see you soon again. Please provide your feedback from https://play.google.com/store/apps/details?id=com.quicklift";
+//            new SendSms(otp_msg,phone).start();
                 if (!stack.isEmpty()){
 //                stack.pop();
                     SharedPreferences.Editor editor=log_id.edit();
@@ -549,6 +557,10 @@ public class FeedbackActivity extends AppCompatActivity {
             cus.removeValue();
 
             Stack<SequenceModel> stack = new SequenceStack().getStack();
+
+
+//            String otp_msg="Thank you for using QuickLift. We hope to see you soon again. Please provide your feedback from https://play.google.com/store/apps/details?id=com.quicklift";
+//            new SendSms(otp_msg,phone).start();
             if (!stack.isEmpty()){
 //                stack.pop();
                 SharedPreferences.Editor editor=log_id.edit();

@@ -269,6 +269,9 @@ public class RequestActivity extends FragmentActivity implements OnMapReadyCallb
         super.onStart();
         user_name.setText(preferences.getString("name",null));
         user_add.setText(preferences.getString("source",null));
+        if (!preferences.getString("seat",null).equals("full")){
+            ((TextView)findViewById(R.id.title)).setText(R.string.Incoming_Share_Request);
+        }
 
 //        if (!preferences.contains("customer_id")){
 //            if (mMediaPlayer!=null && mMediaPlayer.isPlaying()) {
