@@ -44,7 +44,7 @@ public class FeedbackActivity extends AppCompatActivity {
     private RatingBar rate_bar;
     private DatabaseReference feed_rate;
     boolean submit = false;
-    String id,phone,name;
+    String id,phone="",name;
     int price=0;
     private SharedPreferences pref;
     Map<String,Object> datamap;
@@ -63,6 +63,8 @@ public class FeedbackActivity extends AppCompatActivity {
         pref = getApplicationContext().getSharedPreferences("loginPref",MODE_PRIVATE);
         id = getIntent().getStringExtra("customer_id").toString();
 //        phone = getIntent().getStringExtra("phone").toString();
+        if (getIntent().hasExtra("phone"))
+            phone = getIntent().getStringExtra("phone").toString();
         name = getIntent().getStringExtra("name").toString();
 
         ((TextView)findViewById(R.id.feed_text)).setText("Rate "+name);
@@ -212,7 +214,7 @@ public class FeedbackActivity extends AppCompatActivity {
                         SQLQueries sqlQueries = new SQLQueries(FeedbackActivity.this);
 
                         Cursor cursor = sqlQueries.retrievefare();
-                        Object[] dataTransfer = new Object[18];
+                        Object[] dataTransfer = new Object[20];
                         String url=null;
                         if (time>(int)(float)(Float.valueOf(dataSnapshot.child("triptime").getValue().toString())*1.2)) {
                             url = getDirectionsUrlthreeplaces(datamap.get("st_lat").toString(), datamap.get("st_lng").toString(), datamap.get("en_lat").toString(), datamap.get("en_lng").toString());
@@ -236,6 +238,14 @@ public class FeedbackActivity extends AppCompatActivity {
                         dataTransfer[12] = ref;
                         dataTransfer[13] = ongoing_rides;
                         dataTransfer[14] = log_id;
+                        if (datamap.containsKey("parking_price"))
+                            dataTransfer[15] = (int)(float)Float.parseFloat(datamap.get("parking_price").toString());
+                        else
+                            dataTransfer[15]=0;
+                        if (datamap.containsKey("offer"))
+                            dataTransfer[16] = (int)(float)Float.parseFloat(datamap.get("offer").toString());
+                        else
+                            dataTransfer[16]=0;
                         getDirectionsData.execute(dataTransfer);
                     }
                     else {
@@ -247,8 +257,9 @@ public class FeedbackActivity extends AppCompatActivity {
                         editor1.putString("saveprice",String.valueOf(price));
                         editor1.commit();
 
+                        Float amt=(((float)tot)-Float.valueOf(datamap.get("cancel_charge").toString())-Float.valueOf(datamap.get("parking_price").toString())+Float.valueOf(datamap.get("offer").toString()));
                         map.put("amount",String.valueOf(price));
-                        fare.setText("Rs. "+(int)((float)price));
+                        fare.setText("Rs. "+(int)((float)amt));
                         total.setText("Rs. "+(int)((float)tot));
 
                         rides.child(key).setValue(map);
@@ -396,8 +407,10 @@ public class FeedbackActivity extends AppCompatActivity {
 
                 Stack<SequenceModel> stack = new SequenceStack().getStack();
 
-//            String otp_msg="Thank you for using QuickLift. We hope to see you soon again. Please provide your feedback from https://play.google.com/store/apps/details?id=com.quicklift";
-//            new SendSms(otp_msg,phone).start();
+                if (!phone.equals("")) {
+                    String otp_msg = "Thank you for using QuickLift. We hope to see you soon again. Please provide your feedback from https://play.google.com/store/apps/details?id=com.quicklift";
+                    new SendSms(otp_msg, phone).start();
+                }
                 if (!stack.isEmpty()){
 //                stack.pop();
                     SharedPreferences.Editor editor=log_id.edit();
@@ -559,8 +572,10 @@ public class FeedbackActivity extends AppCompatActivity {
             Stack<SequenceModel> stack = new SequenceStack().getStack();
 
 
-//            String otp_msg="Thank you for using QuickLift. We hope to see you soon again. Please provide your feedback from https://play.google.com/store/apps/details?id=com.quicklift";
-//            new SendSms(otp_msg,phone).start();
+            if (!phone.equals("")) {
+                String otp_msg = "Thank you for using QuickLift. We hope to see you soon again. Please provide your feedback from https://play.google.com/store/apps/details?id=com.quicklift";
+                new SendSms(otp_msg, phone).start();
+            }
             if (!stack.isEmpty()){
 //                stack.pop();
                 SharedPreferences.Editor editor=log_id.edit();

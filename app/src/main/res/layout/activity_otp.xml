@@ -12,16 +12,17 @@
         android:textSize="25dp"
         android:text="@string/Otp_Enter"
         android:gravity="center_horizontal"
-        android:layout_marginTop="75dp"/>
+        android:layout_marginTop="30dp"/>
     <EditText
         android:id="@+id/otp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/otp_text"
-        android:layout_margin="60dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginRight="60dp"
         android:backgroundTint="@color/front_color"
         android:inputType="numberDecimal"
-        android:layout_marginTop="55dp"
+        android:layout_marginTop="30dp"
         android:gravity="center_horizontal"/>
     <Button
         android:id="@+id/otp_btn"

@@ -40,6 +40,7 @@ public class GetPriceData extends AsyncTask<Object,String,String> {
     private String key,veh_type;
     private TextView total_text;
     private String cancel_charge;
+    int park,offer;
     private int price;
 
     @Override
@@ -59,6 +60,8 @@ public class GetPriceData extends AsyncTask<Object,String,String> {
         ref=(DatabaseReference)objects[12];
         ongoing_rides=(DatabaseReference)objects[13];
         pref=(SharedPreferences)objects[14];
+        park=(int)objects[15];
+        offer=(int)objects[16];
 //        data=(Data) objects[17];
         //duration=(String) objects[2];
 
@@ -147,7 +150,8 @@ public class GetPriceData extends AsyncTask<Object,String,String> {
         editor.commit();
         Log.v("Price",""+price);
 //        Log.v("PRICE",""+final_price);
-        fare_text.setText("Rs. "+price);
+        int amt=((int)(float)(final_price-Float.valueOf(cancel_charge)))-park+offer;
+        fare_text.setText("Rs. "+amt);
         total_text.setText("Rs. "+(int)final_price);
 
         ongoing_rides.child("price").setValue(String.valueOf((int)(final_price-Float.valueOf(cancel_charge))));

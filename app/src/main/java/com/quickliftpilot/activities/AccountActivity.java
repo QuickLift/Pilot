@@ -33,8 +33,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class AccountActivity extends AppCompatActivity {
     /***
@@ -54,6 +59,8 @@ public class AccountActivity extends AppCompatActivity {
     List<RideHistory> rideHistoryList;
     ArrayList<Feed> earnings=new ArrayList<>();
     ArrayList<Earning> income=new ArrayList<>();
+    ArrayList<String> date=new ArrayList<>();
+    Map<String,Object> checking=new HashMap<>();
 //    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
     float total=0;
@@ -197,6 +204,7 @@ public class AccountActivity extends AppCompatActivity {
                             }
                         }
                     }
+                    check_date();
                     if (earnings.size()>0) {
                         findViewById(R.id.nodata).setVisibility(View.GONE);
                         listView.setVisibility(View.VISIBLE);
@@ -291,6 +299,7 @@ public class AccountActivity extends AppCompatActivity {
                             }
                         }
                     }
+                    check_date();
                     if (earnings.size()>0) {
                         findViewById(R.id.nodata).setVisibility(View.GONE);
                         mTotal.setText("Total Amount : Rs. " + (int)total);
@@ -311,6 +320,31 @@ public class AccountActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void check_date(){
+        for (int i=0;i<earnings.size();i++){
+            checking.put(earnings.get(i).getDate(),earnings.get(i));
+            date.add(earnings.get(i).getDate());
+        }
+        try {
+            date=sortDates(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        earnings.clear();
+        for (int i=date.size()-1;i>=0;i--){
+            earnings.add((Feed)checking.get(date.get(i)));
+        }
+    }
+
+    private ArrayList<String> sortDates(ArrayList<String> dates) throws ParseException {
+        SimpleDateFormat f = new SimpleDateFormat("dd-MM-yyyy");
+        Map<Date, String> dateFormatMap = new TreeMap<>();
+        for (String date: dates)
+            dateFormatMap.put(f.parse(date), date);
+        return new ArrayList<>(dateFormatMap.values());
     }
 
     @SuppressWarnings("deprecation")
@@ -462,6 +496,7 @@ public class AccountActivity extends AppCompatActivity {
                                             }
                                         }
                                     }
+                                    check_date();
                                     if (earnings.size() > 0) {
                                         findViewById(R.id.nodata).setVisibility(View.GONE);
                                         if (spinner.getSelectedItem().toString().trim().equalsIgnoreCase("Booking History")) {

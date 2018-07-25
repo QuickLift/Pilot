@@ -57,7 +57,7 @@ public class BillDetails extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
-                    float total=0,cancel=0,parking=0,timing=0,waiting=0,tax=0;
+                    float total=0,cancel=0,parking=0,timing=0,waiting=0,tax=0,offer=0;
                     ((TextView)findViewById(R.id.timestamp)).setText(dataSnapshot.child("time").getValue().toString());
                     ((TextView)findViewById(R.id.source)).setText(dataSnapshot.child("source").getValue().toString());
                     ((TextView)findViewById(R.id.destination)).setText(dataSnapshot.child("destination").getValue().toString());
@@ -103,6 +103,12 @@ public class BillDetails extends AppCompatActivity {
 //                        cancel=(float) Float.parseFloat(dataSnapshot.child("trip_distance").getValue().toString());
 //                        total=total+(float) Float.parseFloat(dataSnapshot.child("cancel_charge").getValue().toString());
                     }
+                    if (dataSnapshot.hasChild("discount") && !dataSnapshot.child("discount").getValue().toString().equals("0")) {
+                        findViewById(R.id.discountLayout).setVisibility(View.VISIBLE);
+                        ((TextView) findViewById(R.id.discount)).setText("Rs. "+dataSnapshot.child("discount").getValue().toString());
+                        offer=(float) Float.parseFloat(dataSnapshot.child("discount").getValue().toString());
+//                        total=total+(float) Float.parseFloat(dataSnapshot.child("cancel_charge").getValue().toString());
+                    }
                     if (dataSnapshot.hasChild("status")) {
                         if (dataSnapshot.child("status").getValue().toString().equals("Cancelled")) {
                             ((TextView) findViewById(R.id.status)).setText(dataSnapshot.child("status").getValue().toString());
@@ -111,9 +117,9 @@ public class BillDetails extends AppCompatActivity {
                         }
                     }
                     ((TextView)findViewById(R.id.paymode)).setText(dataSnapshot.child("paymode").getValue().toString());
-                    float base=(float) Float.parseFloat(dataSnapshot.child("amount").getValue().toString()) - total;
+                    float base=(float) Float.parseFloat(dataSnapshot.child("amount").getValue().toString()) - total+Float.parseFloat(dataSnapshot.child("discount").getValue().toString());
                     ((TextView)findViewById(R.id.basefare)).setText("Rs. "+String.format("%.2f",(base)));
-                    ((TextView)findViewById(R.id.total)).setText("Rs. "+String.valueOf(total+base+cancel));
+                    ((TextView)findViewById(R.id.total)).setText("Rs. "+String.valueOf(total+base+cancel-offer));
 
                     DatabaseReference ref=FirebaseDatabase.getInstance().getReference("Drivers/"+dataSnapshot.child("driver").getValue().toString());
                     ref.addListenerForSingleValueEvent(new ValueEventListener() {
