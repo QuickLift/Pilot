@@ -147,8 +147,8 @@ public class AccountActivity extends AppCompatActivity {
 //                                Log.v("TAG",""+data.getKey()+" , "+d.getKey()+" , "+d.getChildrenCount());
                             float cash=0,earn=0,cancel=0,offer=0,tot=0,tax=0,cess=0,cancelch=0;
                             int count=0;
-
-                            count=Integer.parseInt(d.child("cancel").getValue(String.class));
+                            if (d.hasChild("cancel"))
+                                count=Integer.parseInt(d.child("cancel").getValue(String.class));
                             if (d.hasChild("cash"))
                                 cash=Float.parseFloat(d.child("cash").getValue(String.class));
                             earn=Float.parseFloat(d.child("earn").getValue(String.class));
@@ -243,7 +243,8 @@ public class AccountActivity extends AppCompatActivity {
                             float cash=0,earn=0,cancel=0,offer=0,tot=0,tax=0,cess=0,cancelch=0;
                             int count=0;
 
-                            count=Integer.parseInt(d.child("cancel").getValue(String.class));
+                            if (d.hasChild("cancel"))
+                                count=Integer.parseInt(d.child("cancel").getValue(String.class));
                             if (d.hasChild("cash"))
                                 cash=Float.parseFloat(d.child("cash").getValue(String.class));
                             earn=Float.parseFloat(d.child("earn").getValue(String.class));

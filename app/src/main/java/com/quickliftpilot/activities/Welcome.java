@@ -767,15 +767,22 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
                                                 String key = dataSnapshot.getKey();
                                                 for (DataSnapshot data : dataSnapshot.getChildren()) {
                                                     Map<String, Object> map = (Map<String, Object>) data.getValue();
-                                                    book.setText(map.get("book").toString());
+                                                    if (map.containsKey("book"))
+                                                        book.setText(map.get("book").toString());
+                                                    else
+                                                        book.setText("0");
                                                     float val=0;
                                                     if (map.containsKey("offer"))
                                                         val=Float.parseFloat(map.get("earn").toString())+Float.parseFloat(map.get("offer").toString());
                                                     else
                                                         val=Float.parseFloat(map.get("earn").toString());
                                                     earn.setText("Rs. " + val);
-                                                    int count=Integer.parseInt(map.get("cancel").toString())+
-                                                            Integer.parseInt(map.get("reject").toString());
+
+                                                    int count=0;
+                                                    if (map.containsKey("cancel"))
+                                                        count+=Integer.parseInt(map.get("cancel").toString());
+                                                    if (map.containsKey("reject"))
+                                                        count+=Integer.parseInt(map.get("reject").toString());
                                                     cancel.setText(String.valueOf(count));
                                                     if (map.containsKey("pickup"))
                                                         pickup.setText("Rs. "+Float.parseFloat(map.get("pickup").toString()));
@@ -793,11 +800,13 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
                                         book.setText("0");
                                         earn.setText("Rs. 0");
                                         cancel.setText("0");
+                                        pickup.setText("Rs. 0");
                                         HashMap<String, Object> driver_info = new HashMap<>();
                                         driver_info.put("book", "0");
                                         driver_info.put("earn", "0");
                                         driver_info.put("reject", "0");
                                         driver_info.put("cancel", "0");
+                                        driver_info.put("pickup", "0");
                                         driver_acc.child(log_id.getString("id", null)).child(formateDate).push().setValue(driver_info);
                                     }
                                 }
@@ -811,11 +820,13 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
                             book.setText("0");
                             earn.setText("Rs. 0");
                             cancel.setText("0");
+                            pickup.setText("Rs. 0");
                             HashMap<String, Object> driver_info = new HashMap<>();
                             driver_info.put("book", "0");
                             driver_info.put("earn", "0");
                             driver_info.put("reject", "0");
                             driver_info.put("cancel", "0");
+                            driver_info.put("pickup", "0");
                             driver_acc.child(log_id.getString("id", null)).child(formateDate).push().setValue(driver_info);
                         }
                     }

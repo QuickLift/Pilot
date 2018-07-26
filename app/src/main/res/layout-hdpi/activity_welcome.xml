@@ -145,7 +145,7 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/cancel"
+                        android:id="@+id/pickup"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:background="@drawable/round_button_blue"
@@ -153,11 +153,11 @@
                         android:orientation="vertical">
                         <TextView
                             android:layout_width="60dp"
-                            android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="@string/Cancel_Circle"/>
+                            android:layout_height="wrap_content"
+                            android:text="@string/Pickup_Circle"/>
                         <TextView
-                            android:id="@+id/cancel_no"
+                            android:id="@+id/pickup_dist"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text=""
@@ -166,7 +166,7 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/pickup"
+                        android:id="@+id/cancel"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:background="@drawable/round_button_blue"
@@ -175,11 +175,11 @@
                         android:layout_marginLeft="5dp">
                         <TextView
                             android:layout_width="60dp"
-                            android:gravity="center"
                             android:layout_height="wrap_content"
-                            android:text="@string/Pickup_Circle"/>
+                            android:gravity="center"
+                            android:text="@string/Cancel_Circle"/>
                         <TextView
-                            android:id="@+id/pickup_dist"
+                            android:id="@+id/cancel_no"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text=""
