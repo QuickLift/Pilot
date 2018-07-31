@@ -1,6 +1,7 @@
 package com.quickliftpilot.activities;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -49,6 +50,7 @@ import com.quickliftpilot.Util.GPSTracker;
 import com.quickliftpilot.Util.SequenceStack;
 import com.quickliftpilot.model.SequenceModel;
 import com.quickliftpilot.services.LocationService;
+import com.quickliftpilot.services.OngoingRideService;
 import com.quickliftpilot.services.RequestService;
 import com.quickliftpilot.services.ShareRideCheckingService;
 import com.firebase.geofire.GeoFire;
@@ -113,6 +115,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
     public static Activity WelcomeActivity=null;
     private PowerManager.WakeLock mWakeLock;
     UpdateLocation mReceiver=new UpdateLocation();
+    ProgressDialog dialog;
 //    private GoogleApiClient googleApiClient;
 
     @Override
@@ -155,6 +158,11 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
             Welcome.WelcomeActivity.finish();
         }
         WelcomeActivity=this;
+        dialog = new ProgressDialog(this, ProgressDialog.THEME_HOLO_DARK);
+        dialog.setIndeterminate(true);
+        dialog.setCancelable(false);
+        dialog.setMessage("Loading ! Please Wait...");
+        dialog.show();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 //        googleApiClient = new GoogleApiClient.Builder(this)
@@ -264,7 +272,6 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
                 right.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
                         alert.dismiss();
                     }
                 });
@@ -628,8 +635,44 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
 //                    if(pref.getBoolean("status",false))
 //                        getCurrentLocation();
                     login_btn.setEnabled(true);
+                    if (dialog.isShowing())
+                        dialog.dismiss();
                     startService(rideCheckingService);
 
+                    if (pref.contains("block") && pref.getString("block",null).equals("1")){
+                        if (pref.getBoolean("status",false) ){
+                            login_btn.setChecked(false);
+                            login_status.setText("Logout");
+                            login_duration.setText("Not Working");
+//                    stopService(requestService);
+                            stopService(rideCheckingService);
+
+                            View view=getLayoutInflater().inflate(R.layout.notification_layout,null);
+                            TextView title=(TextView)view.findViewById(R.id.title);
+                            TextView message=(TextView)view.findViewById(R.id.message);
+                            Button left=(Button) view.findViewById(R.id.left_btn);
+                            Button right=(Button) view.findViewById(R.id.right_btn);
+
+                            left.setVisibility(View.GONE);
+                            right.setText("Ok");
+                            title.setText("Account Blocked !");
+                            message.setText("Your account is blocked ! Please contact the admin !");
+                            AlertDialog.Builder builder = new AlertDialog.Builder(Welcome.this);
+                            builder .setView(view)
+                                    .setCancelable(false);
+
+                            final AlertDialog alert = builder.create();
+                            alert.show();
+
+                            right.setOnClickListener(null);
+                            right.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    alert.dismiss();
+                                }
+                            });
+                        }
+                    }
 //                    sendBroadcast(i);
                 }
                 else {
@@ -640,12 +683,18 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
                     editor.putBoolean("status",true);
                     editor.commit();
 
+                    DatabaseReference seat_data = FirebaseDatabase.getInstance().getReference("DriversAvailable/"+log_id.getString("type",null)+"/"+log_id.getString("id",null));
+                    seat_data.removeValue();
+
                     login_btn.setEnabled(false);
                     login_btn.setChecked(true);
                     login_status.setText("Login");
                     startService(rideCheckingService);
                     login_duration.setText("Running");
 
+                    if (dialog.isShowing())
+                        dialog.dismiss();
+                    startService(new Intent(Welcome.this, OngoingRideService.class));
 //                    unregisterReceiver(mReceiver);
 //                    sendBroadcast(i);
                 }

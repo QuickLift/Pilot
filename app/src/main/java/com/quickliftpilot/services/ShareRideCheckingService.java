@@ -62,6 +62,7 @@ public class ShareRideCheckingService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         wakeLock.acquire();
         Log.i("TAG","ShareRideCheckingService");
+        value=0;
 
         sharereq = FirebaseDatabase.getInstance().getReference("Share");
         sharereq.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -83,6 +84,7 @@ public class ShareRideCheckingService extends Service {
                         Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
                         gpsTracker = new GPSTracker(ShareRideCheckingService.this);
                         Location location = new Location(LocationManager.GPS_PROVIDER);
+                        Log.v("Check",dataSnapshot.getKey());
                         location.setLatitude(Double.valueOf(map.get("st_lat").toString()));
                         location.setLongitude(Double.valueOf(map.get("st_lng").toString()));
 

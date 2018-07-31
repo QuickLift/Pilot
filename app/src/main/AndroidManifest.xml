@@ -33,7 +33,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:windowSoftInputMode="stateAlwaysHidden">
+        android:windowSoftInputMode="stateAlwaysHidden"
+        android:name="android.support.multidex.MultiDexApplication">
+
         <activity android:name=".activities.Welcome" />
 
         <meta-data
