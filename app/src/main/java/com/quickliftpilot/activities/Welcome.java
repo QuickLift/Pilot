@@ -351,7 +351,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
                     if (!pref.getBoolean("status",false)){
-                        if (!pref.contains("block") || (pref.contains("block") && pref.getString("block",null).equals("0"))) {
+                        if (!log_id.contains("block") || (log_id.contains("block") && log_id.getString("block",null).equals("0"))) {
                             GregorianCalendar gregorianCalendar = new GregorianCalendar();
                             String date = String.format("%02d", gregorianCalendar.get(GregorianCalendar.DAY_OF_MONTH));
                             String month = String.format("%02d", (gregorianCalendar.get(GregorianCalendar.MONTH) + 1));
@@ -404,6 +404,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
                                     .setCancelable(false);
 
                             final AlertDialog alert = builder.create();
+                            if (!alert.isShowing())
                             alert.show();
 
                             right.setOnClickListener(null);
@@ -527,8 +528,8 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
         }
 
         if(pref.getBoolean("status",false) || getIntent().hasExtra("status")){
-            if (pref.contains("block")) {
-                if (pref.getString("block",null).equals("1")){
+            if (log_id.contains("block")) {
+                if (log_id.getString("block",null).equals("1")){
                     login_btn.setChecked(false);
                     login_status.setText("Logout");
                     login_duration.setText("Not Working");
@@ -550,6 +551,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
                             .setCancelable(false);
 
                     final AlertDialog alert = builder.create();
+                    if (!alert.isShowing())
                     alert.show();
 
                     right.setOnClickListener(null);
@@ -639,7 +641,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
                         dialog.dismiss();
                     startService(rideCheckingService);
 
-                    if (pref.contains("block") && pref.getString("block",null).equals("1")){
+                    if (log_id.contains("block") && log_id.getString("block",null).equals("1")){
                         if (pref.getBoolean("status",false) ){
                             login_btn.setChecked(false);
                             login_status.setText("Logout");
@@ -662,6 +664,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
                                     .setCancelable(false);
 
                             final AlertDialog alert = builder.create();
+                            if (!alert.isShowing())
                             alert.show();
 
                             right.setOnClickListener(null);

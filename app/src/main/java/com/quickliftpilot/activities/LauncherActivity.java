@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.quickliftpilot.R;
 import com.google.firebase.database.DataSnapshot;
@@ -122,6 +123,7 @@ public class LauncherActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()){
+//                        Toast.makeText(LauncherActivity.this, ""+dataSnapshot.getValue().toString(), Toast.LENGTH_SHORT).show();
                         editor.putString("block",dataSnapshot.getValue().toString());
                         editor.commit();
                     }

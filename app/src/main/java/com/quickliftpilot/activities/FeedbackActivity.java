@@ -145,6 +145,10 @@ public class FeedbackActivity extends AppCompatActivity {
                         map.put("parking","0");
                     map.put("seat",datamap.get("seat").toString());
                     map.put("time",new Date().toString());
+                    if (datamap.containsKey("started"))
+                        map.put("start_time",datamap.get("started").toString());
+                    else
+                        map.put("start_time","");
                     if (datamap.containsKey("pickup_distance"))
                         map.put("pickup_distance",datamap.get("pickup_distance").toString());
                     else
@@ -156,11 +160,11 @@ public class FeedbackActivity extends AppCompatActivity {
 //                    map.put("timing",new Date().toString());
                     String key = rides.push().getKey();
 
-                    if (datamap.containsKey("version")) {
+                    if (datamap.containsKey("version") && datamap.containsKey("seat") && datamap.get("seat").toString().equals("full")) {
                         if (dataSnapshot.hasChild("located") && dataSnapshot.hasChild("started") && dataSnapshot.hasChild("waitcharge")) {
                             try {
-                                Date date1 = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss").parse(dataSnapshot.child("started").getValue().toString());
-                                Date date2 = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss").parse(dataSnapshot.child("located").getValue().toString());
+                                Date date1 = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(dataSnapshot.child("started").getValue().toString());
+                                Date date2 = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(dataSnapshot.child("located").getValue().toString());
 
                                 long diff = date1.getTime() - date2.getTime();
 //                            int days = (int) (diff / (1000*60*60*24));
@@ -183,8 +187,8 @@ public class FeedbackActivity extends AppCompatActivity {
                         int time=0;
                         if (dataSnapshot.hasChild("ended") && dataSnapshot.hasChild("started") && dataSnapshot.hasChild("timecharge") && dataSnapshot.hasChild("triptime")) {
                             try {
-                                Date date1 = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss").parse(dataSnapshot.child("started").getValue().toString());
-                                Date date2 = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss").parse(dataSnapshot.child("ended").getValue().toString());
+                                Date date1 = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(dataSnapshot.child("started").getValue().toString());
+                                Date date2 = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(dataSnapshot.child("ended").getValue().toString());
 
                                 long diff = date2.getTime() - date1.getTime();
 //                            int days = (int) (diff / (1000*60*60*24));
@@ -252,12 +256,22 @@ public class FeedbackActivity extends AppCompatActivity {
                         map.put("waiting","0");
                         map.put("timing", "0");
 
-                        price=(int) (((float)tot)-Float.valueOf(datamap.get("cancel_charge").toString()));
+                        if (datamap.containsKey("cancel_charge"))
+                            price=(int) (((float)tot)-Float.valueOf(datamap.get("cancel_charge").toString()));
+                        else
+                            price=(int)((float)tot);
                         SharedPreferences.Editor editor1=log_id.edit();
                         editor1.putString("saveprice",String.valueOf(price));
                         editor1.commit();
 
-                        Float amt=(((float)tot)-Float.valueOf(datamap.get("cancel_charge").toString())-Float.valueOf(datamap.get("parking_price").toString())+Float.valueOf(datamap.get("offer").toString()));
+                        Float amt=((float)tot);
+                        if (datamap.containsKey("cancel_charge"))
+                            amt=amt-Float.valueOf(datamap.get("cancel_charge").toString());
+                        if (datamap.containsKey("parking_price"))
+                            amt=amt-Float.valueOf(datamap.get("parking_price").toString());
+                        if (datamap.containsKey("offer"))
+                            amt=amt+Float.valueOf(datamap.get("offer").toString());
+//                        amt=(((float)tot)-Float.valueOf(datamap.get("cancel_charge").toString())-Float.valueOf(datamap.get("parking_price").toString())+Float.valueOf(datamap.get("offer").toString()));
                         map.put("amount",String.valueOf(price));
                         fare.setText("Rs. "+(int)((float)amt));
                         total.setText("Rs. "+(int)((float)tot));

@@ -28,7 +28,7 @@ public class OTPActivity extends AppCompatActivity {
     private static EditText otp;
     private static Button otp_btn;
     private SharedPreferences ride_info;
-    SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+    SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
     private SharedPreferences log_id;
     DatabaseReference db;
     String latitude,longitude;

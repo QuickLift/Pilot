@@ -478,6 +478,28 @@ public class Login extends AppCompatActivity {
             });
 
             DatabaseReference db = FirebaseDatabase.getInstance().getReference("Drivers");
+            String version=null;
+            try {
+                version=getApplication().getPackageManager().getPackageInfo(getApplication().getPackageName(), 0).versionName;
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+            db.child(log_id.getString("id", null)+"/version").setValue(version);
+            db.child(log_id.getString("id", null)).child("block").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()){
+//                        Toast.makeText(LauncherActivity.this, ""+dataSnapshot.getValue().toString(), Toast.LENGTH_SHORT).show();
+                        editor.putString("block",dataSnapshot.getValue().toString());
+                        editor.commit();
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
             db.child(log_id.getString("id",null)).child("veh_type").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {

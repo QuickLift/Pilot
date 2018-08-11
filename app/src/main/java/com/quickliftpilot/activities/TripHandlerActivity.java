@@ -188,7 +188,7 @@ public class TripHandlerActivity extends AppCompatActivity {
         db.child("d_lat").setValue(log_id.getString("cur_lat",null));
         db.child("d_lng").setValue(log_id.getString("cur_lng",null));
 
-        SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+        SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         db.child("accepted").setValue(sdf.format(new Date()));
         DatabaseReference response = FirebaseDatabase.getInstance().getReference("Response/"+ride_info.getString("customer_id",null));
         response.child("resp").setValue("Accept");

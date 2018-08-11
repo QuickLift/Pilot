@@ -116,7 +116,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     ValueEventListener response_listener=null;
     public static Activity fa;
     Marker marker;
-    SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+    SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

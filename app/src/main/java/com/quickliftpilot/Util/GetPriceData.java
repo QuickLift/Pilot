@@ -142,16 +142,26 @@ public class GetPriceData extends AsyncTask<Object,String,String> {
             map.put("tax","0");
         }
 
-        map.put("amount",String.valueOf((int)(final_price-Float.valueOf(cancel_charge))));
+        if (((int)(final_price-Float.valueOf(cancel_charge)))<0)
+            map.put("amount","0");
+        else
+            map.put("amount",String.valueOf((int)(final_price-Float.valueOf(cancel_charge))));
 
         Log.v("TAG","step 6: "+final_price);
         price=(int)(final_price-Float.valueOf(cancel_charge));
+        if (price<0)
+            price=0;
         editor.putString("saveprice",String.valueOf(price));
         editor.commit();
         Log.v("Price",""+price);
 //        Log.v("PRICE",""+final_price);
         int amt=((int)(float)(final_price-Float.valueOf(cancel_charge)))-park+offer;
+
+        if (amt<0)
+            amt=0;
         fare_text.setText("Rs. "+amt);
+        if (((int)final_price)<0)
+            final_price=0;
         total_text.setText("Rs. "+(int)final_price);
 
         ongoing_rides.child("price").setValue(String.valueOf((int)(final_price-Float.valueOf(cancel_charge))));
