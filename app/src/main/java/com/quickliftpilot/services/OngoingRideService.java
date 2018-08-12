@@ -86,52 +86,54 @@ public class OngoingRideService extends Service {
 //                        editor.putString("st_lat",map.get("st_lat").toString());
 //                        editor.putString("st_lng",map.get("st_lng").toString());
 
-                        DatabaseReference user = FirebaseDatabase.getInstance().getReference("Users/"+map.get("customer_id").toString());
-                        user.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                Map<String,Object> userMap = (Map<String,Object>)dataSnapshot.getValue();
+                        if (map.containsKey("accept") && !map.get("accept").toString().equals("0")) {
+                            DatabaseReference user = FirebaseDatabase.getInstance().getReference("Users/" + map.get("customer_id").toString());
+                            user.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    Map<String, Object> userMap = (Map<String, Object>) dataSnapshot.getValue();
 //                                editor.putString("name",userMap.get("name").toString());
 //                                editor.putString("phone",userMap.get("phone").toString());
 //                                editor.putString("email",userMap.get("email").toString());
 //                                editor.commit();
 
-                                SequenceModel model = new SequenceModel();
-                                model.setId(map.get("customer_id").toString());
-                                model.setName(userMap.get("name").toString());
-                                model.setType("pick");
-                                model.setOtp(map.get("otp").toString());
-                                model.setAddress(map.get("source").toString());
-                                model.setPhone(userMap.get("phone").toString());
-                                model.setLat(Double.parseDouble(map.get("st_lat").toString()));
-                                model.setLng(Double.parseDouble(map.get("st_lng").toString()));
-                                model.setLatLng(new LatLng(Double.parseDouble(map.get("st_lat").toString()),Double.parseDouble(map.get("st_lng").toString())));
+                                    SequenceModel model = new SequenceModel();
+                                    model.setId(map.get("customer_id").toString());
+                                    model.setName(userMap.get("name").toString());
+                                    model.setType("pick");
+                                    model.setOtp(map.get("otp").toString());
+                                    model.setAddress(map.get("source").toString());
+                                    model.setPhone(userMap.get("phone").toString());
+                                    model.setLat(Double.parseDouble(map.get("st_lat").toString()));
+                                    model.setLng(Double.parseDouble(map.get("st_lng").toString()));
+                                    model.setLatLng(new LatLng(Double.parseDouble(map.get("st_lat").toString()), Double.parseDouble(map.get("st_lng").toString())));
 
-                                SequenceModel dropModel = new SequenceModel();
-                                dropModel.setId(map.get("customer_id").toString());
-                                dropModel.setName(userMap.get("name").toString());
-                                dropModel.setType("drop");
-                                dropModel.setOtp(map.get("otp").toString());
-                                dropModel.setPhone(userMap.get("phone").toString());
-                                dropModel.setAddress(map.get("destination").toString());
-                                dropModel.setLat(Double.parseDouble(map.get("en_lat").toString()));
-                                dropModel.setLng(Double.parseDouble(map.get("en_lng").toString()));
-                                dropModel.setLatLng(new LatLng(Double.parseDouble(map.get("en_lat").toString()),Double.parseDouble(map.get("en_lng").toString())));
+                                    SequenceModel dropModel = new SequenceModel();
+                                    dropModel.setId(map.get("customer_id").toString());
+                                    dropModel.setName(userMap.get("name").toString());
+                                    dropModel.setType("drop");
+                                    dropModel.setOtp(map.get("otp").toString());
+                                    dropModel.setPhone(userMap.get("phone").toString());
+                                    dropModel.setAddress(map.get("destination").toString());
+                                    dropModel.setLat(Double.parseDouble(map.get("en_lat").toString()));
+                                    dropModel.setLng(Double.parseDouble(map.get("en_lng").toString()));
+                                    dropModel.setLatLng(new LatLng(Double.parseDouble(map.get("en_lat").toString()), Double.parseDouble(map.get("en_lng").toString())));
 
-                                stack.push(dropModel);
+                                    stack.push(dropModel);
 //                        Log.i("TAG","Stack Size : "+stack.size());
-                                stack.push(model);
-                                Log.i("TAG","Stack Size : "+stack.size()+" , "+dataSnapshot.getChildrenCount());
+                                    stack.push(model);
+                                    Log.i("TAG", "Stack Size : " + stack.size() + " , " + dataSnapshot.getChildrenCount());
 
-                                if (val==(stack.size()/2))
-                                    startService(new Intent(OngoingRideService.this,RouteArrangeService.class));
-                            }
+                                    if (val == (stack.size() / 2))
+                                        startService(new Intent(OngoingRideService.this, RouteArrangeService.class));
+                                }
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
 
-                            }
-                        });
+                                }
+                            });
+                        }
 //                        Log.i("TAG","Stack Size : "+stack.size());
                     }
                 }else {

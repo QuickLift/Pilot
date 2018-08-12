@@ -42,6 +42,7 @@ public class RouteArrangeService extends Service {
     public void onCreate() {
         super.onCreate();
         stack = new SequenceStack().getStack();
+        log_id=getApplicationContext().getSharedPreferences("Login",MODE_PRIVATE);
     }
 
     @Override
@@ -66,8 +67,9 @@ public class RouteArrangeService extends Service {
 
             GPSTracker gps=new GPSTracker(this);
             StringBuilder url = new StringBuilder("https://maps.googleapis.com/maps/api/directions/json?");
-            url.append("origin="+gps.getLatitude()+","+gps.getLongitude());
+            url.append("origin="+log_id.getString("cur_lat",null)+","+log_id.getString("cur_lng",null));
 
+//            Log.v("Checking",url.toString());
             Location location=new Location(LocationManager.GPS_PROVIDER);
             location.setLatitude(seq.get(1).getLat());
             location.setLongitude(seq.get(1).getLng());

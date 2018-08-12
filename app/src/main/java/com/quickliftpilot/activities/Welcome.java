@@ -100,11 +100,11 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
     private static DatabaseReference db,driver_acc,driver_info;
     private static TextView login_status,login_duration,book,earn,cancel,name,contact,pickup;
     private static SharedPreferences pref;
-    private static  SharedPreferences.Editor editor,wel_edit;
+    private static SharedPreferences.Editor editor,wel_edit;
     private static RatingBar rate;
     private static SharedPreferences log_id,welcome;
     private static DatabaseHelper databaseHelper;
-    private static Intent rideCheckingService,locationService;
+    private static Intent rideCheckingService,locationService,requestService;
     private static Date login_time,logout_time;
     protected static final int REQUEST_CHECK_SETTINGS = 0x1;
     boolean doubleBackToExitPressedOnce = false;
@@ -186,7 +186,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
         type = log_id.getString("type",null);
         driver_acc = FirebaseDatabase.getInstance().getReference("Driver_Account_Info");
         databaseHelper = new DatabaseHelper(getApplicationContext());
-//        requestService = new Intent(Welcome.this,RequestService.class);
+        requestService = new Intent(Welcome.this,RequestService.class);
         locationService = new Intent(Welcome.this,LocationService.class);
         rideCheckingService=new Intent(this, ShareRideCheckingService.class);
 
@@ -398,7 +398,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
                             left.setVisibility(View.GONE);
                             right.setText("Ok");
                             title.setText("Account Blocked !");
-                            message.setText("Your account is blocked ! Please contact the admin !");
+                            message.setText("This is an Invalid Account. Please Contact Support team");
                             AlertDialog.Builder builder = new AlertDialog.Builder(Welcome.this);
                             builder .setView(view)
                                     .setCancelable(false);
@@ -522,6 +522,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
 
 //        Log.v("TAG","ON Start Called");
 
+        startService(requestService);
         if (log_id.contains("ride")) {
             if (!log_id.getString("ride", null).equals(""))
                 login_btn.setEnabled(false);
@@ -545,7 +546,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
                     left.setVisibility(View.GONE);
                     right.setText("Ok");
                     title.setText("Account Blocked !");
-                    message.setText("Your account is blocked ! Please contact the admin !");
+                    message.setText("This is an Invalid Account. Please Contact Support team");
                     AlertDialog.Builder builder = new AlertDialog.Builder(Welcome.this);
                     builder .setView(view)
                             .setCancelable(false);
@@ -658,7 +659,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
                             left.setVisibility(View.GONE);
                             right.setText("Ok");
                             title.setText("Account Blocked !");
-                            message.setText("Your account is blocked ! Please contact the admin !");
+                            message.setText("This is an Invalid Account. Please Contact Support team");
                             AlertDialog.Builder builder = new AlertDialog.Builder(Welcome.this);
                             builder .setView(view)
                                     .setCancelable(false);
