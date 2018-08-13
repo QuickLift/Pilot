@@ -406,7 +406,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
                     channelId, channelName, importance);
             mNotificationManager.createNotificationChannel(mChannel);
         }
-        mNotificationManager.notify(001, noti);
+//        mNotificationManager.notify(001, noti);
         startForeground(7,noti);
     }
 
