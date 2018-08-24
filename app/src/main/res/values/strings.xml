@@ -82,9 +82,9 @@
     <string name="title_activity_request">Map</string>
 
     <string-array name="select_option">
-        <item>Account Statement</item>
-        <item>Booking History</item>
-        <item>Cancel History</item>
+        <item>@string/Account_Statment</item>
+        <item>@string/Account_Booking_History</item>
+        <item>@string/Account_Cancel_History</item>
     </string-array>
     <string name="select_prompt">Select an option</string>
 
@@ -100,11 +100,14 @@
     <string name="Welcome_Login">Login</string>
     <string name="Welcome_Logout">Logout</string>
 
+    //Blocked Account
+    <string name="Account_blocked">Account Blocked !</string>
+    <string name="block_message">This is an Invalid Account. Please contact Support Team.</string>
 
     //Profile Activity
-
     <string name="Profile_Cancel">Cancel</string>
     <string name="Profile_Save">Save</string>
+    <string name="Profile_Title">Profile</string>
 
     //Map Activity
 
@@ -114,10 +117,18 @@
     <string name="Map_Drop">Drop</string>
     <string name="Map_EndTrip">End Trip</string>
     <string name="Map_RideList">Rider List</string>
-
+    <string name="Map_No">Yes</string>
+    <string name="Map_Yes">No</string>
+    <string name="Map_Confirm_Trip_Cancellation">Are you sure you want to cancel trip?</string>
+    <string name="Map_Confirm_Trip_End">Do you want to end the trip?</string>
+    <string name="Map_Ok">Ok</string>
+    <string name="Map_Trip_Cancelled">Trip Cancelled !</string>
+    <string name="Map_Trip_Cancelled_By_Customer">The trip is cancelled by Customer</string>
+    <string name="Map_Trip_Cancelled_By_GetIntent">The trip is cancelled by</string>
 
 
     //Feedback Activity
+    <string name="Feedback">Feedback</string>
     <string name="Feedback_TripEnded">Trip Ended</string>
     <string name="Feedback_Fare">Fare</string>
     <string name="Feedback_Offer">Offer</string>
@@ -131,12 +142,65 @@
     //Incoming request
     <string name="Incoming_Request">Incoming Request</string>
     <string name="Incoming_Share_Request">Incoming Share Request</string>
-
+    <string name="Confirm_Button">Confirm</string>
     //Otp Activity
     <string name="Otp_Enter">Enter OTP</string>
     <string name="Otp_Submit">Submit</string>
 
+    //Trip Tags
+    <string name="Trip_Cancelled">Trip Cancelled</string>
+    <string name="Cancelled_by"> has cancelled the request</string>
+
     //Cancel Reason
-    <string name="Cancel_Reason">Reason for Cancellation</string>
+    <string name="Cancel_Reason">Cancel Trip</string>
+
+
+    //Login Activity
+    <string name="Login_heading">Login</string>
+    <string name="Ref_ID">Enter your Reference ID</string>
+    <string name="Send_Otp">Send OTP</string>
+    <string name="Enter_Otp">Enter OTP</string>
+    <string name="Login">Login</string>
+    <string name="Invalid_Ref">Invalid Reference number\n Please conatact to the Office</string>
+    <string name="Invalid_OTP">Invalid OTP\n Try again</string>
+    <string name="TimeOut_OTP">Time Out \n Please try again</string>
+
+    //Ride Activity
+    <string name="Ride_Current_Ride">Current Ride</string>
+    <string name="Ride_Base_Fare">Base Fare</string>
+    <string name="Ride_Total_Amt">Total</string>
+    <string name="Ride_Tax">Tax</string>
+    <string name="Ride_Offer">Offer</string>
+    <string name="Ride_Time_Charge">Time Charge</string>
+    <string name="Ride_Parking_Charge">Parking Charge</string>
+    <string name="Ride_Cancel_Charge">Cancellation Charge</string>
+    <string name="Ride_Waiting_Charge">Waiting Charge</string>
+    <string name="Ride_Trip_Distance">Trip Distance</string>
+    <string name="Ride_Pickup_Distanse">Pick up Distance</string>
+    <string name="Ride_Paymnet_Mode">Payment Mode</string>
+    <string name="Ride_Cash">Cash</string>
+    <string name="Ride_Bill_Details">Bill Details</string>
+    <string name="Ride_List">Bill Details</string>
+    <string name="Ride_Trip_Details">Trip Details</string>
+    <!--<string name="Send_Otp">Send OTP</string>-->
+
+
+    //AccountInfo Activity
+    <string name="Account_Title">Account Information</string>
+    <string name="Account_Transection_History">Transection History</string>
+    <string name="Account_Statment">Account Statement</string>
+    <string name="Account_Booking_History">Booking History</string>
+    <string name="Account_Cancel_History">Cancel History</string>
+    <string name="Account_Load_Button">Load</string>
+    <string name="Account_Earning">Earning</string>
+    <string name="Account_Cash">Cash</string>
+    <string name="Account_Paytm">Paytm</string>
+    <string name="Account_Offer">Offer</string>
+    <string name="Account_Deduction">Deduction</string>
+    <string name="Account_Tax">Tax</string>
+    <string name="Account_Cancel">Cancel</string>
+    <string name="Account_Company_Cess">QuickLift Cess</string>
+    <string name="Account_Outstanding">Outstanding Amount</string>
+    <string name="Account_Total">Total Amount</string>
 
 </resources>

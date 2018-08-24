@@ -206,7 +206,7 @@
                 android:layout_marginLeft="20dp"
                 android:textColor="#000000"
                 android:textSize="18sp"
-                android:text="Receipt Details : "/>
+                android:text="@string/Ride_Bill_Details"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -228,7 +228,7 @@
                     android:paddingLeft="30dp"
                     android:textColor="#05affc"
                     android:textSize="16sp"
-                    android:text="Base Fare"/>
+                    android:text="@string/Ride_Base_Fare"/>
 
                 <TextView
                     android:id="@+id/basefare"
@@ -256,7 +256,7 @@
                     android:paddingLeft="30dp"
                     android:textColor="#05affc"
                     android:textSize="16sp"
-                    android:text="Tolls, Parking"/>
+                    android:text="@string/Ride_Parking_Charge"/>
 
                 <TextView
                     android:id="@+id/parking"
@@ -284,7 +284,7 @@
                     android:paddingLeft="30dp"
                     android:textColor="#05affc"
                     android:textSize="16sp"
-                    android:text="Waiting Charge"/>
+                    android:text="@string/Ride_Waiting_Charge"/>
 
                 <TextView
                     android:id="@+id/waiting"
@@ -312,7 +312,7 @@
                     android:paddingLeft="30dp"
                     android:textColor="#05affc"
                     android:textSize="16sp"
-                    android:text="Timing Charge"/>
+                    android:text="@string/Ride_Time_Charge"/>
 
                 <TextView
                     android:id="@+id/timing"
@@ -340,7 +340,7 @@
                     android:paddingLeft="30dp"
                     android:textColor="#05affc"
                     android:textSize="16sp"
-                    android:text="Cancellation Charge"/>
+                    android:text="@string/Ride_Cancel_Charge"/>
 
                 <TextView
                     android:id="@+id/cancel_charge"
@@ -368,7 +368,7 @@
                     android:paddingLeft="30dp"
                     android:textColor="#05affc"
                     android:textSize="16sp"
-                    android:text="Tax"/>
+                    android:text="@string/Ride_Tax"/>
 
                 <TextView
                     android:id="@+id/tax"
@@ -396,7 +396,7 @@
                     android:paddingLeft="30dp"
                     android:textColor="#05affc"
                     android:textSize="16sp"
-                    android:text="Offer"/>
+                    android:text="@string/Ride_Offer"/>
 
                 <TextView
                     android:id="@+id/discount"
@@ -430,7 +430,7 @@
                     android:paddingLeft="30dp"
                     android:textColor="#05affc"
                     android:textSize="16sp"
-                    android:text="Total"/>
+                    android:text="@string/Ride_Total_Amt"/>
 
                 <TextView
                     android:id="@+id/total"
@@ -465,7 +465,7 @@
                     android:paddingLeft="30dp"
                     android:textColor="#05affc"
                     android:textSize="16sp"
-                    android:text="Trip Distance"/>
+                    android:text="@string/Ride_Trip_Distance"/>
 
                 <TextView
                     android:id="@+id/trip_dist"
@@ -492,7 +492,7 @@
                     android:paddingLeft="30dp"
                     android:textColor="#05affc"
                     android:textSize="16sp"
-                    android:text="Pickup Distance"/>
+                    android:text="@string/Ride_Pickup_Distanse"/>
 
                 <TextView
                     android:id="@+id/pickup_dist"
@@ -526,7 +526,7 @@
                             android:id="@+id/pay_head"
                             android:layout_width="match_parent"
                             android:layout_height="25dp"
-                            android:text="Payment Mode"
+                            android:text="@string/Ride_Paymnet_Mode"
                             android:gravity="center"
                             android:textColor="#000000"
                             android:textSize="16sp"/>
@@ -543,34 +543,34 @@
                     </RelativeLayout>
                 </LinearLayout>
                 <!--<LinearLayout-->
-                    <!--android:layout_width="0dp"-->
-                    <!--android:layout_weight="1"-->
-                    <!--android:gravity="center"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:visibility="gone">-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_weight="1"-->
+                <!--android:gravity="center"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:visibility="gone">-->
 
-                    <!--<RelativeLayout-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:gravity="center"-->
-                        <!--android:padding="10dp"-->
-                        <!--android:background="@drawable/blue_background">-->
+                <!--<RelativeLayout-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:gravity="center"-->
+                <!--android:padding="10dp"-->
+                <!--android:background="@drawable/blue_background">-->
 
-                        <!--<ImageView-->
-                            <!--android:id="@+id/email"-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:layout_centerHorizontal="true"-->
-                            <!--android:src="@drawable/ic_email"-->
-                            <!--android:tint="#FFFFFF"/>-->
-                        <!--<TextView-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:textColor="#FFFFFF"-->
-                            <!--android:layout_below="@+id/email"-->
-                            <!--android:text="Invoice"-->
-                            <!--android:textSize="18sp"/>-->
-                    <!--</RelativeLayout>-->
+                <!--<ImageView-->
+                <!--android:id="@+id/email"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_centerHorizontal="true"-->
+                <!--android:src="@drawable/ic_email"-->
+                <!--android:tint="#FFFFFF"/>-->
+                <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:textColor="#FFFFFF"-->
+                <!--android:layout_below="@+id/email"-->
+                <!--android:text="Invoice"-->
+                <!--android:textSize="18sp"/>-->
+                <!--</RelativeLayout>-->
                 <!--</LinearLayout>-->
             </LinearLayout>
         </LinearLayout>

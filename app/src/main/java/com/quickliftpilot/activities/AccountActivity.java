@@ -88,7 +88,7 @@ public class AccountActivity extends AppCompatActivity {
         setContentView(R.layout.activity_account);
         // stop auto showing keyboard
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        getSupportActionBar().setTitle("Account");
+        getSupportActionBar().setTitle(R.string.Account_Title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // attetch components with id's
         myCalendar = Calendar.getInstance();
@@ -202,13 +202,14 @@ public class AccountActivity extends AppCompatActivity {
 //                            Log.v("OK",""+offer+" "+earn+" "+cash+" "+cancel+" "+cancelch+" "+tax+" "+cess);
                                 earnings.add(feed);
                             }
+                            break;
                         }
                     }
                     check_date();
                     if (earnings.size()>0) {
                         findViewById(R.id.nodata).setVisibility(View.GONE);
                         listView.setVisibility(View.VISIBLE);
-                        mTotal.setText("Total Amount : Rs. " + (int)total);
+                        mTotal.setText(getString(R.string.Account_Total) + ": Rs "+ (int)total);
                         mTotal.setVisibility(View.VISIBLE);
                         listView.setAdapter(new EarningAdapter());
                     }
@@ -298,12 +299,13 @@ public class AccountActivity extends AppCompatActivity {
 //                            Log.v("OK",""+offer+" "+earn+" "+cash+" "+cancel+" "+cancelch+" "+tax+" "+cess);
                                 earnings.add(feed);
                             }
+                            break;
                         }
                     }
                     check_date();
                     if (earnings.size()>0) {
                         findViewById(R.id.nodata).setVisibility(View.GONE);
-                        mTotal.setText("Total Amount : Rs. " + (int)total);
+                        mTotal.setText(getString(R.string.Account_Total)+ ": Rs. " + (int)total);
                         mTotal.setVisibility(View.VISIBLE);
                         listView.setVisibility(View.VISIBLE);
                         listView.setAdapter(new EarningAdapter());
@@ -493,6 +495,7 @@ public class AccountActivity extends AppCompatActivity {
 //                                                    total = total + outst;
 
                                                     earnings.add(feed);
+                                                    break;
                                                 }
                                             }
                                         }
@@ -509,7 +512,7 @@ public class AccountActivity extends AppCompatActivity {
                                             listView.setVisibility(View.VISIBLE);
                                             mTotal.setVisibility(View.GONE);
                                         } else if (spinner.getSelectedItem().toString().trim().equalsIgnoreCase("Account Statement")) {
-                                            mTotal.setText("Total Amount : Rs. " + total);
+                                            mTotal.setText(getString(R.string.Account_Total)+ ": Rs. " + total);
                                             listView.setVisibility(View.VISIBLE);
                                             mTotal.setVisibility(View.VISIBLE);
                                             listView.setAdapter(new EarningAdapter());
@@ -660,10 +663,10 @@ public class AccountActivity extends AppCompatActivity {
             total=Float.parseFloat(earnings.get(position).getTotalEarning())+Float.parseFloat(earnings.get(position).getOffer());
 
             date.setText(earnings.get(position).getDate());
-            earning.setText("Earning : Rs. "+total);
-            cash.setText("Cash : "+String.valueOf(Float.valueOf(earnings.get(position).getCash())+Float.valueOf(earnings.get(position).getCancel_charge())));
-            paytm.setText("Paytm : "+String.valueOf(Float.parseFloat(earnings.get(position).getTotalEarning())-Float.parseFloat(earnings.get(position).getCash())));
-            offer.setText("Offer : "+earnings.get(position).getOffer());
+            earning.setText(getString(R.string.Account_Earning)+": Rs. "+total);
+            cash.setText(getString(R.string.Account_Cash)+" : "+String.valueOf(Float.valueOf(earnings.get(position).getCash())+Float.valueOf(earnings.get(position).getCancel_charge())));
+            paytm.setText(getString(R.string.Account_Paytm)+ " : "+String.valueOf(Float.parseFloat(earnings.get(position).getTotalEarning())-Float.parseFloat(earnings.get(position).getCash())));
+            offer.setText(getString(R.string.Account_Offer)+" : "+earnings.get(position).getOffer());
 
             if (preferences.contains("basevalue")) {
                 if (Float.parseFloat(earnings.get(position).getTotalEarning()) < Float.parseFloat(preferences.getString("basevalue", null))) {
@@ -673,21 +676,21 @@ public class AccountActivity extends AppCompatActivity {
                     cess=cess+Float.valueOf(Float.valueOf(preferences.getString("maxcommission", null)) * (total-Float.parseFloat(preferences.getString("basevalue", null))) / 100);
                 }
             }
-            company_cess.setText("Company Cess : " + String.format("%.2f",cess));
+            company_cess.setText(getString(R.string.Account_Company_Cess)+" : " + String.format("%.2f",cess));
             if (preferences.contains("cancelcharge")) {
 //                Log.v("OK","true");
                 cancel = Integer.parseInt(earnings.get(position).getCanceledRidesCount()) * Integer.parseInt(preferences.getString("cancelcharge", null));
             }
-            cancellation.setText("Cancel : " + String.format("%.2f",cancel));
+            cancellation.setText(getString(R.string.Account_Cancel)+" : " + String.format("%.2f",cancel));
             if (preferences.contains("tax")) {
 //                tottax = Float.valueOf(Float.valueOf(preferences.getString("tax", null)) * total / 100);
                 float tax_amt=Float.valueOf(preferences.getString("tax", null));
                 tottax=(total*tax_amt)/(100+tax_amt);
             }
-            tax.setText("Tax : " + String.format("%.2f",tottax));
+            tax.setText(getString(R.string.Account_Tax)+" : " + String.format("%.2f",tottax));
 
             ded=cess+tottax+cancel;
-            deduction.setText("Deduction : Rs. "+String.format("%.2f",ded));
+            deduction.setText(getString(R.string.Account_Deduction)+" : Rs. "+String.format("%.2f",ded));
             float outst=0,receive=0,retrn=0;
 
             receive=Float.parseFloat(earnings.get(position).getOffer())+Float.parseFloat(earnings.get(position).getTotalEarning())-
@@ -698,7 +701,7 @@ public class AccountActivity extends AppCompatActivity {
 //                    Float.parseFloat(earnings.get(position).getTotalEarning())- Float.parseFloat(earnings.get(position).getCash());
 //            outst=Float.parseFloat(earnings.get(position).getTotalEarning())-Float.parseFloat(earnings.get(position).getCash());
 //            outst=
-            outstanding.setText("Outstanding Amount : Rs. "+String.format("%.2f",(receive-retrn)));
+            outstanding.setText(getString(R.string.Account_Outstanding)+" : Rs. "+String.format("%.2f",(receive-retrn)));
 //            Log.v("OK",""+earnings.get(position).getDate()+" "+earnings.get(position).getCanceledRidesCount());
             return view;
         }

@@ -46,7 +46,7 @@ public class BillDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bill_details);
 
-        getSupportActionBar().setTitle("Trip Details");
+        getSupportActionBar().setTitle(R.string.Ride_Bill_Details);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -117,7 +117,11 @@ public class BillDetails extends AppCompatActivity {
                         }
                     }
                     ((TextView)findViewById(R.id.paymode)).setText(dataSnapshot.child("paymode").getValue().toString());
-                    float base=(float) Float.parseFloat(dataSnapshot.child("amount").getValue().toString()) - total+Float.parseFloat(dataSnapshot.child("discount").getValue().toString());
+                    float base=0;
+                    if (dataSnapshot.hasChild("discount"))
+                        base=(float)Float.parseFloat(dataSnapshot.child("amount").getValue().toString()) - total+Float.parseFloat(dataSnapshot.child("discount").getValue().toString());
+                    else
+                        base=(float)Float.parseFloat(dataSnapshot.child("amount").getValue().toString());
                     ((TextView)findViewById(R.id.basefare)).setText("Rs. "+String.format("%.2f",(base)));
                     ((TextView)findViewById(R.id.total)).setText("Rs. "+String.valueOf(total+base+cancel-offer));
 

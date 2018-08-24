@@ -79,7 +79,7 @@
         android:id="@+id/confirm_btn"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:text="Confirm"
+        android:text="@string/Confirm_Button"
         android:background="@color/back_color"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="20dp"

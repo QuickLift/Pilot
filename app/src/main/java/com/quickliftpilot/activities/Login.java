@@ -165,7 +165,7 @@ public class Login extends AppCompatActivity {
             displayLocationSettingsRequest(getApplicationContext());
         }
 
-        getSupportActionBar().setTitle("Driver Login");
+        getSupportActionBar().setTitle(R.string.Login_heading);
 
         auth = FirebaseAuth.getInstance();
         FirebaseAuthentication();
@@ -307,7 +307,7 @@ public class Login extends AppCompatActivity {
         if (TextUtils.isEmpty(reference.getText().toString())){
 //            err.setTextColor(Color.RED);
 //            err.setText("Please Enter Reference Id");
-            reference.setError("Please Enter Reference ID");
+            reference.setError(getString(R.string.Ref_ID));
         }else {
             final String ref_id = reference.getText().toString().trim();
             Log.i("OK","Reference Id : "+ref_id);
@@ -324,7 +324,7 @@ public class Login extends AppCompatActivity {
                                 showProgressDialog();
                                 otp_number = String.valueOf((int)(Math.random()*9999)+1000);
 //                                String otp_msg = "Enter "+otp_number+" as an otp to verify yourself. This otp is valid for only 2 mins from the time when otp was sent.";
-                                Toast.makeText(Login.this, ""+otp_number, Toast.LENGTH_LONG).show();
+//                                Toast.makeText(Login.this, ""+otp_number, Toast.LENGTH_LONG).show();
 
                                 String otp_msg="\"Enter "+otp_number+" as an otp to verify yourself. This otp is valid for only 2 mins from the time when otp was sent.";
                                 Log.v("TAG",otp_msg);
@@ -333,7 +333,7 @@ public class Login extends AppCompatActivity {
                                 message = message + otp_msg;
                                 numbers = numbers + phone;
 
-//                                new SendSms(otp_msg,phone).start();
+                                new SendSms(otp_msg,phone).start();
 
                                 hideProgressDialog();
 
@@ -353,7 +353,7 @@ public class Login extends AppCompatActivity {
                                         otp.setText("");
 
                                         err.setTextColor(Color.RED);
-                                        err.setText("Time Expired\nPlease try again");
+                                        err.setText(R.string.TimeOut_OTP);
                                     }
                                 };
 
@@ -361,7 +361,7 @@ public class Login extends AppCompatActivity {
                             }
                         }else {
                             err.setTextColor(Color.RED);
-                            err.setText("Invalid reference number \nPlease contact QuickLift customer care");
+                            err.setText(R.string.Invalid_Ref);
                         }
                     }catch (Exception e){
                         Log.e("OK","Error : "+e.getLocalizedMessage());
@@ -385,14 +385,14 @@ public class Login extends AppCompatActivity {
         err.setText("");
         if (TextUtils.isEmpty(otp.getText().toString().trim())){
             err.setTextColor(Color.RED);
-            err.setText("Please enter OTP");
+            err.setText(getString(R.string.Enter_Otp));
         }else {
             if (otp.getText().toString().trim().equalsIgnoreCase(otp_number)){
                 otp_ref.child(reference.getText().toString()).removeValue();
                 updateUI(reference.getText().toString().trim());
             }else {
                 err.setTextColor(Color.RED);
-                err.setText("Invalid OTP\nTry again");
+                err.setText(getString(R.string.Invalid_OTP));
             }
         }
     }

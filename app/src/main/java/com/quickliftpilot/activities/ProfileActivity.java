@@ -61,7 +61,7 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        getSupportActionBar().setTitle("Profile");
+        getSupportActionBar().setTitle(R.string.Profile_Title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -80,6 +80,7 @@ public class ProfileActivity extends AppCompatActivity {
         rate.setIsIndicator(true);
 
         image = (CircleImageView)findViewById(R.id.image);
+        mobile.setInputType(0);
 
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override

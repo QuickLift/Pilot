@@ -196,12 +196,12 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
             Button right=(Button) view.findViewById(R.id.right_btn);
 
             left.setVisibility(View.GONE);
-            right.setText("Ok");
-            title.setText("Trip Cancelled !");
+            right.setText(R.string.Map_Ok);
+            title.setText(R.string.Map_Trip_Cancelled);
             if (getIntent().getStringExtra("cancelled")!=null)
-                message.setText("The trip is cancelled by \n"+getIntent().getStringExtra("cancelled"));
+                message.setText(R.string.Map_Trip_Cancelled_By_GetIntent+"\n"+getIntent().getStringExtra("cancelled"));
             else
-                message.setText("The trip is cancelled by Customer");
+                message.setText(R.string.Map_Trip_Cancelled_By_Customer);
 
             AlertDialog.Builder builder = new AlertDialog.Builder(MapActivity.this);
             builder .setView(view)
@@ -501,7 +501,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                 if (model.getType().equalsIgnoreCase("pick")) {
 //                    Log.i("Model",""+model.getName()+" "+model.getId()+" "+model.getType());
 
-                    type.setText("Pick ");
+                    type.setText(R.string.Map_PickUp);
                     name.setText(model.getName());
                     pick_name.setText(model.getName());
                     pick_address.setText(model.getAddress());
@@ -510,7 +510,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                 } else if (model.getType().equalsIgnoreCase("drop")) {
 //                    Log.i("Model",""+model.getName()+" "+model.getId()+" "+model.getType());
 
-                    type.setText("Drop");
+                    type.setText(R.string.Map_Drop);
                     name.setText(model.getName());
                     pick_name.setText(model.getName());
                     drop_location.setText(model.getAddress());
@@ -1110,10 +1110,10 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
             Button right=(Button) view.findViewById(R.id.right_btn);
 
             left.setVisibility(View.VISIBLE);
-            left.setText("No");
-            right.setText("Yes");
-            title.setText("End Trip !");
-            message.setText("Are you sure you want to end trip ?");
+            left.setText(R.string.Map_Yes);
+            right.setText(R.string.Map_No);
+            title.setText(R.string.Map_EndTrip);
+            message.setText(R.string.Map_Confirm_Trip_End);
             AlertDialog.Builder builder = new AlertDialog.Builder(MapActivity.this);
             builder .setView(view)
                     .setCancelable(false);

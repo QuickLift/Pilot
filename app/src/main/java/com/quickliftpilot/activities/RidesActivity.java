@@ -48,6 +48,7 @@ public class RidesActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        startActivity(new Intent(RidesActivity.this,Welcome.class));
         finish();
     }
 
@@ -56,6 +57,7 @@ public class RidesActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
+                startActivity(new Intent(RidesActivity.this,Welcome.class));
                 finish();
                 return true;
         }
@@ -86,7 +88,7 @@ public class RidesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rides);
 
-        getSupportActionBar().setTitle("Ride List");
+        getSupportActionBar().setTitle(R.string.Ride_Trip_Details);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -152,9 +154,11 @@ public class RidesActivity extends AppCompatActivity {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent=new Intent(RidesActivity.this,BillDetails.class);
-                intent.putExtra("rideid",ridekey.get(ridekey.size()-1-position));
-                startActivity(intent);
+                if (ride_list.get(ride_list.size()-position-1).get("status").toString().equals("Completed")) {
+                    Intent intent = new Intent(RidesActivity.this, BillDetails.class);
+                    intent.putExtra("rideid", ridekey.get(ridekey.size() - 1 - position));
+                    startActivity(intent);
+                }
             }
         });
     }
@@ -202,7 +206,11 @@ public class RidesActivity extends AppCompatActivity {
             else {
                 charge = Float.valueOf(ride_list.get(ride_list.size() - position - 1).get("amount").toString());
             }
-            float val=Float.valueOf(ride_list.get(ride_list.size() - position - 1).get("amount").toString())+Float.valueOf(ride_list.get(ride_list.size() - position - 1).get("discount").toString());
+            float val=0;
+            if (ride_list.get(ride_list.size() - position - 1).containsKey("discount"))
+                val=Float.valueOf(ride_list.get(ride_list.size() - position - 1).get("amount").toString())+Float.valueOf(ride_list.get(ride_list.size() - position - 1).get("discount").toString());
+            else
+                val=Float.valueOf(ride_list.get(ride_list.size() - position - 1).get("amount").toString());
             amount.setText("Rs. "+val);
 //            if (ride_list.get(ride_list.size()-position-1).containsKey("discount"))
 //                offer.setText("Rs. "+ride_list.get(ride_list.size()-position-1).get("discount").toString()+" (Offer)");
@@ -218,6 +226,8 @@ public class RidesActivity extends AppCompatActivity {
 //                else
 //                    ride.setText(ride_list.get(ride_list.size() - position - 1).get("seat").toString()+" seats");
 //            }
+            if (!ride_list.get(ride_list.size()-position-1).get("status").toString().equals("Completed"))
+                amount.setVisibility(View.INVISIBLE);
             try{
                 status.setText(ride_list.get(ride_list.size()-position-1).get("status").toString());
             }catch (Exception e){

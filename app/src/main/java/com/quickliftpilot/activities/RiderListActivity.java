@@ -64,7 +64,7 @@ public class RiderListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rider_list);
 
-        getSupportActionBar().setTitle("Rider List");
+        getSupportActionBar().setTitle(R.string.Ride_List);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -191,7 +191,10 @@ public class RiderListActivity extends AppCompatActivity {
                     map.put("destination", dataSnapshot.child("destination").getValue().toString());
                     map.put("driver", log_id.getString("id", null));
                     map.put("source", dataSnapshot.child("source").getValue().toString());
-                    map.put("discount", dataSnapshot.child("offer").getValue().toString());
+                    if (dataSnapshot.hasChild("offer"))
+                        map.put("discount", dataSnapshot.child("offer").getValue().toString());
+                    else
+                        map.put("discount","0");
                     map.put("cancel_charge", dataSnapshot.child("cancel_charge").getValue().toString());
                     map.put("paymode", dataSnapshot.child("paymode").getValue().toString());
                     map.put("reason", reason);
@@ -202,6 +205,7 @@ public class RiderListActivity extends AppCompatActivity {
                     map.put("seat",dataSnapshot.child("seat").getValue().toString());
                     map.put("time", new Date().toString());
                     map.put("status", "Cancelled");
+                    map.put("tax","0");
                     map.put("cancelledby", "Driver");
 
                     String key = rides.push().getKey();

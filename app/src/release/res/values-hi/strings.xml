@@ -82,9 +82,9 @@
     <string name="title_activity_request">Map</string>
 
     <string-array name="select_option">
-        <item>Account Statement</item>
-        <item>Booking History</item>
-        <item>Cancel History</item>
+        <item>@string/Account_Statment</item>
+        <item>@string/Account_Booking_History</item>
+        <item>@string/Account_Cancel_History</item>
     </string-array>
     <string name="select_prompt">Select an option</string>
 
@@ -92,45 +92,113 @@
     <string name="Booking_Circle">बुकिंग</string>
     <string name="Earning_Circle">आमदनी</string>
     <string name="Cancel_Circle">कैंसिल</string>
-    <string name="Pickup_Circle">Pickup</string>
+    <string name="Pickup_Circle">पिक अप</string>
     <string name="Welcome_Profile">प्रोफाइल </string>
     <string name="Welcome_Ride">राइड </string>
     <string name="Welcome_AccountInfo">अकाउंट </string>
-    <string name="Welcome_Help">हेल्प</string>
+    <string name="Welcome_Help">सहायता</string>
     <string name="Welcome_Login">ऑन ड्यूटी</string>
     <string name="Welcome_Logout">ऑफ ड्यूटी</string>
     //Profile Activity
 
     <string name="Profile_Cancel">रद्द करें</string>
     <string name="Profile_Save">सेव करें </string>
+    <string name="Profile_Title">प्रोफाइल</string>
+
 
     //Map Activity
 
-    <string name="Map_PickUp">पिक उप</string>
+    <string name="Map_PickUp">पिक अप</string>
     <string name="Map_Located">कस्टमर लोकेटेड</string>
     <string name="Map_StartTrip">यात्रा शुरू करें</string>
     <string name="Map_Drop">ड्राप</string>
     <string name="Map_EndTrip">यात्रा समाप्त करें</string>
     <string name="Map_RideList">सवारी विवरण</string>
+    <string name="Map_Yes">नहीं</string>
+    <string name="Map_No">हाँ</string>
+    <string name="Map_Confirm_Trip_Cancellation">क्या आप ट्रिप कैंसिल करना चाहते है?</string>
+    <string name="Map_Confirm_Trip_End">क्या आप ट्रिप समाप्त करना चाहते है?</string>
+    <string name="Map_Ok">ठीक हैं</string>
+    <string name="Map_Trip_Cancelled">ट्रिप को कैंसिल कर दिया गया हैं !</string>
+    <string name="Map_Trip_Cancelled_By_Customer">ट्रिप को कस्टमर के द्वारा कैंसिल कर दिया गया हैं</string>
+    <string name="Map_Trip_Cancelled_By_GetIntent">ट्रिप को कैंसिल कर दिया गया हैं </string>
+
+    //Trip Tags
+    <string name="Trip_Cancelled">ट्रिप कैंसिल</string>
+    <string name="Cancelled_by">ने कैंसिल कर दिया</string>
+
+    //Blocked Account
+    <string name="Account_blocked">अवैद्य अकाउंट</string>
+    <string name="block_message">आपका अकाउंट बंद कर दिया गया है । कृपया सहायता केंद्र से संपर्क करे ।</string>
 
     //Feedback Activity
+    <string name="Feedback">फीडबैक</string>
     <string name="Feedback_TripEnded">ट्रिप समाप्त हुआ </string>
     <string name="Feedback_Fare">बिल </string>
     <string name="Feedback_Offer">ऑफर </string>
     <string name="Feedback_Parking">पार्किंग  </string>
 
     <string name="Feedback_Cancel">यात्रा रद्द शुल्क </string>
-    <string name="Feedback_Total">कूल </string>
+    <string name="Feedback_Total">कुल</string>
     <string name="Feedback_Rating">कस्टमर को रेटिंग करें </string>
     <string name="Feedback_Save">सेव करें </string>
-//Incoming trip
+
+    //Incoming trip
     <string name="Incoming_Request">रिक्वेस्ट आ रही हैं</string>
     <string name="Incoming_Share_Request">रिक्वेस्ट आ रही हैं</string>
+    <string name="Confirm_Button">पुष्टि करें</string>
+
     //Otp Activity
     <string name="Otp_Enter">OTP डालें</string>
     <string name="Otp_Submit">चालू करें </string>
 
     //Cancel Reason
-    <string name="Cancel_Reason">Reason for Cancellation</string>
+    <string name="Cancel_Reason">कैंसिल की वजह</string>
+
+    //Login Activity
+    <string name="Login_heading">लॉगिन</string>
+    <string name="Ref_ID">अपना पहचान नंबर डालें </string>
+    <string name="Send_Otp">OTP भेजें</string>
+    <string name="Enter_Otp">OTP डालें </string>
+    <string name="Login">लॉगिन करें</string>
+    <string name="Invalid_Ref">गलत पहचान नंबर डाला गया \nकृपया ऑफिस से संपर्क करें</string>
+    <string name="Invalid_OTP">OTP गलत है \nकृपया पुनः प्रयाश करें </string>
+    <string name="TimeOut_OTP">OTP डालने का समय खत्म हो गया \nकृपया पुनः प्रयाश करें </string>
+
+    //Ride Activity
+    <string name="Ride_Current_Ride">अभी का ट्रिप </string>
+    <string name="Ride_Base_Fare">बेस शुल्का </string>
+    <string name="Ride_Total_Amt">कुल शुल्क  </string>
+    <string name="Ride_Tax">टैक्स</string>
+    <string name="Ride_Offer">ऑफर </string>
+    <string name="Ride_Parking_Charge">पार्किंग शुल्क</string>
+    <string name="Ride_Cancel_Charge">कैंसिल शुल्क</string>
+    <string name="Ride_Time_Charge">समय शुल्क </string>
+    <string name="Ride_Waiting_Charge">इंतज़ार शुल्क  </string>
+    <string name="Ride_Trip_Distance">ट्रिप दूरी</string>
+    <string name="Ride_Pickup_Distanse">पिक अप शुल्क</string>
+    <string name="Ride_Paymnet_Mode">पभुगतान  का तरीका</string>
+    <string name="Ride_Cash">कॅश</string>
+    <string name="Ride_Trip_Details">ट्रिप विवरण</string>
+    <string name="Ride_Bill_Details">बिल विवरण</string>
+    <string name="Ride_List">राइड लिस्ट</string>
+
+    //AccountInfo Activity
+    <string name="Account_Title">अकाउंट विवरण</string>
+    <string name="Account_Transection_History">ट्रांसेक्शन विवरण देखें </string>
+    <string name="Account_Statment">अकाउंट विवरण</string>
+    <string name="Account_Booking_History">बुकिंग विविरण</string>
+    <string name="Account_Cancel_History">कैंसिल विवरण</string>
+    <string name="Account_Load_Button">देखें</string>
+    <string name="Account_Earning">कमाई</string>
+    <string name="Account_Cash">कॅश</string>
+    <string name="Account_Paytm">पे टी एम</string>
+    <string name="Account_Offer">छूट</string>
+    <string name="Account_Deduction">कटौती</string>
+    <string name="Account_Tax">टैक्स</string>
+    <string name="Account_Cancel">कैंसिल</string>
+    <string name="Account_Company_Cess">क्विकलिफ्ट कमीशन</string>
+    <string name="Account_Outstanding">बकाया राशि</string>
+    <string name="Account_Total">कुल रकम</string>
 
 </resources>

@@ -66,6 +66,7 @@
         android:layout_height="50dp"
         android:layout_below="@+id/hr_line"
         android:onClick="edit_mobile"
+        android:visibility="invisible"
         android:layout_toRightOf="@id/mobile_num"
         android:src="@drawable/ic_action_edit" />
 
@@ -117,15 +118,15 @@
         android:background="@color/front_color"
         android:layout_below="@id/address"
         android:layout_marginLeft="20dp"
+        android:visibility="gone"
         android:layout_alignParentLeft="true"/>
     <Button
         android:id="@+id/confirm_btn"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/Profile_Save"
         android:background="@color/front_color"
         android:layout_below="@id/address"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="20dp"/>
+        android:layout_alignParentRight="true"/>
 
 </RelativeLayout>

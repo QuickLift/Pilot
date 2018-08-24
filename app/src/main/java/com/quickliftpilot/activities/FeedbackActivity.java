@@ -54,9 +54,9 @@ public class FeedbackActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback);
 
-        getSupportActionBar().setTitle("Feedback");
+        getSupportActionBar().setTitle(R.string.Feedback);
 
-        Log.v("TAG","feedback");
+//        Log.v("TAG","feedback");
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         log_id=getApplicationContext().getSharedPreferences("Login",MODE_PRIVATE);
         ride_info = getApplicationContext().getSharedPreferences("ride_info",MODE_PRIVATE);
@@ -109,15 +109,15 @@ public class FeedbackActivity extends AppCompatActivity {
                         cancel.setVisibility(View.GONE);
                         findViewById(R.id.cancel_text).setVisibility(View.GONE);
                     }
-                    if (datamap.containsKey("offer") && !datamap.get("offer").toString().equals("0")) {
-                        ((TextView)findViewById(R.id.offer)).setText("Rs. " + datamap.get("offer").toString());
-                        final_price-=Float.valueOf(datamap.get("offer").toString());
-                        Log.v("PRICE",""+final_price);
-                        findViewById(R.id.offer_text).setVisibility(View.VISIBLE);
-                    }else {
-                        findViewById(R.id.offer).setVisibility(View.GONE);
-                        findViewById(R.id.offer_text).setVisibility(View.GONE);
-                    }
+//                    if (datamap.containsKey("offer") && !datamap.get("offer").toString().equals("0")) {
+//                        ((TextView)findViewById(R.id.offer)).setText("Rs. " + datamap.get("offer").toString());
+//                        final_price-=Float.valueOf(datamap.get("offer").toString());
+//                        Log.v("PRICE",""+final_price);
+//                        findViewById(R.id.offer_text).setVisibility(View.VISIBLE);
+//                    }else {
+//                        findViewById(R.id.offer).setVisibility(View.GONE);
+//                        findViewById(R.id.offer_text).setVisibility(View.GONE);
+//                    }
                     if (datamap.containsKey("parking_price") && !datamap.get("parking_price").toString().equals("0")) {
                         ((TextView)findViewById(R.id.parking)).setText("Rs. " + datamap.get("parking_price").toString());
                         final_price+=Float.valueOf(datamap.get("parking_price").toString());
@@ -128,7 +128,7 @@ public class FeedbackActivity extends AppCompatActivity {
                         findViewById(R.id.parking_text).setVisibility(View.GONE);
                     }
 
-                    Float tot=Float.valueOf(datamap.get("price").toString())+Float.valueOf(datamap.get("cancel_charge").toString());
+                    float tot=Float.valueOf(datamap.get("price").toString())+Float.valueOf(datamap.get("cancel_charge").toString());
 
                     price=Integer.parseInt(datamap.get("price").toString());
 
@@ -136,7 +136,8 @@ public class FeedbackActivity extends AppCompatActivity {
                     map.put("destination",datamap.get("destination").toString());
                     map.put("driver",log_id.getString("id",null));
                     map.put("source",datamap.get("source").toString());
-                    map.put("discount",datamap.get("offer").toString());
+                    if (datamap.containsKey("offer"))
+                        map.put("discount",datamap.get("offer").toString());
                     map.put("cancel_charge",datamap.get("cancel_charge").toString());
                     map.put("paymode",datamap.get("paymode").toString());
                     if (datamap.containsKey("parking_price"))
@@ -195,9 +196,28 @@ public class FeedbackActivity extends AppCompatActivity {
 //                            int hours = (int) ((diff - (1000*60*60*24*days)) / (1000*60*60));
                                 int min = (int) (diff / (1000 * 60));
                                 time=min;
+                                if (min>Integer.parseInt(dataSnapshot.child("triptime").getValue().toString())) {
+                                    if ((0.25 * min) > 10) {
+                                        int dif = min - Integer.parseInt(dataSnapshot.child("triptime").getValue().toString());
+                                        if (dif < (int) (0.25 * min)) {
+                                            min = Integer.parseInt(dataSnapshot.child("triptime").getValue().toString());
+                                        }
+                                        else {
+                                            min=min-(int)(0.25*min);
+                                        }
+                                    } else {
+                                        int dif = min - Integer.parseInt(dataSnapshot.child("triptime").getValue().toString());
+                                        if (dif < 10) {
+                                            min = Integer.parseInt(dataSnapshot.child("triptime").getValue().toString());
+                                        }
+                                        else {
+                                            min=min-10;
+                                        }
+                                    }
+                                }
                                 final_price += ((float) min) * Float.parseFloat(dataSnapshot.child("timecharge").getValue().toString());
-                                Log.v("PRICE", "" + final_price);
-                                map.put("triptime",String.valueOf(min));
+//                                Log.v("PRICE", "" + final_price);
+                                map.put("triptime",String.valueOf(time));
                                 map.put("timing", String.valueOf((int) (Float.parseFloat(dataSnapshot.child("timecharge").getValue().toString()) * (float) (min))));
 //                            if ((min>Integer.parseInt(dataSnapshot.child("triptime").getValue().toString()))){
 //                                tot+=(Float.parseFloat(dataSnapshot.child("timecharge").getValue().toString())*(float)(min-Integer.parseInt(dataSnapshot.child("triptime").getValue().toString())));
@@ -215,10 +235,11 @@ public class FeedbackActivity extends AppCompatActivity {
 //                    map.put("amount",String.valueOf(price));
 //                    total.setText("Rs. "+(int)((float)tot));
 
+                        Log.v("TAG","if condition");
                         SQLQueries sqlQueries = new SQLQueries(FeedbackActivity.this);
 
                         Cursor cursor = sqlQueries.retrievefare();
-                        Object[] dataTransfer = new Object[20];
+                        Object[] dataTransfer = new Object[22];
                         String url=null;
                         if (time>(int)(float)(Float.valueOf(dataSnapshot.child("triptime").getValue().toString())*1.2)) {
                             url = getDirectionsUrlthreeplaces(datamap.get("st_lat").toString(), datamap.get("st_lng").toString(), datamap.get("en_lat").toString(), datamap.get("en_lng").toString());
@@ -246,33 +267,91 @@ public class FeedbackActivity extends AppCompatActivity {
                             dataTransfer[15] = (int)(float)Float.parseFloat(datamap.get("parking_price").toString());
                         else
                             dataTransfer[15]=0;
-                        if (datamap.containsKey("offer"))
-                            dataTransfer[16] = (int)(float)Float.parseFloat(datamap.get("offer").toString());
-                        else
-                            dataTransfer[16]=0;
+                        if (datamap.containsKey("offer")) {
+                            dataTransfer[16] = (int) (float) Float.parseFloat(datamap.get("offer").toString());
+                        }
+                        else if (datamap.containsKey("offer_upto")){
+                            dataTransfer[16] = (int) (float) Float.parseFloat(datamap.get("offer_upto").toString());
+                        }
+                        else {
+                            dataTransfer[16] = 0;
+                        }
+                        if (datamap.containsKey("offer_disc")){
+                            dataTransfer[17] = (int) (float) Float.parseFloat(datamap.get("offer_disc").toString());
+                        }
+                        else {
+                            dataTransfer[17]=0;
+                        }
+                        dataTransfer[18]=((TextView)findViewById(R.id.offer));
+                        dataTransfer[19]=((TextView)findViewById(R.id.offer_text));
                         getDirectionsData.execute(dataTransfer);
                     }
                     else {
+                        Log.v("TAG","else condition");
                         map.put("waiting","0");
                         map.put("timing", "0");
 
+                        float offer_val=0;
                         if (datamap.containsKey("cancel_charge"))
                             price=(int) (((float)tot)-Float.valueOf(datamap.get("cancel_charge").toString()));
                         else
                             price=(int)((float)tot);
                         SharedPreferences.Editor editor1=log_id.edit();
                         editor1.putString("saveprice",String.valueOf(price));
+                        if (datamap.containsKey("offer")) {
+                            editor1.putString("offervalue", datamap.get("offer").toString());
+                            offer_val=Integer.parseInt(datamap.get("offer").toString());
+                        }
+                        else if (datamap.containsKey("offer_disc")){
+                            if(!datamap.get("offer_disc").toString().equals("0")) {
+//                                editor1.putString("offervalue", "0");
+//                                offer_val=((float)tot)*Integer.parseInt(datamap.get("offer_disc").toString())/100;
+//                                if (offer_val>Float.parseFloat(datamap.get("offer_upto").toString())){
+//                                    offer_val=Float.parseFloat(datamap.get("offer_upto").toString());
+//                                }
+                                offer_val=Float.parseFloat(datamap.get("offer_value").toString());
+                                editor1.putString("offervalue", String.valueOf((int)offer_val));
+                            }
+                            else {
+                                editor1.putString("offervalue", "0");
+                            }
+                        }
+                        else {
+                            editor1.putString("offervalue", "0");
+                        }
                         editor1.commit();
 
-                        Float amt=((float)tot);
+//                        if (price<=(int) offer_val)
+//                            offer_val=price;
+
+                        map.put("discount",String.valueOf((int)offer_val));
+                        if (offer_val==0){
+                            ((TextView)findViewById(R.id.offer)).setVisibility(View.GONE);
+                            ((TextView)findViewById(R.id.offer_text)).setVisibility(View.GONE);
+                        }
+                        else {
+                            ((TextView)findViewById(R.id.offer)).setVisibility(View.VISIBLE);
+                            ((TextView)findViewById(R.id.offer_text)).setVisibility(View.VISIBLE);
+                            ((TextView)findViewById(R.id.offer)).setText("Rs. "+offer_val);
+                        }
+//                        price=price-(int) offer_val;
+//                        tot=tot-offer_val;
+//                        if (price<0)
+//                            price=0;
+//                        if (tot<0)
+//                            tot=0;
+
+                        float amt=((float)tot);
                         if (datamap.containsKey("cancel_charge"))
                             amt=amt-Float.valueOf(datamap.get("cancel_charge").toString());
                         if (datamap.containsKey("parking_price"))
                             amt=amt-Float.valueOf(datamap.get("parking_price").toString());
-                        if (datamap.containsKey("offer"))
-                            amt=amt+Float.valueOf(datamap.get("offer").toString());
+//                        if (datamap.containsKey("offer"))
+                            amt=amt+offer_val;
 //                        amt=(((float)tot)-Float.valueOf(datamap.get("cancel_charge").toString())-Float.valueOf(datamap.get("parking_price").toString())+Float.valueOf(datamap.get("offer").toString()));
                         map.put("amount",String.valueOf(price));
+//                        if (amt<0)
+//                            amt=0;
                         fare.setText("Rs. "+(int)((float)amt));
                         total.setText("Rs. "+(int)((float)tot));
 
@@ -374,9 +453,9 @@ public class FeedbackActivity extends AppCompatActivity {
                             else
                                 earn= Float.parseFloat(String.valueOf(price));
                             if (offer!=null)
-                                offer = offer + Float.parseFloat(datamap.get("offer").toString());
+                                offer = offer + Integer.valueOf(log_id.getString("offervalue",null));
                             else
-                                offer=Float.parseFloat(datamap.get("offer").toString());
+                                offer=Float.valueOf(Integer.valueOf(log_id.getString("offervalue",null)));
                             if (cancel_charge!=null)
                                 cancel_charge = cancel_charge + Float.parseFloat(datamap.get("cancel_charge").toString());
                             else
@@ -423,7 +502,7 @@ public class FeedbackActivity extends AppCompatActivity {
 
                 if (!phone.equals("")) {
                     String otp_msg = "Thank you for using QuickLift. We hope to see you soon again. Please provide your feedback from https://play.google.com/store/apps/details?id=com.quicklift";
-//                    new SendSms(otp_msg, phone).start();
+                    new SendSms(otp_msg, phone).start();
                 }
                 if (!stack.isEmpty()){
 //                stack.pop();
@@ -540,14 +619,15 @@ public class FeedbackActivity extends AppCompatActivity {
                             cancel_charge = Float.parseFloat(map.get("cancel_charge").toString());
 
                         confirm = confirm+1;
+                        price=Integer.valueOf(log_id.getString("saveprice",null));
                         if (earn!=null)
                             earn = earn + Float.parseFloat(String.valueOf(price));
                         else
                             earn= Float.parseFloat(String.valueOf(price));
                         if (offer!=null)
-                            offer = offer + Float.parseFloat(datamap.get("offer").toString());
+                            offer = offer + Integer.valueOf(log_id.getString("offervalue",null));
                         else
-                            offer=Float.parseFloat(datamap.get("offer").toString());
+                            offer=Float.valueOf(log_id.getString("offervalue",null));
                         if (cancel_charge!=null)
                             cancel_charge = cancel_charge + Float.parseFloat(datamap.get("cancel_charge").toString());
                         else
@@ -588,7 +668,7 @@ public class FeedbackActivity extends AppCompatActivity {
 
             if (!phone.equals("")) {
                 String otp_msg = "Thank you for using QuickLift. We hope to see you soon again. Please provide your feedback from https://play.google.com/store/apps/details?id=com.quicklift";
-//                new SendSms(otp_msg, phone).start();
+                new SendSms(otp_msg, phone).start();
             }
             if (!stack.isEmpty()){
 //                stack.pop();

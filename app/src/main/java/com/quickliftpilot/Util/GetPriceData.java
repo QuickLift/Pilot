@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -38,10 +39,11 @@ public class GetPriceData extends AsyncTask<Object,String,String> {
     private HashMap<String, Object> map;
     private DatabaseReference rides,ref,ongoing_rides;
     private String key,veh_type;
-    private TextView total_text;
+    private TextView total_text,offer_text,offer_value;
     private String cancel_charge;
     int park,offer;
     private int price;
+    int discount;
 
     @Override
     protected String doInBackground(Object... objects) {
@@ -62,6 +64,9 @@ public class GetPriceData extends AsyncTask<Object,String,String> {
         pref=(SharedPreferences)objects[14];
         park=(int)objects[15];
         offer=(int)objects[16];
+        discount=(int)objects[17];
+        offer_value=(TextView)objects[18];
+        offer_text=(TextView)objects[19];
 //        data=(Data) objects[17];
         //duration=(String) objects[2];
 
@@ -135,26 +140,52 @@ public class GetPriceData extends AsyncTask<Object,String,String> {
             float tax=final_price * Float.valueOf(pref.getString("tax", null))/100;
             map.put("tax",String.valueOf(tax));
             final_price += tax;
-
-            Log.v("TAG","step 5: "+final_price);
         }
         else {
             map.put("tax","0");
         }
 
+        price=(int)(final_price-Float.valueOf(cancel_charge));
+//        Log.v("PRICE",""+final_price);
+        if (discount!=0) {
+            float off = final_price * discount / 100;
+            if (off < offer) {
+                offer = (int) off;
+            }
+        }
+
+        final_price=final_price-offer;
+        price=price-offer;
+        if (price<0)
+            price=0;
+        if (final_price<0)
+            final_price=0;
+        if (offer!=0){
+            offer_text.setVisibility(View.VISIBLE);
+            offer_value.setVisibility(View.VISIBLE);
+            offer_value.setText("Rs. "+offer);
+        }
+        else {
+            offer_text.setVisibility(View.GONE);
+            offer_value.setVisibility(View.GONE);
+        }
+        map.put("discount", String.valueOf(offer));
         if (((int)(final_price-Float.valueOf(cancel_charge)))<0)
             map.put("amount","0");
         else
             map.put("amount",String.valueOf((int)(final_price-Float.valueOf(cancel_charge))));
 
-        Log.v("TAG","step 6: "+final_price);
-        price=(int)(final_price-Float.valueOf(cancel_charge));
-        if (price<0)
-            price=0;
         editor.putString("saveprice",String.valueOf(price));
+        Log.v("TAG",""+offer);
+        if (offer==0) {
+            editor.putString("offervalue", "0");
+            Log.v("TAG","1"+offer);
+        }
+        else {
+            editor.putString("offervalue", String.valueOf(offer));
+            Log.v("TAG","2"+offer);
+        }
         editor.commit();
-        Log.v("Price",""+price);
-//        Log.v("PRICE",""+final_price);
         int amt=((int)(float)(final_price-Float.valueOf(cancel_charge)))-park+offer;
 
         if (amt<0)

@@ -255,12 +255,12 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
                 Button right=(Button) view.findViewById(R.id.right_btn);
 
                 left.setVisibility(View.GONE);
-                right.setText("Ok");
-                title.setText("Trip Cancelled !");
+                right.setText(R.string.Map_Ok);
+                title.setText(R.string.Trip_Cancelled);
                 if (getIntent().getStringExtra("cancelled")!=null)
-                    message.setText("The trip is cancelled by \n"+getIntent().getStringExtra("cancelled"));
+                    message.setText(getIntent().getStringExtra("cancelled")+" "+getString(R.string.Cancelled_by));
                 else
-                    message.setText("The trip is cancelled by Customer");
+                    message.setText("Customer "+getString(R.string.Cancelled_by));
                 AlertDialog.Builder builder = new AlertDialog.Builder(Welcome.this);
                 builder .setView(view)
                         .setCancelable(false);
@@ -291,7 +291,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
             public void onClick(View v) {
                 Intent intent = new Intent(Welcome.this,RidesActivity.class);
                 startActivity(intent);
-//                finish();
+                finish();
             }
         });
 
@@ -334,7 +334,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
 ////                    stopService(rideCheckingService);
 //                    startService(requestService);
 //                    startService(rideCheckingService);
-//                    login_status.setText("Login");
+//                    login_status.setText(R.string.Welcome_Login);
 //                    login_duration.setText("Running...");
 //                    wel_edit = welcome.edit();
 //                    wel_edit.putString("date",formateDate);
@@ -375,7 +375,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
                             } else {
                                 startService(locationService);
                             }
-                            login_status.setText("Login");
+                            login_status.setText(R.string.Welcome_Login);
                             login_duration.setText("Running...");
                             wel_edit = welcome.edit();
                             wel_edit.putString("date", formateDate);
@@ -396,9 +396,9 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
                             Button right=(Button) view.findViewById(R.id.right_btn);
 
                             left.setVisibility(View.GONE);
-                            right.setText("Ok");
-                            title.setText("Account Blocked !");
-                            message.setText("This is an Invalid Account. Please Contact Support team");
+                            right.setText(R.string.Map_Ok);
+                            title.setText(R.string.Account_blocked);
+                            message.setText(R.string.block_message);
                             AlertDialog.Builder builder = new AlertDialog.Builder(Welcome.this);
                             builder .setView(view)
                                     .setCancelable(false);
@@ -448,7 +448,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
 ////                    stopService(rideCheckingService);
 //                        startService(requestService);
 //                        startService(rideCheckingService);
-//                        login_status.setText("Login");
+//                        login_status.setText(R.string.Welcome_Login);
 //                        login_duration.setText("Running...");
 //                        wel_edit = welcome.edit();
 //                        wel_edit.putString("date",formateDate);
@@ -473,7 +473,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
 //            stopService(requestService);
             stopService(rideCheckingService);
 //            stopService(locationService);
-            login_status.setText("Logout");
+            login_status.setText(R.string.Welcome_Logout);
             logout_time = new Date();
             login_time = new Date(welcome.getString("login_time",null));
 
@@ -532,7 +532,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
             if (log_id.contains("block")) {
                 if (log_id.getString("block",null).equals("1")){
                     login_btn.setChecked(false);
-                    login_status.setText("Logout");
+                    login_status.setText(R.string.Welcome_Logout);
                     login_duration.setText("Not Working");
 //                    stopService(requestService);
                     stopService(rideCheckingService);
@@ -544,9 +544,9 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
                     Button right=(Button) view.findViewById(R.id.right_btn);
 
                     left.setVisibility(View.GONE);
-                    right.setText("Ok");
-                    title.setText("Account Blocked !");
-                    message.setText("This is an Invalid Account. Please Contact Support team");
+                    right.setText(R.string.Map_Ok);
+                    title.setText(R.string.Account_blocked);
+                    message.setText(R.string.block_message);
                     AlertDialog.Builder builder = new AlertDialog.Builder(Welcome.this);
                     builder .setView(view)
                             .setCancelable(false);
@@ -565,7 +565,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
                 }
                 else {
                     login_btn.setChecked(true);
-                    login_status.setText("Login");
+                    login_status.setText(R.string.Welcome_Login);
                     login_duration.setText("Running");
 //            Log.v("TAG","STATUS TRUE !");
 //            stopService(requestService);
@@ -584,7 +584,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
             }
             else {
                 login_btn.setChecked(true);
-                login_status.setText("Login");
+                login_status.setText(R.string.Welcome_Login);
                 login_duration.setText("Running");
 //            Log.v("TAG","STATUS TRUE !");
 //            stopService(requestService);
@@ -603,7 +603,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
 //            getCurrentLocation();
         }else {
             login_btn.setChecked(false);
-            login_status.setText("Logout");
+            login_status.setText(R.string.Welcome_Logout);
             login_duration.setText("Not Working");
 //            stopService(requestService);
             stopService(rideCheckingService);
@@ -645,7 +645,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
                     if (log_id.contains("block") && log_id.getString("block",null).equals("1")){
                         if (pref.getBoolean("status",false) ){
                             login_btn.setChecked(false);
-                            login_status.setText("Logout");
+                            login_status.setText(R.string.Welcome_Logout);
                             login_duration.setText("Not Working");
 //                    stopService(requestService);
                             stopService(rideCheckingService);
@@ -657,9 +657,9 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
                             Button right=(Button) view.findViewById(R.id.right_btn);
 
                             left.setVisibility(View.GONE);
-                            right.setText("Ok");
-                            title.setText("Account Blocked !");
-                            message.setText("This is an Invalid Account. Please Contact Support team");
+                            right.setText(R.string.Map_Ok);
+                            title.setText(R.string.Account_blocked);
+                            message.setText(R.string.block_message);
                             AlertDialog.Builder builder = new AlertDialog.Builder(Welcome.this);
                             builder .setView(view)
                                     .setCancelable(false);
@@ -692,7 +692,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
 
                     login_btn.setEnabled(false);
                     login_btn.setChecked(true);
-                    login_status.setText("Login");
+                    login_status.setText(R.string.Welcome_Login);
                     startService(rideCheckingService);
                     login_duration.setText("Running");
 
@@ -767,10 +767,10 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
 //        if (pref.getBoolean("status",false)){
 //            login_btn.setChecked(true);
 //            login_duration.setText("Running...");
-//            login_status.setText("Login");
+//            login_status.setText(R.string.Welcome_Login);
 //        }else {
 //            login_btn.setChecked(false);
-//            login_status.setText("Logout");
+//            login_status.setText(R.string.Welcome_Logout);
 //        }
             db.child(log_id.getString("id",null)).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override

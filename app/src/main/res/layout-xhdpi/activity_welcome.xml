@@ -17,37 +17,37 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/image"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:src="@drawable/profile"
-                    android:layout_marginTop="20dp"
-                    android:layout_centerHorizontal="true"/>
-                <Switch
-                    android:id="@+id/login_switch"
-                    android:layout_width="70dp"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/image"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginLeft="10dp"/>
-                <TextView
-                    android:id="@+id/login_status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/Welcome_Logout"
-                    android:textSize="14sp"
-                    android:layout_toRightOf="@id/login_switch"
-                    android:layout_marginTop="33dp"/>
-                <TextView
-                    android:id="@+id/login_duration"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Duration"
-                    android:textSize="14sp"
-                    android:layout_toRightOf="@id/image"
-                    android:layout_below="@id/login_switch"
-                    android:layout_marginLeft="45dp"/>
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/image"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/profile"
+                android:layout_marginTop="20dp"
+                android:layout_centerHorizontal="true"/>
+            <Switch
+                android:id="@+id/login_switch"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/image"
+                android:layout_marginTop="30dp"
+                android:layout_marginLeft="10dp"/>
+            <TextView
+                android:id="@+id/login_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Welcome_Logout"
+                android:textSize="14sp"
+                android:layout_toRightOf="@id/login_switch"
+                android:layout_marginTop="33dp"/>
+            <TextView
+                android:id="@+id/login_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Duration"
+                android:textSize="14sp"
+                android:layout_toRightOf="@id/image"
+                android:layout_below="@id/login_switch"
+                android:layout_marginLeft="45dp"/>
 
             <TextView
                 android:id="@+id/driver_name"

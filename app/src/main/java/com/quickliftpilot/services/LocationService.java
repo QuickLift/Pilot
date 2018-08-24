@@ -3,6 +3,7 @@ package com.quickliftpilot.services;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -39,6 +40,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.quickliftpilot.R;
 import com.quickliftpilot.Util.GPSTracker;
 import com.quickliftpilot.Util.SequenceStack;
+import com.quickliftpilot.activities.LauncherActivity;
 import com.quickliftpilot.activities.MapActivity;
 import com.quickliftpilot.activities.RequestActivity;
 import com.quickliftpilot.activities.Welcome;
@@ -70,6 +72,10 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     private SharedPreferences.Editor editor;
     private Intent notificationServ;
     private Stack<SequenceModel> stack;
+    public interface NOTIFICATION_ID {
+        public static int FOREGROUND_SERVICE = 101;
+    }
+    public static String MAIN_ACTION = "com.quickliftadmin.notificationService.action.main";
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -135,6 +141,8 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     @Override
     public void onDestroy() {
         this.isRunning = false;
+//        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("DriversAvailable/"+logid.getString("type",null)+"/"+log_id.getString("id",null));
+//        ref.removeValue();
         if (wakeLock.isHeld())
             wakeLock.release();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -385,18 +393,23 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     }
 
     public void notification (){
-        String title="";
+//        String title="";
         String channelId = "channel-07";
         String channelName = "Driver Location";
         int importance = NotificationManager.IMPORTANCE_HIGH;
+
+        Intent notificationIntent = new Intent(this, LauncherActivity.class);
+        notificationIntent.setAction(MAIN_ACTION);
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(LocationService.this,0,notificationIntent,0);
 
         Notification noti = new NotificationCompat.Builder(this,channelId)
                 .setContentTitle("QuickLift Pilot")
                 .setContentText("Quicklift Pilot is running. Do not close this service.")
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.drawable.logo))
                 .setSmallIcon(R.drawable.carfinal)
-                .setAutoCancel(false)
-                .setPriority(Notification.PRIORITY_HIGH)
+                .setContentIntent(pendingIntent)
+                .setOngoing(true)
                 .build();
 
         NotificationManager mNotificationManager =
@@ -407,7 +420,29 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
             mNotificationManager.createNotificationChannel(mChannel);
         }
 //        mNotificationManager.notify(001, noti);
-        startForeground(7,noti);
+//        startForeground(7,noti);
+
+//        Intent notificationIntent = new Intent(this, LauncherActivity.class);
+//        notificationIntent.setAction(MAIN_ACTION);
+//        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(LocationService.this,0,notificationIntent,0);
+
+//        Notification noti = new Notification.Builder(LocationService.this)
+//                .setContentTitle("QuickLift Pilot")
+//                .setContentText("Quicklift Pilot is running. Do not close this service.")
+//                .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.drawable.logo))
+//                .setSmallIcon(R.drawable.carfinal)
+//                .setContentIntent(pendingIntent)
+//                .setOngoing(true)
+//                .build();
+//        NotificationManager mNotificationManager =
+//                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+//            NotificationChannel mChannel = new NotificationChannel(
+//                    channelId, channelName, importance);
+//            mNotificationManager.createNotificationChannel(mChannel);
+//        }
+        startForeground(NOTIFICATION_ID.FOREGROUND_SERVICE,noti);
     }
 
     @Override

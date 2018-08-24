@@ -54,7 +54,7 @@ public class CancelReason extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cancel_reason);
 
-        getSupportActionBar().setTitle("Cancel Trip");
+        getSupportActionBar().setTitle(R.string.Cancel_Reason);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
