@@ -102,7 +102,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
     private static SharedPreferences pref;
     private static SharedPreferences.Editor editor,wel_edit;
     private static RatingBar rate;
-    private static SharedPreferences log_id,welcome;
+    private static SharedPreferences log_id,welcome,account_info;
     private static DatabaseHelper databaseHelper;
     private static Intent rideCheckingService,locationService,requestService;
     private static Date login_time,logout_time;
@@ -153,7 +153,6 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
 //        registerReceiver(mReceiver, intentFilter);
 //        Intent it = new Intent("android.intent.action.MAIN");
 //        sendBroadcast(it);
-
         if (Welcome.WelcomeActivity != null) {
             Welcome.WelcomeActivity.finish();
         }
@@ -162,7 +161,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
         dialog.setIndeterminate(true);
         dialog.setCancelable(false);
         dialog.setMessage("Loading ! Please Wait...");
-        dialog.show();
+//        dialog.show();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 //        googleApiClient = new GoogleApiClient.Builder(this)
@@ -192,6 +191,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         pref = getSharedPreferences("loginPref",MODE_PRIVATE);
+        account_info = getSharedPreferences("account",MODE_PRIVATE);
 
         welcome = getSharedPreferences("welcome",MODE_PRIVATE);
 
@@ -808,6 +808,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
 //                    StringBuilder builder=new StringBuilder().append(String.format("%02d", (date))).append("-")
 //                            .append(String.format("%02d", (month+1))).append("-").append(year);
                         final String formateDate = date + "-" + month + "-" + year;
+                        final SharedPreferences.Editor acc_editor=account_info.edit();
 
                         if (dataSnapshot.hasChild(log_id.getString("id", null))) {
                             driver_acc.child(log_id.getString("id", null)).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -820,27 +821,69 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
                                                 String key = dataSnapshot.getKey();
                                                 for (DataSnapshot data : dataSnapshot.getChildren()) {
                                                     Map<String, Object> map = (Map<String, Object>) data.getValue();
-                                                    if (map.containsKey("book"))
+                                                    if (map.containsKey("book")) {
                                                         book.setText(map.get("book").toString());
-                                                    else
+                                                        acc_editor.putString("book",map.get("book").toString());
+                                                    }
+                                                    else {
                                                         book.setText("0");
+                                                        acc_editor.putString("book","0");
+                                                    }
                                                     float val=0;
-                                                    if (map.containsKey("offer"))
-                                                        val=Float.parseFloat(map.get("earn").toString())+Float.parseFloat(map.get("offer").toString());
-                                                    else
-                                                        val=Float.parseFloat(map.get("earn").toString());
+                                                    if (map.containsKey("earn")){
+                                                        acc_editor.putString("earn",map.get("earn").toString());
+                                                    }
+                                                    else {
+                                                        acc_editor.putString("earn","0");
+                                                    }
+                                                    if (map.containsKey("offer")) {
+                                                        val = Float.parseFloat(map.get("earn").toString()) + Float.parseFloat(map.get("offer").toString());
+                                                        acc_editor.putString("offer",map.get("offer").toString());
+                                                    }
+                                                    else {
+                                                        val = Float.parseFloat(map.get("earn").toString());
+                                                        acc_editor.putString("offer","0");
+                                                    }
                                                     earn.setText("Rs. " + val);
 
                                                     int count=0;
-                                                    if (map.containsKey("cancel"))
-                                                        count+=Integer.parseInt(map.get("cancel").toString());
-                                                    if (map.containsKey("reject"))
-                                                        count+=Integer.parseInt(map.get("reject").toString());
+                                                    if (map.containsKey("cancel")) {
+                                                        count += Integer.parseInt(map.get("cancel").toString());
+                                                        acc_editor.putString("cancel",map.get("cancel").toString());
+                                                    }
+                                                    else {
+                                                        acc_editor.putString("cancel","0");
+                                                    }
+                                                    if (map.containsKey("reject")) {
+                                                        count += Integer.parseInt(map.get("reject").toString());
+                                                        acc_editor.putString("reject",map.get("reject").toString());
+                                                    }
+                                                    else {
+                                                        acc_editor.putString("reject","0");
+                                                    }
                                                     cancel.setText(String.valueOf(count));
-                                                    if (map.containsKey("pickup"))
-                                                        pickup.setText("Rs. "+Float.parseFloat(map.get("pickup").toString()));
-                                                    else
+                                                    if (map.containsKey("pickup")) {
+                                                        pickup.setText("Rs. " + Float.parseFloat(map.get("pickup").toString()));
+                                                        acc_editor.putString("pickup",map.get("pickup").toString());
+                                                    }
+                                                    else {
                                                         pickup.setText("Rs. 0");
+                                                        acc_editor.putString("pickup","0");
+                                                    }
+                                                    if (map.containsKey("cancel_charge")){
+                                                        acc_editor.putString("cancel_charge",map.get("cancel_charge").toString());
+                                                    }
+                                                    else {
+                                                        acc_editor.putString("cancel_charge","0");
+                                                    }
+                                                    if (map.containsKey("cash")){
+                                                        acc_editor.putString("cash",map.get("cash").toString());
+                                                    }
+                                                    else {
+                                                        acc_editor.putString("cash","0");
+                                                    }
+                                                    acc_editor.putString("key",data.getKey());
+                                                    acc_editor.commit();
                                                 }
                                             }
 
@@ -860,7 +903,19 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
                                         driver_info.put("reject", "0");
                                         driver_info.put("cancel", "0");
                                         driver_info.put("pickup", "0");
+                                        driver_info.put("offer", "0");
+                                        driver_info.put("cash", "0");
+                                        driver_info.put("cancel_charge", "0");
                                         driver_acc.child(log_id.getString("id", null)).child(formateDate).push().setValue(driver_info);
+                                        acc_editor.putString("book","0");
+                                        acc_editor.putString("earn","0");
+                                        acc_editor.putString("reject","0");
+                                        acc_editor.putString("cancel","0");
+                                        acc_editor.putString("pickup","0");
+                                        acc_editor.putString("cash","0");
+                                        acc_editor.putString("cancel_charge","0");
+                                        acc_editor.putString("offer","0");
+                                        acc_editor.commit();
                                     }
                                 }
 
@@ -880,7 +935,19 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
                             driver_info.put("reject", "0");
                             driver_info.put("cancel", "0");
                             driver_info.put("pickup", "0");
+                            driver_info.put("offer", "0");
+                            driver_info.put("cash", "0");
+                            driver_info.put("cancel_charge", "0");
                             driver_acc.child(log_id.getString("id", null)).child(formateDate).push().setValue(driver_info);
+                            acc_editor.putString("book","0");
+                            acc_editor.putString("earn","0");
+                            acc_editor.putString("reject","0");
+                            acc_editor.putString("cancel","0");
+                            acc_editor.putString("pickup","0");
+                            acc_editor.putString("cash","0");
+                            acc_editor.putString("cancel_charge","0");
+                            acc_editor.putString("offer","0");
+                            acc_editor.commit();
                         }
                     }
                 }

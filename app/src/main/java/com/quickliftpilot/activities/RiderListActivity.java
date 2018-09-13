@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.quickliftpilot.DAO.DatabaseHelper;
 import com.quickliftpilot.R;
 import com.quickliftpilot.Util.SequenceStack;
 import com.quickliftpilot.model.RiderList;
@@ -143,7 +144,7 @@ public class RiderListActivity extends AppCompatActivity {
 
     public void cancel_trip(String customer, final String reason){
         GregorianCalendar gregorianCalendar=new GregorianCalendar();
-        String date = String.format("%02d",gregorianCalendar.get(GregorianCalendar.DAY_OF_MONTH));
+        final String date = String.format("%02d",gregorianCalendar.get(GregorianCalendar.DAY_OF_MONTH));
         String month = String.format("%02d",(gregorianCalendar.get(GregorianCalendar.MONTH)+1));
         String year = String.format("%02d",gregorianCalendar.get(GregorianCalendar.YEAR));
 //                    StringBuilder builder=new StringBuilder().append(String.format("%02d", (date))).append("-")
@@ -207,6 +208,26 @@ public class RiderListActivity extends AppCompatActivity {
                     map.put("status", "Cancelled");
                     map.put("tax","0");
                     map.put("cancelledby", "Driver");
+
+                    if (map.containsKey("offer_code")){
+                        final DatabaseReference dref=FirebaseDatabase.getInstance().getReference("CustomerOffers/"+dataSnapshot.child("customer_id").getValue().toString()+"/"+map.get("offer_code").toString());
+                        dref.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()){
+                                    int val= Integer.parseInt(dataSnapshot.getValue().toString())+1;
+                                    dref.setValue(String.valueOf(val));
+                                } else {
+                                    dref.setValue("1");
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
 
                     String key = rides.push().getKey();
                     rides.child(key).setValue(map);

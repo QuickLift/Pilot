@@ -180,14 +180,14 @@
     <string name="Ride_Paymnet_Mode">Payment Mode</string>
     <string name="Ride_Cash">Cash</string>
     <string name="Ride_Bill_Details">Bill Details</string>
-    <string name="Ride_List">Bill Details</string>
+    <string name="Ride_List">Rider List</string>
     <string name="Ride_Trip_Details">Trip Details</string>
     <!--<string name="Send_Otp">Send OTP</string>-->
 
 
     //AccountInfo Activity
     <string name="Account_Title">Account Information</string>
-    <string name="Account_Transection_History">Transection History</string>
+    <string name="Account_Transection_History">Transaction History</string>
     <string name="Account_Statment">Account Statement</string>
     <string name="Account_Booking_History">Booking History</string>
     <string name="Account_Cancel_History">Cancel History</string>

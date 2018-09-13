@@ -52,6 +52,9 @@ public class OngoingRideService extends Service {
 
         stack = new SequenceStack().getStack();
         log_id = getSharedPreferences("Login",MODE_PRIVATE);
+
+        startService(new Intent(OngoingRideService.this, StoreRequestDetails.class));
+
         customerReq= FirebaseDatabase.getInstance().getReference("CustomerRequests/"+log_id.getString("id",null));
         customerReq.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -124,8 +127,9 @@ public class OngoingRideService extends Service {
                                     stack.push(model);
                                     Log.i("TAG", "Stack Size : " + stack.size() + " , " + dataSnapshot.getChildrenCount());
 
-                                    if (val == (stack.size() / 2))
+                                    if (val == (stack.size() / 2)) {
                                         startService(new Intent(OngoingRideService.this, RouteArrangeService.class));
+                                    }
                                 }
 
                                 @Override

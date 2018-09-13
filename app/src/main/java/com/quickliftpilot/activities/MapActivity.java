@@ -197,11 +197,11 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
             left.setVisibility(View.GONE);
             right.setText(R.string.Map_Ok);
-            title.setText(R.string.Map_Trip_Cancelled);
+            title.setText(R.string.Trip_Cancelled);
             if (getIntent().getStringExtra("cancelled")!=null)
-                message.setText(R.string.Map_Trip_Cancelled_By_GetIntent+"\n"+getIntent().getStringExtra("cancelled"));
+                message.setText(getIntent().getStringExtra("cancelled")+" "+getString(R.string.Cancelled_by));
             else
-                message.setText(R.string.Map_Trip_Cancelled_By_Customer);
+                message.setText("Customer "+getString(R.string.Cancelled_by));
 
             AlertDialog.Builder builder = new AlertDialog.Builder(MapActivity.this);
             builder .setView(view)

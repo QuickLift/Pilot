@@ -44,6 +44,8 @@ public class GetPriceData extends AsyncTask<Object,String,String> {
     int park,offer;
     private int price;
     int discount;
+    GenerateLog driver_log=new GenerateLog();
+    String tag="GetPrice",offer_type="";
 
     @Override
     protected String doInBackground(Object... objects) {
@@ -67,8 +69,11 @@ public class GetPriceData extends AsyncTask<Object,String,String> {
         discount=(int)objects[17];
         offer_value=(TextView)objects[18];
         offer_text=(TextView)objects[19];
+        offer_type=(String)objects[20];
+        vehicle_case=(int)objects[21];
 //        data=(Data) objects[17];
         //duration=(String) objects[2];
+        driver_log.appendLog(tag,"Get Price start");
 
         DownloadUrl downloadUrl=new DownloadUrl();
 
@@ -88,6 +93,7 @@ public class GetPriceData extends AsyncTask<Object,String,String> {
         directionsList=parser.parseDirections(s);
         duration=directionsList.get("duration");
         distance=directionsList.get("distance");
+        driver_log.appendLog(tag,"distance res "+directionsList.toString());
 
 //        pref = context.getSharedPreferences("Login",MODE_PRIVATE);
         editor=pref.edit();
@@ -111,6 +117,7 @@ public class GetPriceData extends AsyncTask<Object,String,String> {
         }
 
         Log.v("DISTANCE",String.valueOf(Float.valueOf(distance)/1000));
+        driver_log.appendLog(tag,"Dist : "+String.valueOf(Float.valueOf(distance)/1000));
         if (veh_type.equals("full"))
             pricecar(-1,spec_location,index, cursor,Float.valueOf(distance)/1000);
         else if (veh_type.equals("share"))
@@ -148,9 +155,19 @@ public class GetPriceData extends AsyncTask<Object,String,String> {
         price=(int)(final_price-Float.valueOf(cancel_charge));
 //        Log.v("PRICE",""+final_price);
         if (discount!=0) {
-            float off = final_price * discount / 100;
-            if (off < offer) {
-                offer = (int) off;
+            if (offer_type.equals("special")){
+                if (final_price < offer){
+                    offer=0;
+                }
+                else {
+                    offer=discount;
+                }
+            }
+            else {
+                float off = final_price * discount / 100;
+                if (off < offer) {
+                    offer = (int) off;
+                }
             }
         }
 
@@ -198,6 +215,7 @@ public class GetPriceData extends AsyncTask<Object,String,String> {
         ongoing_rides.child("price").setValue(String.valueOf((int)(final_price-Float.valueOf(cancel_charge))));
         ref.child("resp").setValue("Trip Ended");
         rides.child(key).setValue(map);
+        driver_log.appendLog(tag,"Get Price end");
     }
 
     private void priceexcel(int pckg, Cursor sloc, int index, Cursor cursor, float distanceValue) {

@@ -231,6 +231,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Log.v("REMOVED","Removed from Location service.");
 //                Log.v("OK","Request Service Again Called"+dataSnapshot.getKey());
                 if (dataSnapshot.child("accept").getValue(Integer.class) == 0) {
                     if (RequestActivity.RequestActivity != null)
@@ -303,6 +304,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
                     if (dataSnapshot.child("accept").getValue(Integer.class) == 2 && dataSnapshot.child("accept").getValue(Integer.class) != 3) {
                         Log.v("OK", "This is called !");
 
+                        display_cancel_notification(string);
                         if (stack.size() > 0) {
                             if (MapActivity.fa != null) {
                                 MapActivity.fa.finish();
@@ -502,5 +504,43 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("DriversAvailable/"+logid.getString("type",null));
         GeoFire geoFire = new GeoFire(ref);
         geoFire.setLocation(userId,new GeoLocation(location.getLatitude(),location.getLongitude()));
+    }
+
+    public void display_cancel_notification(String string){
+        String title="";
+        String channelId = "channel-01";
+        String channelName = "Channel Name";
+        int importance = NotificationManager.IMPORTANCE_HIGH;
+
+        if (string==null){
+            string="Customer";
+        }
+
+        Intent notificationIntent = new Intent(this, LauncherActivity.class);
+        notificationIntent.setAction(MAIN_ACTION);
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(LocationService.this,0,notificationIntent,0);
+
+        Notification noti = new NotificationCompat.Builder(this,channelId)
+                .setContentTitle("Request Cancelled")
+                .setContentText(string+" has cancelled the trip.")
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.drawable.logo))
+                .setSmallIcon(R.drawable.carfinal)
+                .setAutoCancel(false)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(string+" has cancelled the trip."))
+                .setPriority(Notification.PRIORITY_HIGH)
+                .setContentIntent(pendingIntent)
+                .setSound(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.sound))
+                .build();
+
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel mChannel = new NotificationChannel(
+                    channelId, channelName, importance);
+            mNotificationManager.createNotificationChannel(mChannel);
+        }
+        mNotificationManager.notify(003, noti);
     }
 }

@@ -23,6 +23,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.quickliftpilot.services.StoreRequestDetails;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -183,6 +184,7 @@ public class TripHandlerActivity extends AppCompatActivity {
 //        Log.i("TAG","stack size : "+stack.size());
 
         startService(new Intent(this, RouteArrangeService.class));
+        startService(new Intent(this, StoreRequestDetails.class));
 
         db.child("accept").setValue(1);
         db.child("d_lat").setValue(log_id.getString("cur_lat",null));
