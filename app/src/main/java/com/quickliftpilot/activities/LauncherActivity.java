@@ -34,7 +34,6 @@ public class LauncherActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launcher);
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 //        Log.v("Tag","Launcher Activity");
 
 //        DatabaseReference cust_cancel_reason=FirebaseDatabase.getInstance().getReference("CustomerCancelReason");

@@ -108,6 +108,7 @@ public class AccountActivity extends AppCompatActivity {
         spinner=(Spinner)findViewById(R.id.select);
         linearLayout=(LinearLayout)findViewById(R.id.list_layout);
         linearLayout.setVisibility(View.GONE);
+        listView.setVisibility(View.VISIBLE);
         //read shared preferences of log-in
         preferences=getApplicationContext().getSharedPreferences("Login",MODE_PRIVATE);
         spinner.setSelection(0);

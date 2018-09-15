@@ -85,58 +85,62 @@ public class ShareRideCheckingService extends Service {
                         gpsTracker = new GPSTracker(ShareRideCheckingService.this);
                         Location location = new Location(LocationManager.GPS_PROVIDER);
                         Log.v("Check",dataSnapshot.getKey());
-                        location.setLatitude(Double.valueOf(map.get("st_lat").toString()));
-                        location.setLongitude(Double.valueOf(map.get("st_lng").toString()));
+                        if (map.containsKey("st_lat") && map.containsKey("st_lng") && map.containsKey("en_lat") && map.containsKey("en_lng") && map.containsKey("seats")) {
+                            location.setLatitude(Double.valueOf(map.get("st_lat").toString()));
+                            location.setLongitude(Double.valueOf(map.get("st_lng").toString()));
 
 //                    Toast.makeText(ShareRideCheckingService.this, ""+String.valueOf(gpsTracker.getLocation().distanceTo(location)), Toast.LENGTH_SHORT).show();
-                        if (gpsTracker.getLocation().distanceTo(location) < 5000) {
-                            ArrayList<SequenceModel> seq = new ArrayList<>();
-                            seq.clear();
-                            for (int i = 0; i < stack.size(); i++) {
-                                seq.add(stack.pop());
+                            if (gpsTracker.canGetLocation()) {
+                                if (gpsTracker.getLocation().distanceTo(location) < 5000) {
+                                    ArrayList<SequenceModel> seq = new ArrayList<>();
+                                    seq.clear();
+                                    for (int i = 0; i < stack.size(); i++) {
+                                        seq.add(stack.pop());
+                                    }
+
+                                    StringBuilder url = new StringBuilder("https://maps.googleapis.com/maps/api/directions/json?");
+                                    StringBuilder url2 = new StringBuilder("https://maps.googleapis.com/maps/api/directions/json?");
+                                    url.append("origin=" + gpsTracker.getLatitude() + "," + gpsTracker.getLongitude());
+                                    url2.append("origin=" + gpsTracker.getLatitude() + "," + gpsTracker.getLongitude());
+                                    url.append("&destination=" + seq.get(seq.size() - 1).getLat() + "," + seq.get(seq.size() - 1).getLng());
+
+                                    Location location2 = new Location(LocationManager.GPS_PROVIDER);
+                                    location2.setLatitude(seq.get(seq.size() - 1).getLat());
+                                    location2.setLongitude(seq.get(seq.size() - 1).getLng());
+
+                                    if (gpsTracker.getLocation().distanceTo(location) > gpsTracker.getLocation().distanceTo(location2))
+                                        url2.append("&destination=" + location.getLatitude() + "," + location.getLongitude());
+                                    else
+                                        url2.append("&destination=" + location2.getLatitude() + "," + location2.getLongitude());
+
+                                    url.append("&waypoints=optimize:true");
+                                    url2.append("&waypoints=optimize:true");
+                                    url2.append("|" + location.getLatitude() + "," + location.getLongitude());
+
+                                    for (int j = seq.size() - 1; j >= 0; j--) {
+                                        stack.push(seq.get(j));
+                                        url.append("|" + seq.get(j).getLat() + "," + seq.get(j).getLng());
+                                        url2.append("|" + seq.get(j).getLat() + "," + seq.get(j).getLng());
+                                    }
+                                    url.append("&key=AIzaSyAexys7sg7A0OSyEk1uBmryDXFzCmY0068");
+                                    url2.append("&key=AIzaSyAexys7sg7A0OSyEk1uBmryDXFzCmY0068");
+
+                                    Log.v("Tag", url.toString());
+                                    Log.v("Tag", url2.toString());
+
+                                    SharedPreferences log_id = getApplicationContext().getSharedPreferences("Login", MODE_PRIVATE);
+                                    Object[] datatransfer = new Object[5];
+                                    String form_url = url.toString();
+                                    String form_url2 = url2.toString();
+                                    CheckRoute checkRoute = new CheckRoute();
+                                    datatransfer[0] = form_url;
+                                    datatransfer[1] = form_url2;
+                                    datatransfer[2] = log_id;
+                                    datatransfer[3] = dataSnapshot.getKey();
+                                    //Log.v("TAG",""+url);
+                                    checkRoute.execute(datatransfer);
+                                }
                             }
-
-                            StringBuilder url = new StringBuilder("https://maps.googleapis.com/maps/api/directions/json?");
-                            StringBuilder url2 = new StringBuilder("https://maps.googleapis.com/maps/api/directions/json?");
-                            url.append("origin=" + gpsTracker.getLatitude() + "," + gpsTracker.getLongitude());
-                            url2.append("origin=" + gpsTracker.getLatitude() + "," + gpsTracker.getLongitude());
-                            url.append("&destination=" + seq.get(seq.size() - 1).getLat() + "," + seq.get(seq.size() - 1).getLng());
-
-                            Location location2 = new Location(LocationManager.GPS_PROVIDER);
-                            location2.setLatitude(seq.get(seq.size() - 1).getLat());
-                            location2.setLongitude(seq.get(seq.size() - 1).getLng());
-
-                            if (gpsTracker.getLocation().distanceTo(location) > gpsTracker.getLocation().distanceTo(location2))
-                                url2.append("&destination=" + location.getLatitude() + "," + location.getLongitude());
-                            else
-                                url2.append("&destination=" + location2.getLatitude() + "," + location2.getLongitude());
-
-                            url.append("&waypoints=optimize:true");
-                            url2.append("&waypoints=optimize:true");
-                            url2.append("|" + location.getLatitude() + "," + location.getLongitude());
-
-                            for (int j = seq.size() - 1; j >= 0; j--) {
-                                stack.push(seq.get(j));
-                                url.append("|" + seq.get(j).getLat() + "," + seq.get(j).getLng());
-                                url2.append("|" + seq.get(j).getLat() + "," + seq.get(j).getLng());
-                            }
-                            url.append("&key=AIzaSyAexys7sg7A0OSyEk1uBmryDXFzCmY0068");
-                            url2.append("&key=AIzaSyAexys7sg7A0OSyEk1uBmryDXFzCmY0068");
-
-                            Log.v("Tag",url.toString());
-                            Log.v("Tag",url2.toString());
-
-                            SharedPreferences log_id = getApplicationContext().getSharedPreferences("Login", MODE_PRIVATE);
-                            Object[] datatransfer = new Object[5];
-                            String form_url = url.toString();
-                            String form_url2 = url2.toString();
-                            CheckRoute checkRoute = new CheckRoute();
-                            datatransfer[0] = form_url;
-                            datatransfer[1] = form_url2;
-                            datatransfer[2] = log_id;
-                            datatransfer[3] = dataSnapshot.getKey();
-                            //Log.v("TAG",""+url);
-                            checkRoute.execute(datatransfer);
                         }
                     }
                 }

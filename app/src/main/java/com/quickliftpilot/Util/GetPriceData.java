@@ -291,7 +291,8 @@ public class GetPriceData extends AsyncTask<Object,String,String> {
             int val=(int)fare;
             val=(int)(((float)val)* Float.parseFloat(pref.getString("ratemultiplier",null)))+((int)((float)add* Float.parseFloat(pref.getString("ratemultiplier",null)))*Integer.parseInt(pref.getString("outsidetripextraamount",null)));
 //            price_excel.setText("Rs. " + val);
-
+            final_price=val;
+            fare_text.setText("Rs. " + val);
             Log.v("TAG",""+distanceValue+" "+fare+" "+val);
         }
     }
@@ -376,7 +377,8 @@ public class GetPriceData extends AsyncTask<Object,String,String> {
             int val=(int)fare;
             val=(int)(((float)val)* Float.parseFloat(pref.getString("ratemultiplier",null)))+((int)((float)add* Float.parseFloat(pref.getString("ratemultiplier",null)))*Integer.parseInt(pref.getString("outsidetripextraamount",null)));
 //            price_car.setText("Rs. " + val);
-
+            final_price=val;
+            fare_text.setText("Rs. " + val);
             Log.v("TAG","step 4: "+distanceValue+" "+fare+" "+val);
         }
         //time_car.setText(String.valueOf(time/60)+" min");

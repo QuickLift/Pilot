@@ -462,6 +462,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
+//        if (googleApiClient!=null)
         LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, lct, this);
     }
 

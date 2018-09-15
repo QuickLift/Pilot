@@ -141,9 +141,11 @@ public class ProfileActivity extends AppCompatActivity {
                     address.setText(map.get("address").toString());
                     rate.setRating(Float.parseFloat(map.get("rate").toString()));
 
-                    byte[] decodedString = Base64.decode(map.get("thumb").toString(), Base64.DEFAULT);
-                    photo = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                    image.setImageBitmap(photo);
+                    if (map.containsKey("thumb") && !map.get("thumb").toString().equals("")) {
+                        byte[] decodedString = Base64.decode(map.get("thumb").toString(), Base64.DEFAULT);
+                        photo = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                        image.setImageBitmap(photo);
+                    }
                 }
             }
 

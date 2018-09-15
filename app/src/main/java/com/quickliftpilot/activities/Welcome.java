@@ -156,6 +156,8 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
         if (Welcome.WelcomeActivity != null) {
             Welcome.WelcomeActivity.finish();
         }
+        DatabaseReference scoresRef = FirebaseDatabase.getInstance().getReference();
+        scoresRef.keepSynced(true);
         WelcomeActivity=this;
         dialog = new ProgressDialog(this, ProgressDialog.THEME_HOLO_DARK);
         dialog.setIndeterminate(true);
@@ -784,10 +786,12 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
                             name.setText(map.get("name").toString());
                             contact.setText(map.get("phone").toString());
                             rate.setRating(Float.parseFloat(map.get("rate").toString()));
-                            byte[] decodedString = Base64.decode(map.get("thumb").toString(), Base64.DEFAULT);
-                            photo = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                            image.setImageBitmap(photo);
-                            profile_icon.setImageBitmap(photo);
+                            if (map.containsKey("thumb") && !map.get("thumb").toString().equals("")) {
+                                byte[] decodedString = Base64.decode(map.get("thumb").toString(), Base64.DEFAULT);
+                                photo = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                                image.setImageBitmap(photo);
+                                profile_icon.setImageBitmap(photo);
+                            }
                         }
                     }
                 }

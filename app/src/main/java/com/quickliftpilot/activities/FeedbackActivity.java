@@ -252,6 +252,22 @@ public class FeedbackActivity extends AppCompatActivity {
 //                    map.put("amount",String.valueOf(price));
 //                    total.setText("Rs. "+(int)((float)tot));
 
+                            if (Double.parseDouble(datamap.get("st_lat").toString()) >= 25.561272 && Double.parseDouble(datamap.get("st_lat").toString()) <= 25.654152
+                                    && Double.parseDouble(datamap.get("st_lng").toString()) >= 85.020262 && Double.parseDouble(datamap.get("st_lng").toString()) <= 85.278055){
+                                vehicle_case=1;
+                            }
+                            else {
+                                vehicle_case=2;
+                            }
+
+                            if (Double.parseDouble(datamap.get("en_lat").toString()) >= 25.561272 && Double.parseDouble(datamap.get("en_lat").toString()) <= 25.654152
+                                    && Double.parseDouble(datamap.get("en_lng").toString()) >= 85.020262 && Double.parseDouble(datamap.get("en_lng").toString()) <= 85.278055){
+                                vehicle_case=1;
+                            }
+                            else {
+                                vehicle_case=2;
+                            }
+
                             Log.v("TAG", "if condition");
                             SQLQueries sqlQueries = new SQLQueries(FeedbackActivity.this);
 
@@ -783,6 +799,15 @@ public class FeedbackActivity extends AppCompatActivity {
 //        GPSTracker gpsTracker=new GPSTracker(this);
 
 //        Log.v("DISTANCE",""+gpsTracker.getLatitude()+" , "+gpsTracker.getLongitude());
+
+        if (Double.parseDouble(log_id.getString("cur_lat",null)) >= 25.561272 && Double.parseDouble(log_id.getString("cur_lat",null)) <= 25.654152
+                && Double.parseDouble(log_id.getString("cur_lng",null)) >= 85.020262 && Double.parseDouble(log_id.getString("cur_lng",null)) <= 85.278055){
+            vehicle_case=1;
+        }
+        else {
+            vehicle_case=2;
+        }
+
         StringBuilder googleDirectionsUrl=new StringBuilder("https://maps.googleapis.com/maps/api/directions/json?");
         googleDirectionsUrl.append("origin="+st_lt+","+st_ln);
         googleDirectionsUrl.append("&destination="+log_id.getString("cur_lat",null)+","+log_id.getString("cur_lng",null));
@@ -794,6 +819,14 @@ public class FeedbackActivity extends AppCompatActivity {
 //        GPSTracker gpsTracker=new GPSTracker(this);
 
 //        Log.v("DISTANCE",""+gpsTracker.getLatitude()+" , "+gpsTracker.getLongitude());
+        if (Double.parseDouble(log_id.getString("cur_lat",null)) >= 25.561272 && Double.parseDouble(log_id.getString("cur_lat",null)) <= 25.654152
+                && Double.parseDouble(log_id.getString("cur_lng",null)) >= 85.020262 && Double.parseDouble(log_id.getString("cur_lng",null)) <= 85.278055){
+            vehicle_case=1;
+        }
+        else {
+            vehicle_case=2;
+        }
+
         StringBuilder googleDirectionsUrl=new StringBuilder("https://maps.googleapis.com/maps/api/directions/json?");
         googleDirectionsUrl.append("origin="+st_lt+","+st_ln);
         googleDirectionsUrl.append("&destination="+log_id.getString("cur_lat",null)+","+log_id.getString("cur_lng",null));
