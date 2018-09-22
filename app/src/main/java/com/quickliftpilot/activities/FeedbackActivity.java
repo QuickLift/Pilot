@@ -562,7 +562,7 @@ public class FeedbackActivity extends AppCompatActivity {
 
                 if (!phone.equals("")) {
                     String otp_msg = "Thank you for using QuickLift. We hope to see you soon again. Please provide your feedback from https://play.google.com/store/apps/details?id=com.quicklift";
-//                    new SendSms(otp_msg, phone).start();
+                    new SendSms(otp_msg, phone).start();
                 }
                 ArrayList<Map<String,Object>> request_list=RequestDetails.getRequest_list();
                 for (int i=0;i<RequestDetails.getRequest_list().size();i++){
@@ -748,7 +748,7 @@ public class FeedbackActivity extends AppCompatActivity {
             }
             if (!phone.equals("")) {
                 String otp_msg = "Thank you for using QuickLift. We hope to see you soon again. Please provide your feedback from https://play.google.com/store/apps/details?id=com.quicklift";
-//                new SendSms(otp_msg, phone).start();
+                new SendSms(otp_msg, phone).start();
             }
             if (!stack.isEmpty()){
 //                stack.pop();

@@ -509,18 +509,18 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
     public void display_cancel_notification(String string){
         String title="";
-        String channelId = "channel-01";
-        String channelName = "Channel Name";
+        String channelId = "channel-09";
+        String channelName = "QuickLift";
         int importance = NotificationManager.IMPORTANCE_HIGH;
 
         if (string==null){
             string="Customer";
         }
 
-        Intent notificationIntent = new Intent(this, LauncherActivity.class);
-        notificationIntent.setAction(MAIN_ACTION);
-        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(LocationService.this,0,notificationIntent,0);
+//        Intent notificationIntent = new Intent(this, LauncherActivity.class);
+//        notificationIntent.setAction(MAIN_ACTION);
+//        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(LocationService.this,0,notificationIntent,0);
 
         Notification noti = new NotificationCompat.Builder(this,channelId)
                 .setContentTitle("Request Cancelled")
@@ -531,7 +531,6 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
                 .setStyle(new NotificationCompat.BigTextStyle()
                         .bigText(string+" has cancelled the trip."))
                 .setPriority(Notification.PRIORITY_HIGH)
-                .setContentIntent(pendingIntent)
                 .setSound(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.sound))
                 .build();
 
@@ -542,6 +541,6 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
                     channelId, channelName, importance);
             mNotificationManager.createNotificationChannel(mChannel);
         }
-        mNotificationManager.notify(003, noti);
+        mNotificationManager.notify(007, noti);
     }
 }

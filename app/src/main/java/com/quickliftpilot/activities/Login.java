@@ -324,7 +324,7 @@ public class Login extends AppCompatActivity {
                                 showProgressDialog();
                                 otp_number = String.valueOf((int)(Math.random()*9999)+1000);
 //                                String otp_msg = "Enter "+otp_number+" as an otp to verify yourself. This otp is valid for only 2 mins from the time when otp was sent.";
-                                Toast.makeText(Login.this, ""+otp_number, Toast.LENGTH_LONG).show();
+//                                Toast.makeText(Login.this, ""+otp_number, Toast.LENGTH_LONG).show();
 
                                 String otp_msg="\"Enter "+otp_number+" as an otp to verify yourself. This otp is valid for only 2 mins from the time when otp was sent.";
                                 Log.v("TAG",otp_msg);
@@ -333,7 +333,7 @@ public class Login extends AppCompatActivity {
                                 message = message + otp_msg;
                                 numbers = numbers + phone;
 
-//                                new SendSms(otp_msg,phone).start();
+                                new SendSms(otp_msg,phone).start();
 
                                 hideProgressDialog();
 
