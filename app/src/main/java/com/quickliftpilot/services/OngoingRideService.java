@@ -107,6 +107,8 @@ public class OngoingRideService extends Service {
                                     model.setOtp(map.get("otp").toString());
                                     model.setAddress(map.get("source").toString());
                                     model.setPhone(userMap.get("phone").toString());
+                                    if (!map.get("seat").equals("full"))
+                                        model.setSeat(Integer.parseInt(map.get("seat").toString()));
                                     model.setLat(Double.parseDouble(map.get("st_lat").toString()));
                                     model.setLng(Double.parseDouble(map.get("st_lng").toString()));
                                     model.setLatLng(new LatLng(Double.parseDouble(map.get("st_lat").toString()), Double.parseDouble(map.get("st_lng").toString())));
@@ -117,6 +119,8 @@ public class OngoingRideService extends Service {
                                     dropModel.setType("drop");
                                     dropModel.setOtp(map.get("otp").toString());
                                     dropModel.setPhone(userMap.get("phone").toString());
+                                    if (!map.get("seat").equals("full"))
+                                        dropModel.setSeat(Integer.parseInt(map.get("seat").toString()));
                                     dropModel.setAddress(map.get("destination").toString());
                                     dropModel.setLat(Double.parseDouble(map.get("en_lat").toString()));
                                     dropModel.setLng(Double.parseDouble(map.get("en_lng").toString()));

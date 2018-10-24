@@ -219,6 +219,26 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
             });
         }
 
+        db.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    for (DataSnapshot data:dataSnapshot.getChildren()){
+                        if (data.getChildrenCount()<10){
+                            data.getRef().removeValue();
+                            finish();
+                            startActivity(getIntent());
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 //        db.addChildEventListener(new ChildEventListener() {
 //            @Override
 //            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -502,7 +522,11 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 //                    Log.i("Model",""+model.getName()+" "+model.getId()+" "+model.getType());
 
                     type.setText(R.string.Map_PickUp);
-                    name.setText(model.getName());
+                    if (model.getSeat()!=0) {
+                        name.setText(model.getName() + " (" + model.getSeat() + " seat)");
+                    } else {
+                        name.setText(model.getName());
+                    }
                     pick_name.setText(model.getName());
                     pick_address.setText(model.getAddress());
                     dest_type.setVisibility(View.VISIBLE);

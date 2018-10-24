@@ -318,6 +318,19 @@ public class FeedbackActivity extends AppCompatActivity {
                             else
                                 dataTransfer[20] = "";
                             dataTransfer[21] = vehicle_case;
+                            if (datamap.containsKey("triptime")) {
+                                dataTransfer[22] = datamap.get("triptime").toString();
+                            }
+                            else {
+                                dataTransfer[22] = 0;
+                            }
+                            if (datamap.containsKey("tripdistance")){
+                                dataTransfer[23] = datamap.get("tripdistance").toString();
+                            }
+                            else {
+                                dataTransfer[23] = 0;
+                            }
+
                             driver_log.appendLog(tag, "Get Price Data called..");
                             getDirectionsData.execute(dataTransfer);
 
@@ -434,6 +447,7 @@ public class FeedbackActivity extends AppCompatActivity {
         feed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                feed.setEnabled(false);
                 ProgressDialog pdialog=new ProgressDialog(FeedbackActivity.this);
                 pdialog.setMessage("Saving. Please wait ...");
                 pdialog.setIndeterminate(true);
@@ -562,7 +576,7 @@ public class FeedbackActivity extends AppCompatActivity {
 
                 if (!phone.equals("")) {
                     String otp_msg = "Thank you for using QuickLift. We hope to see you soon again. Please provide your feedback from https://play.google.com/store/apps/details?id=com.quicklift";
-                    new SendSms(otp_msg, phone).start();
+//                    new SendSms(otp_msg, phone).start();
                 }
                 ArrayList<Map<String,Object>> request_list=RequestDetails.getRequest_list();
                 for (int i=0;i<RequestDetails.getRequest_list().size();i++){
@@ -748,7 +762,7 @@ public class FeedbackActivity extends AppCompatActivity {
             }
             if (!phone.equals("")) {
                 String otp_msg = "Thank you for using QuickLift. We hope to see you soon again. Please provide your feedback from https://play.google.com/store/apps/details?id=com.quicklift";
-                new SendSms(otp_msg, phone).start();
+//                new SendSms(otp_msg, phone).start();
             }
             if (!stack.isEmpty()){
 //                stack.pop();

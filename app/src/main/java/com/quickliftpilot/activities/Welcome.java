@@ -682,6 +682,14 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
 //                    sendBroadcast(i);
                 }
                 else {
+                    for (DataSnapshot data:dataSnapshot.getChildren()){
+                        if (data.getChildrenCount()<10){
+                            Log.v("data",data.getRef().toString());
+                            data.getRef().removeValue();
+                            finish();
+                            startActivity(getIntent());
+                        }
+                    }
                     SharedPreferences.Editor editor=log_id.edit();
                     editor.putString("ride","ride");
                     editor.commit();

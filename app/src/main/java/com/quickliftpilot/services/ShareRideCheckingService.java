@@ -84,14 +84,18 @@ public class ShareRideCheckingService extends Service {
                         Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
                         gpsTracker = new GPSTracker(ShareRideCheckingService.this);
                         Location location = new Location(LocationManager.GPS_PROVIDER);
+                        Location cur_location = new Location(LocationManager.GPS_PROVIDER);
                         Log.v("Check",dataSnapshot.getKey());
                         if (map.containsKey("st_lat") && map.containsKey("st_lng") && map.containsKey("en_lat") && map.containsKey("en_lng") && map.containsKey("seats")) {
                             location.setLatitude(Double.valueOf(map.get("st_lat").toString()));
                             location.setLongitude(Double.valueOf(map.get("st_lng").toString()));
 
+                            Log.v("Check","location is present");
 //                    Toast.makeText(ShareRideCheckingService.this, ""+String.valueOf(gpsTracker.getLocation().distanceTo(location)), Toast.LENGTH_SHORT).show();
                             if (gpsTracker.canGetLocation()) {
+                                Log.v("Check","got location");
                                 if (gpsTracker.getLocation().distanceTo(location) < 5000) {
+                                    Log.v("Check","distance is fyn");
                                     ArrayList<SequenceModel> seq = new ArrayList<>();
                                     seq.clear();
                                     for (int i = 0; i < stack.size(); i++) {

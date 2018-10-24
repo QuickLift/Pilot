@@ -233,143 +233,144 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Log.v("REMOVED","Removed from Location service.");
 //                Log.v("OK","Request Service Again Called"+dataSnapshot.getKey());
-                if (dataSnapshot.child("accept").getValue(Integer.class) == 0) {
-                    if (RequestActivity.RequestActivity != null)
-                        RequestActivity.RequestActivity.finish();
-                    if (dataSnapshot.child("customer_id").getValue().toString().equals(ride_info.getString("customer_id",null))){
-                        SharedPreferences.Editor editor=ride_info.edit();
-                        editor.remove("customer_id");
-                        editor.commit();
+                if (dataSnapshot.getChildrenCount()>10) {
+                    if (dataSnapshot.child("accept").getValue(Integer.class) == 0) {
+                        if (RequestActivity.RequestActivity != null)
+                            RequestActivity.RequestActivity.finish();
+                        if (dataSnapshot.child("customer_id").getValue().toString().equals(ride_info.getString("customer_id", null))) {
+                            SharedPreferences.Editor editor = ride_info.edit();
+                            editor.remove("customer_id");
+                            editor.commit();
+                        }
                     }
-                }
 
-                if (dataSnapshot.child("accept").getValue(Integer.class) != 0) {
-                    final SharedPreferences.Editor editor = log_id.edit();
+                    if (dataSnapshot.child("accept").getValue(Integer.class) != 0) {
+                        final SharedPreferences.Editor editor = log_id.edit();
 
-                    String string = null;
-                    int count=0;
-                    ArrayList<SequenceModel> sequenceModels = new ArrayList<>();
-                    if (stack.size() > 0) {
-                        Log.v("TAG", "Child Removed Called !");
-                        while (stack.size() > 0) {
-                            Log.i("TAG", "Stak pop : " + stack.size());
-                            SequenceModel deleteModel = stack.pop();
-                            Log.v("TAG", deleteModel.getId() + " " + dataSnapshot.child("customer_id").getValue().toString());
-                            if (!deleteModel.getId().equals(dataSnapshot.child("customer_id").getValue().toString())) {
-                                sequenceModels.add(deleteModel);
-                                if (deleteModel.getType().equals("drop"))
-                                    count=count+deleteModel.getSeat();
-                                Log.i("TAG", "item for pushing : " + sequenceModels.size());
-                            } else {
-                                string = deleteModel.getName();
+                        String string = null;
+                        int count = 0;
+                        ArrayList<SequenceModel> sequenceModels = new ArrayList<>();
+                        if (stack.size() > 0) {
+                            Log.v("TAG", "Child Removed Called !");
+                            while (stack.size() > 0) {
+                                Log.i("TAG", "Stak pop : " + stack.size());
+                                SequenceModel deleteModel = stack.pop();
+                                Log.v("TAG", deleteModel.getId() + " " + dataSnapshot.child("customer_id").getValue().toString());
+                                if (!deleteModel.getId().equals(dataSnapshot.child("customer_id").getValue().toString())) {
+                                    sequenceModels.add(deleteModel);
+                                    if (deleteModel.getType().equals("drop"))
+                                        count = count + deleteModel.getSeat();
+                                    Log.i("TAG", "item for pushing : " + sequenceModels.size());
+                                } else {
+                                    string = deleteModel.getName();
 //                                    Toast.makeText(RequestService.this, ""+ string, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            if (sequenceModels.size() > 0) {
+                                for (int i = sequenceModels.size() - 1; i >= 0; i--) {
+                                    Log.i("TAG", "Stak push : " + i);
+                                    stack.push(sequenceModels.get(i));
+                                }
+                                sequenceModels.clear();
                             }
                         }
 
-                        if (sequenceModels.size() > 0) {
-                            for (int i = sequenceModels.size() - 1; i >= 0; i--) {
-                                Log.i("TAG", "Stak push : " + i);
-                                stack.push(sequenceModels.get(i));
-                            }
-                            sequenceModels.clear();
-                        }
-                    }
-
-                    if (!dataSnapshot.child("seat").getValue().toString().equalsIgnoreCase("full")) {
+                        if (!dataSnapshot.child("seat").getValue().toString().equalsIgnoreCase("full")) {
 //                    seat = seat-Integer.parseInt(dataSnapshot.child("seat").getValue().toString());
-                        Log.i("OK", "Child Seat : ");
-                        int seat = 0;
-                        editor.putString("seats", String.valueOf(count));
-                        editor.commit();
+                            Log.i("OK", "Child Seat : ");
+                            int seat = 0;
+                            editor.putString("seats", String.valueOf(count));
+                            editor.commit();
 //                    Toast.makeText(RequestService.this, ""+seat, Toast.LENGTH_SHORT).show();
-                        if (count == 0) {
-                            Log.v("OK", "Removed");
+                            if (count == 0) {
+                                Log.v("OK", "Removed");
+                                DatabaseReference seat_data = FirebaseDatabase.getInstance().getReference("DriversWorking/" + log_id.getString("type", null) + "/" + log_id.getString("id", null));
+                                seat_data.removeValue();
+
+                            } else {
+                                Log.v("OK", "Set value");
+                                DatabaseReference seat_data = FirebaseDatabase.getInstance().getReference("DriversWorking/" + log_id.getString("type", null) + "/" + log_id.getString("id", null) + "/seat");
+                                seat_data.setValue(Integer.toString(count));
+                            }
+                        } else if (dataSnapshot.child("seat").getValue().toString().equalsIgnoreCase("full")) {
                             DatabaseReference seat_data = FirebaseDatabase.getInstance().getReference("DriversWorking/" + log_id.getString("type", null) + "/" + log_id.getString("id", null));
                             seat_data.removeValue();
-
-                        } else {
-                            Log.v("OK", "Set value");
-                            DatabaseReference seat_data = FirebaseDatabase.getInstance().getReference("DriversWorking/" + log_id.getString("type", null) + "/" + log_id.getString("id", null) + "/seat");
-                            seat_data.setValue(Integer.toString(count));
-                        }
-                    } else if (dataSnapshot.child("seat").getValue().toString().equalsIgnoreCase("full")) {
-                        DatabaseReference seat_data = FirebaseDatabase.getInstance().getReference("DriversWorking/" + log_id.getString("type", null) + "/" + log_id.getString("id", null));
-                        seat_data.removeValue();
-                        editor.putString("seats", "0");
-                        editor.commit();
-                    }
-
-                    //int size = stack.size();
-
-                    if (dataSnapshot.child("accept").getValue(Integer.class) == 2 && dataSnapshot.child("accept").getValue(Integer.class) != 3) {
-                        Log.v("OK", "This is called !");
-
-                        display_cancel_notification(string);
-                        if (stack.size() > 0) {
-                            if (MapActivity.fa != null) {
-                                MapActivity.fa.finish();
-                            }
-                            Intent intent = new Intent(LocationService.this, MapActivity.class);
-                            intent.putExtra("cancelled", string);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                        } else {
-                            Log.v("TAG", "Placing DriverAvailable !");
-                            editor.putString("ride", "");
+                            editor.putString("seats", "0");
                             editor.commit();
-
-                            SharedPreferences pref = getSharedPreferences("loginPref", MODE_PRIVATE);
-                            SharedPreferences.Editor editor1 = pref.edit();
-                            editor1.putBoolean("status", true);
-                            editor1.commit();
-
-                            GPSTracker gps = new GPSTracker(LocationService.this);
-                            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("DriversAvailable/" + log_id.getString("type", null));
-                            GeoFire geoFire = new GeoFire(ref);
-                            geoFire.setLocation(log_id.getString("id", null), new GeoLocation(gps.getLatitude(), gps.getLongitude()));
-
-                            if (Welcome.WelcomeActivity != null) {
-                                Welcome.WelcomeActivity.finish();
-                            }
-                            Intent intent = new Intent(LocationService.this, Welcome.class);
-                            intent.putExtra("status", "true");
-                            intent.putExtra("cancelled", string);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
                         }
-                    } else if (dataSnapshot.child("accept").getValue(Integer.class) != 3) {
-                        Log.v("OK", "This is also called !");
-                        if (stack.size() > 0) {
-                            if (MapActivity.fa != null) {
-                                MapActivity.fa.finish();
+
+                        //int size = stack.size();
+
+                        if (dataSnapshot.child("accept").getValue(Integer.class) == 2 && dataSnapshot.child("accept").getValue(Integer.class) != 3) {
+                            Log.v("OK", "This is called !");
+
+                            display_cancel_notification(string);
+                            if (stack.size() > 0) {
+                                if (MapActivity.fa != null) {
+                                    MapActivity.fa.finish();
+                                }
+                                Intent intent = new Intent(LocationService.this, MapActivity.class);
+                                intent.putExtra("cancelled", string);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            } else {
+                                Log.v("TAG", "Placing DriverAvailable !");
+                                editor.putString("ride", "");
+                                editor.commit();
+
+                                SharedPreferences pref = getSharedPreferences("loginPref", MODE_PRIVATE);
+                                SharedPreferences.Editor editor1 = pref.edit();
+                                editor1.putBoolean("status", true);
+                                editor1.commit();
+
+                                GPSTracker gps = new GPSTracker(LocationService.this);
+                                DatabaseReference ref = FirebaseDatabase.getInstance().getReference("DriversAvailable/" + log_id.getString("type", null));
+                                GeoFire geoFire = new GeoFire(ref);
+                                geoFire.setLocation(log_id.getString("id", null), new GeoLocation(gps.getLatitude(), gps.getLongitude()));
+
+                                if (Welcome.WelcomeActivity != null) {
+                                    Welcome.WelcomeActivity.finish();
+                                }
+                                Intent intent = new Intent(LocationService.this, Welcome.class);
+                                intent.putExtra("status", "true");
+                                intent.putExtra("cancelled", string);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
                             }
-                            Intent intent = new Intent(LocationService.this, MapActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                        } else {
-                            Log.v("TAG", "Placing DriverAvailable !");
-                            editor.putString("ride", "");
-                            editor.commit();
+                        } else if (dataSnapshot.child("accept").getValue(Integer.class) != 3) {
+                            Log.v("OK", "This is also called !");
+                            if (stack.size() > 0) {
+                                if (MapActivity.fa != null) {
+                                    MapActivity.fa.finish();
+                                }
+                                Intent intent = new Intent(LocationService.this, MapActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            } else {
+                                Log.v("TAG", "Placing DriverAvailable !");
+                                editor.putString("ride", "");
+                                editor.commit();
 
-                            SharedPreferences pref = getSharedPreferences("loginPref", MODE_PRIVATE);
-                            SharedPreferences.Editor editor1 = pref.edit();
-                            editor1.putBoolean("status", true);
-                            editor1.commit();
+                                SharedPreferences pref = getSharedPreferences("loginPref", MODE_PRIVATE);
+                                SharedPreferences.Editor editor1 = pref.edit();
+                                editor1.putBoolean("status", true);
+                                editor1.commit();
 
-                            GPSTracker gps = new GPSTracker(LocationService.this);
-                            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("DriversAvailable/" + log_id.getString("type", null));
-                            GeoFire geoFire = new GeoFire(ref);
-                            geoFire.setLocation(log_id.getString("id", null), new GeoLocation(gps.getLatitude(), gps.getLongitude()));
+                                GPSTracker gps = new GPSTracker(LocationService.this);
+                                DatabaseReference ref = FirebaseDatabase.getInstance().getReference("DriversAvailable/" + log_id.getString("type", null));
+                                GeoFire geoFire = new GeoFire(ref);
+                                geoFire.setLocation(log_id.getString("id", null), new GeoLocation(gps.getLatitude(), gps.getLongitude()));
 
-                            if (Welcome.WelcomeActivity != null) {
-                                Welcome.WelcomeActivity.finish();
+                                if (Welcome.WelcomeActivity != null) {
+                                    Welcome.WelcomeActivity.finish();
+                                }
+                                Intent intent = new Intent(LocationService.this, Welcome.class);
+                                intent.putExtra("status", "true");
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
                             }
-                            Intent intent = new Intent(LocationService.this, Welcome.class);
-                            intent.putExtra("status", "true");
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
                         }
-                    }
 
 //                LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 //                View view = inflater.inflate(R.layout.dialog_layout, null);
@@ -379,6 +380,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 //                dialog.setContentView(view);
 //                dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
 //                dialog.show();
+                    }
                 }
             }
 

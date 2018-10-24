@@ -47,6 +47,7 @@ public class RiderListActivity extends AppCompatActivity {
     private SharedPreferences log_id;
     private Stack<SequenceModel> stack;
     private SharedPreferences ride_info;
+    HashMap hashmap=new HashMap();
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -90,6 +91,7 @@ public class RiderListActivity extends AppCompatActivity {
                     Log.i("TAG","request listener");
                     for (DataSnapshot data : dataSnapshot.getChildren()){
                         final String c_id = data.getKey();
+                        hashmap.put(c_id,data.child("seat").getValue().toString());
                         response.child(c_id).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -111,7 +113,7 @@ public class RiderListActivity extends AppCompatActivity {
                                         public void onDataChange(DataSnapshot dataSnapshot) {
                                             String name = dataSnapshot.child("name").getValue().toString();
 //                                            Log.i("TAG","user name : "+name);
-                                            ride.setC_name(name);
+                                            ride.setC_name(name+" ("+hashmap.get(ride.getC_id())+" seat)");
                                             ride.setC_phone(dataSnapshot.child("phone").getValue().toString());
                                             riders.add(ride);
                                             rider.setAdapter(new CustomAdapter());

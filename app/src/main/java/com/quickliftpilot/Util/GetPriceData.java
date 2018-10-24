@@ -46,6 +46,7 @@ public class GetPriceData extends AsyncTask<Object,String,String> {
     int discount;
     GenerateLog driver_log=new GenerateLog();
     String tag="GetPrice",offer_type="";
+    String saved_dist,saved_time;
 
     @Override
     protected String doInBackground(Object... objects) {
@@ -71,6 +72,8 @@ public class GetPriceData extends AsyncTask<Object,String,String> {
         offer_text=(TextView)objects[19];
         offer_type=(String)objects[20];
         vehicle_case=(int)objects[21];
+        saved_time=(String)objects[22];
+        saved_dist=(String)objects[23];
 //        data=(Data) objects[17];
         //duration=(String) objects[2];
         driver_log.appendLog(tag,"Get Price start");
@@ -90,10 +93,18 @@ public class GetPriceData extends AsyncTask<Object,String,String> {
     protected void onPostExecute(String s) {
         HashMap<String,String> directionsList=null;
         PriceParser parser=new PriceParser();
-        directionsList=parser.parseDirections(s);
-        duration=directionsList.get("duration");
-        distance=directionsList.get("distance");
-        driver_log.appendLog(tag,"distance res "+directionsList.toString());
+        if (s!=null) {
+            directionsList = parser.parseDirections(s);
+        }
+        if (directionsList!=null) {
+            duration = directionsList.get("duration");
+            distance = directionsList.get("distance");
+            driver_log.appendLog(tag, "distance res " + directionsList.toString());
+        }
+        else {
+            duration=saved_time;
+            distance=saved_dist;
+        }
 
 //        pref = context.getSharedPreferences("Login",MODE_PRIVATE);
         editor=pref.edit();
