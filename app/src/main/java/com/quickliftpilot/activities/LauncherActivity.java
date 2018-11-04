@@ -22,6 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.quickliftpilot.Util.SQLQueries;
+import com.quickliftpilot.services.SetLocation;
 import com.quickliftpilot.services.UpdateLocation;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class LauncherActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launcher);
+
 //        Log.v("Tag","Launcher Activity");
 
 //        DatabaseReference cust_cancel_reason=FirebaseDatabase.getInstance().getReference("CustomerCancelReason");
@@ -45,6 +47,7 @@ public class LauncherActivity extends AppCompatActivity {
         SharedPreferences log_id=getApplicationContext().getSharedPreferences("Login",MODE_PRIVATE);
 
         if (log_id.contains("id")) {
+            startService(new Intent(this,SetLocation.class));
             DatabaseReference vers = FirebaseDatabase.getInstance().getReference("Version_driver");
             vers.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override

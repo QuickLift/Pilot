@@ -226,8 +226,12 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                     for (DataSnapshot data:dataSnapshot.getChildren()){
                         if (data.getChildrenCount()<10){
                             data.getRef().removeValue();
-                            finish();
-                            startActivity(getIntent());
+                            Intent intent = new Intent(MapActivity.fa, Welcome.class);
+                            intent.putExtra("status", "true");
+                            intent.putExtra("cancelled", "Customer");
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                            MapActivity.fa.finish();
                         }
                     }
                 }
@@ -1270,5 +1274,4 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
         //cancel_trip();
     }
-
 }

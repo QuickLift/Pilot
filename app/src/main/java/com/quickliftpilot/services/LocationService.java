@@ -411,7 +411,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
                 .setContentTitle("QuickLift Pilot")
                 .setContentText("Quicklift Pilot is running. Do not close this service.")
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.drawable.logo))
-                .setSmallIcon(R.drawable.carfinal)
+                .setSmallIcon(R.drawable.notification_icon)
                 .setContentIntent(pendingIntent)
                 .setOngoing(true)
                 .build();
@@ -528,7 +528,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
                 .setContentTitle("Request Cancelled")
                 .setContentText(string+" has cancelled the trip.")
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.drawable.logo))
-                .setSmallIcon(R.drawable.carfinal)
+                .setSmallIcon(R.drawable.notification_icon)
                 .setAutoCancel(false)
                 .setStyle(new NotificationCompat.BigTextStyle()
                         .bigText(string+" has cancelled the trip."))

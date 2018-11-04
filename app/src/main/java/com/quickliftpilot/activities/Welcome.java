@@ -116,6 +116,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
     private PowerManager.WakeLock mWakeLock;
     UpdateLocation mReceiver=new UpdateLocation();
     ProgressDialog dialog;
+    boolean status_intent=false;
 //    private GoogleApiClient googleApiClient;
 
     @Override
@@ -156,8 +157,6 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
         if (Welcome.WelcomeActivity != null) {
             Welcome.WelcomeActivity.finish();
         }
-        DatabaseReference scoresRef = FirebaseDatabase.getInstance().getReference();
-        scoresRef.keepSynced(true);
         WelcomeActivity=this;
         dialog = new ProgressDialog(this, ProgressDialog.THEME_HOLO_DARK);
         dialog.setIndeterminate(true);
@@ -245,6 +244,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
         }
 
             if (getIntent().hasExtra("status")){
+                status_intent=true;
                 editor = pref.edit();
                 editor.putBoolean("status",true);
                 editor.commit();
@@ -414,6 +414,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
                                 @Override
                                 public void onClick(View v) {
                                     login_btn.setChecked(false);
+                                    Log.v("CheckLogin","6");
                                     alert.dismiss();
                                 }
                             });
@@ -466,6 +467,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
 
     private void logOut(){
         if (welcome.contains("login_time")){
+            status_intent=false;
             DatabaseReference cus=FirebaseDatabase.getInstance().getReference("DriversAvailable/"+log_id.getString("type",null)+"/"+log_id.getString("id",null));
             cus.removeValue();
             editor = pref.edit();
@@ -530,10 +532,11 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
                 login_btn.setEnabled(false);
         }
 
-        if(pref.getBoolean("status",false) || getIntent().hasExtra("status")){
+        if(pref.getBoolean("status",false) || status_intent){
             if (log_id.contains("block")) {
                 if (log_id.getString("block",null).equals("1")){
                     login_btn.setChecked(false);
+                    Log.v("CheckLogin","7");
                     login_status.setText(R.string.Welcome_Logout);
                     login_duration.setText("Not Working");
 //                    stopService(requestService);
@@ -567,6 +570,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
                 }
                 else {
                     login_btn.setChecked(true);
+                    Log.v("CheckLogin","1");
                     login_status.setText(R.string.Welcome_Login);
                     login_duration.setText("Running");
 //            Log.v("TAG","STATUS TRUE !");
@@ -586,6 +590,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
             }
             else {
                 login_btn.setChecked(true);
+                Log.v("CheckLogin","2");
                 login_status.setText(R.string.Welcome_Login);
                 login_duration.setText("Running");
 //            Log.v("TAG","STATUS TRUE !");
@@ -605,6 +610,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
 //            getCurrentLocation();
         }else {
             login_btn.setChecked(false);
+            Log.v("CheckLogin","3");
             login_status.setText(R.string.Welcome_Logout);
             login_duration.setText("Not Working");
 //            stopService(requestService);
@@ -647,6 +653,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
                     if (log_id.contains("block") && log_id.getString("block",null).equals("1")){
                         if (pref.getBoolean("status",false) ){
                             login_btn.setChecked(false);
+                            Log.v("CheckLogin","4");
                             login_status.setText(R.string.Welcome_Logout);
                             login_duration.setText("Not Working");
 //                    stopService(requestService);
@@ -702,6 +709,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
 
                     login_btn.setEnabled(false);
                     login_btn.setChecked(true);
+                    Log.v("CheckLogin","5");
                     login_status.setText(R.string.Welcome_Login);
                     startService(rideCheckingService);
                     login_duration.setText("Running");
@@ -809,158 +817,103 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
 
                 }
             });
-            driver_acc.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            GregorianCalendar gregorianCalendar = new GregorianCalendar();
+            String date = String.format("%02d", gregorianCalendar.get(GregorianCalendar.DAY_OF_MONTH));
+            String month = String.format("%02d", (gregorianCalendar.get(GregorianCalendar.MONTH) + 1));
+            String year = String.format("%02d", gregorianCalendar.get(GregorianCalendar.YEAR));
+//                    StringBuilder builder=new StringBuilder().append(String.format("%02d", (date))).append("-")
+//                            .append(String.format("%02d", (month+1))).append("-").append(year);
+            final String formateDate = date + "-" + month + "-" + year;
+            final SharedPreferences.Editor acc_editor=account_info.edit();
+            driver_acc.child(log_id.getString("id", null) + "/" + formateDate).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
-                        GregorianCalendar gregorianCalendar = new GregorianCalendar();
-                        String date = String.format("%02d", gregorianCalendar.get(GregorianCalendar.DAY_OF_MONTH));
-                        String month = String.format("%02d", (gregorianCalendar.get(GregorianCalendar.MONTH) + 1));
-                        String year = String.format("%02d", gregorianCalendar.get(GregorianCalendar.YEAR));
-//                    StringBuilder builder=new StringBuilder().append(String.format("%02d", (date))).append("-")
-//                            .append(String.format("%02d", (month+1))).append("-").append(year);
-                        final String formateDate = date + "-" + month + "-" + year;
-                        final SharedPreferences.Editor acc_editor=account_info.edit();
+                        for (DataSnapshot data : dataSnapshot.getChildren()) {
+                            Map<String, Object> map = (Map<String, Object>) data.getValue();
+                            if (map.containsKey("book")) {
+                                book.setText(map.get("book").toString());
+                                acc_editor.putString("book", map.get("book").toString());
+                            } else {
+                                book.setText("0");
+                                acc_editor.putString("book", "0");
+                            }
+                            float val = 0;
+                            if (map.containsKey("earn")) {
+                                acc_editor.putString("earn", map.get("earn").toString());
+                            } else {
+                                acc_editor.putString("earn", "0");
+                            }
+                            if (map.containsKey("offer")) {
+                                val = Float.parseFloat(map.get("earn").toString()) + Float.parseFloat(map.get("offer").toString());
+                                acc_editor.putString("offer", map.get("offer").toString());
+                            } else {
+                                val = Float.parseFloat(map.get("earn").toString());
+                                acc_editor.putString("offer", "0");
+                            }
+                            earn.setText("Rs. " + val);
 
-                        if (dataSnapshot.hasChild(log_id.getString("id", null))) {
-                            driver_acc.child(log_id.getString("id", null)).addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    if (dataSnapshot.hasChild(formateDate)) {
-                                        driver_acc.child(log_id.getString("id", null) + "/" + formateDate).addValueEventListener(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                                String key = dataSnapshot.getKey();
-                                                for (DataSnapshot data : dataSnapshot.getChildren()) {
-                                                    Map<String, Object> map = (Map<String, Object>) data.getValue();
-                                                    if (map.containsKey("book")) {
-                                                        book.setText(map.get("book").toString());
-                                                        acc_editor.putString("book",map.get("book").toString());
-                                                    }
-                                                    else {
-                                                        book.setText("0");
-                                                        acc_editor.putString("book","0");
-                                                    }
-                                                    float val=0;
-                                                    if (map.containsKey("earn")){
-                                                        acc_editor.putString("earn",map.get("earn").toString());
-                                                    }
-                                                    else {
-                                                        acc_editor.putString("earn","0");
-                                                    }
-                                                    if (map.containsKey("offer")) {
-                                                        val = Float.parseFloat(map.get("earn").toString()) + Float.parseFloat(map.get("offer").toString());
-                                                        acc_editor.putString("offer",map.get("offer").toString());
-                                                    }
-                                                    else {
-                                                        val = Float.parseFloat(map.get("earn").toString());
-                                                        acc_editor.putString("offer","0");
-                                                    }
-                                                    earn.setText("Rs. " + val);
-
-                                                    int count=0;
-                                                    if (map.containsKey("cancel")) {
-                                                        count += Integer.parseInt(map.get("cancel").toString());
-                                                        acc_editor.putString("cancel",map.get("cancel").toString());
-                                                    }
-                                                    else {
-                                                        acc_editor.putString("cancel","0");
-                                                    }
-                                                    if (map.containsKey("reject")) {
-                                                        count += Integer.parseInt(map.get("reject").toString());
-                                                        acc_editor.putString("reject",map.get("reject").toString());
-                                                    }
-                                                    else {
-                                                        acc_editor.putString("reject","0");
-                                                    }
-                                                    cancel.setText(String.valueOf(count));
-                                                    if (map.containsKey("pickup")) {
-                                                        pickup.setText("Rs. " + Float.parseFloat(map.get("pickup").toString()));
-                                                        acc_editor.putString("pickup",map.get("pickup").toString());
-                                                    }
-                                                    else {
-                                                        pickup.setText("Rs. 0");
-                                                        acc_editor.putString("pickup","0");
-                                                    }
-                                                    if (map.containsKey("cancel_charge")){
-                                                        acc_editor.putString("cancel_charge",map.get("cancel_charge").toString());
-                                                    }
-                                                    else {
-                                                        acc_editor.putString("cancel_charge","0");
-                                                    }
-                                                    if (map.containsKey("cash")){
-                                                        acc_editor.putString("cash",map.get("cash").toString());
-                                                    }
-                                                    else {
-                                                        acc_editor.putString("cash","0");
-                                                    }
-                                                    acc_editor.putString("key",data.getKey());
-                                                    acc_editor.commit();
-                                                }
-                                            }
-
-                                            @Override
-                                            public void onCancelled(DatabaseError databaseError) {
-
-                                            }
-                                        });
-                                    } else {
-                                        book.setText("0");
-                                        earn.setText("Rs. 0");
-                                        cancel.setText("0");
-                                        pickup.setText("Rs. 0");
-                                        HashMap<String, Object> driver_info = new HashMap<>();
-                                        driver_info.put("book", "0");
-                                        driver_info.put("earn", "0");
-                                        driver_info.put("reject", "0");
-                                        driver_info.put("cancel", "0");
-                                        driver_info.put("pickup", "0");
-                                        driver_info.put("offer", "0");
-                                        driver_info.put("cash", "0");
-                                        driver_info.put("cancel_charge", "0");
-                                        driver_acc.child(log_id.getString("id", null)).child(formateDate).push().setValue(driver_info);
-                                        acc_editor.putString("book","0");
-                                        acc_editor.putString("earn","0");
-                                        acc_editor.putString("reject","0");
-                                        acc_editor.putString("cancel","0");
-                                        acc_editor.putString("pickup","0");
-                                        acc_editor.putString("cash","0");
-                                        acc_editor.putString("cancel_charge","0");
-                                        acc_editor.putString("offer","0");
-                                        acc_editor.commit();
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-
-                                }
-                            });
-                        } else {
-                            book.setText("0");
-                            earn.setText("Rs. 0");
-                            cancel.setText("0");
-                            pickup.setText("Rs. 0");
-                            HashMap<String, Object> driver_info = new HashMap<>();
-                            driver_info.put("book", "0");
-                            driver_info.put("earn", "0");
-                            driver_info.put("reject", "0");
-                            driver_info.put("cancel", "0");
-                            driver_info.put("pickup", "0");
-                            driver_info.put("offer", "0");
-                            driver_info.put("cash", "0");
-                            driver_info.put("cancel_charge", "0");
-                            driver_acc.child(log_id.getString("id", null)).child(formateDate).push().setValue(driver_info);
-                            acc_editor.putString("book","0");
-                            acc_editor.putString("earn","0");
-                            acc_editor.putString("reject","0");
-                            acc_editor.putString("cancel","0");
-                            acc_editor.putString("pickup","0");
-                            acc_editor.putString("cash","0");
-                            acc_editor.putString("cancel_charge","0");
-                            acc_editor.putString("offer","0");
+                            int count = 0;
+                            if (map.containsKey("cancel")) {
+                                count += Integer.parseInt(map.get("cancel").toString());
+                                acc_editor.putString("cancel", map.get("cancel").toString());
+                            } else {
+                                acc_editor.putString("cancel", "0");
+                            }
+                            if (map.containsKey("reject")) {
+                                count += Integer.parseInt(map.get("reject").toString());
+                                acc_editor.putString("reject", map.get("reject").toString());
+                            } else {
+                                acc_editor.putString("reject", "0");
+                            }
+                            cancel.setText(String.valueOf(count));
+                            if (map.containsKey("pickup")) {
+                                pickup.setText("Rs. " + Float.parseFloat(map.get("pickup").toString()));
+                                acc_editor.putString("pickup", map.get("pickup").toString());
+                            } else {
+                                pickup.setText("Rs. 0");
+                                acc_editor.putString("pickup", "0");
+                            }
+                            if (map.containsKey("cancel_charge")) {
+                                acc_editor.putString("cancel_charge", map.get("cancel_charge").toString());
+                            } else {
+                                acc_editor.putString("cancel_charge", "0");
+                            }
+                            if (map.containsKey("cash")) {
+                                acc_editor.putString("cash", map.get("cash").toString());
+                            } else {
+                                acc_editor.putString("cash", "0");
+                            }
+                            acc_editor.putString("key", data.getKey());
                             acc_editor.commit();
                         }
+                    } else {
+                        book.setText("0");
+                        earn.setText("Rs. 0");
+                        cancel.setText("0");
+                        pickup.setText("Rs. 0");
+                        HashMap<String, Object> driver_info = new HashMap<>();
+                        driver_info.put("book", "0");
+                        driver_info.put("earn", "0");
+                        driver_info.put("reject", "0");
+                        driver_info.put("cancel", "0");
+                        driver_info.put("pickup", "0");
+                        driver_info.put("offer", "0");
+                        driver_info.put("cash", "0");
+                        driver_info.put("cancel_charge", "0");
+                        String key=driver_acc.child(log_id.getString("id", null)+"/"+formateDate).push().getKey();
+                        driver_acc.child(log_id.getString("id", null)+"/"+formateDate+"/"+key).setValue(driver_info);
+                        acc_editor.putString("book","0");
+                        acc_editor.putString("earn","0");
+                        acc_editor.putString("reject","0");
+                        acc_editor.putString("cancel","0");
+                        acc_editor.putString("pickup","0");
+                        acc_editor.putString("cash","0");
+                        acc_editor.putString("cancel_charge","0");
+                        acc_editor.putString("offer","0");
+                        acc_editor.putString("key", key);
+                        acc_editor.commit();
                     }
                 }
 
@@ -1041,7 +994,6 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
 
                     }
                 }
-
                 break;
         }
     }
@@ -1102,7 +1054,7 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
         super.onStop();
     }
 
-        private void displayLocationSettingsRequest(Context context) {
+    private void displayLocationSettingsRequest(Context context) {
 //            GoogleApiClient googleApiClient = new GoogleApiClient.Builder(context)
 //                    .addApi(LocationServices.API).build();
 //            googleApiClient.connect();
