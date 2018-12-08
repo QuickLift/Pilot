@@ -32,6 +32,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.Switch;
@@ -314,6 +315,10 @@ public class Welcome extends AppCompatActivity implements Runnable,LocationListe
 //                finish();
             }
         });
+
+        if (log_id.contains("type") && log_id.getString("type",null).equals("Rickshaw")){
+            ((ImageView)findViewById(R.id.ride_icon)).setImageResource(R.drawable.rickshawfinal);
+        }
 
 //        login_btn.setOnClickListener(new View.OnClickListener() {
 //            @Override

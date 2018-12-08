@@ -116,6 +116,9 @@ public class BillDetails extends AppCompatActivity {
                             ((TextView) findViewById(R.id.status)).setText("CANCELLED");
                         }
                     }
+                    if (dataSnapshot.hasChild("type") && dataSnapshot.child("type").getValue().equals("rickshaw")){
+                        ((ImageView)findViewById(R.id.vehimg)).setImageResource(R.drawable.rickshawfinal);
+                    }
                     ((TextView)findViewById(R.id.paymode)).setText(dataSnapshot.child("paymode").getValue().toString());
                     float base=0;
                     if (dataSnapshot.hasChild("discount"))

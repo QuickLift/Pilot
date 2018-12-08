@@ -44,7 +44,7 @@ public class LauncherActivity extends AppCompatActivity {
 //        cust_cancel_reason.child("reason1").setValue("Option 1");
 //        driver_cancel_reason.child("reason1").setValue("Option 1");
 
-        SharedPreferences log_id=getApplicationContext().getSharedPreferences("Login",MODE_PRIVATE);
+        final SharedPreferences log_id=getApplicationContext().getSharedPreferences("Login",MODE_PRIVATE);
 
         if (log_id.contains("id")) {
             startService(new Intent(this,SetLocation.class));
@@ -295,6 +295,6 @@ public class LauncherActivity extends AppCompatActivity {
                     valid=true;
                 }
             }
-        },2000);
+        },5000);
     }
 }

@@ -155,6 +155,15 @@ public class FeedbackActivity extends AppCompatActivity {
                         map.put("destination", datamap.get("destination").toString());
                         map.put("driver", log_id.getString("id", null));
                         map.put("source", datamap.get("source").toString());
+                        if (datamap.containsKey("veh_type")){
+                            String str=datamap.get("veh_type").toString();
+                            if (str.equals("share") || str.equals("full"))
+                                map.put("type","car");
+                            else if (str.equals("excel"))
+                                map.put("type","excel");
+                            else if (str.equals("rickshawfull"))
+                                map.put("type","rickshaw");
+                        }
                         if (datamap.containsKey("offer"))
                             map.put("discount", datamap.get("offer").toString());
                         map.put("cancel_charge", datamap.get("cancel_charge").toString());
